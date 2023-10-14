@@ -1,6 +1,6 @@
 export function School(){
     return (
-        <></>
+        <>this is school component</>
     )
 }
 

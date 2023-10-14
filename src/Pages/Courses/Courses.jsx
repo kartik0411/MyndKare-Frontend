@@ -1,6 +1,7 @@
-export function Courses(){
+export function Courses() {
     return (
         <>
+            Courses
         </>
     )
 }
