@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "../components/Header";
+import Footer from "../components/Footer/Footer";
 
 const MainLayout = ({ children }) => {
 
@@ -7,9 +8,10 @@ const MainLayout = ({ children }) => {
         <>
             <div>
                 <Header />
-                <div>
+                <div className="flex justify-center">
                     {children}
                 </div>
+                <Footer />
             </div>
         </>
     )

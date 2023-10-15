@@ -1,9 +1,10 @@
 import Header from "../../components/Header";
+import Login from "../Login/Login";
 
 export function Home() {
     return (
         <>
-            Home
+            {/* <Login /> */}
         </>
     )
 }
