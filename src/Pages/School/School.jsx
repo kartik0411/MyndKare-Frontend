@@ -1,6 +1,13 @@
-export function School(){
+import EnhancedTable from "../../components/Table";
+
+export function School() {
     return (
-        <>this is school component</>
+        <div className="flex flex-col justify-center w-11/12">
+            this is school component
+            <div className="">
+                <EnhancedTable />
+            </div>
+        </div>
     )
 }
 

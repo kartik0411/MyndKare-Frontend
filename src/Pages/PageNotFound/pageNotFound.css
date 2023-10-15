@@ -1,21 +1,6 @@
-/* import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css'; */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-
-
 /*======================
     404 page
 =======================*/
-body {
-    font-family: "Julius Sans One", Sans-serif;
-    font-weight: bold;
-}
-
 .page_404 {
     padding: 40px 0;
     background: #fff;
