@@ -163,7 +163,7 @@ function Question() {
 
   if(loading){
     return (
-      <Box class="mt-40 mb-40" sx={{ display: 'flex' }}>
+      <Box class="mb-40 mt-40 flex items-center justify-center" sx={{ display: 'flex' }}>
         <CircularProgress />
       </Box>
     );

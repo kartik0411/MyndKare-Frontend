@@ -64,3 +64,8 @@ body {
         margin-right: 0;
     }
 }
+
+.page-wrap{
+     max-width: 1366px;
+     margin: auto;
+}

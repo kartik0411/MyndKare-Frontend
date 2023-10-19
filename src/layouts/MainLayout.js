@@ -8,7 +8,7 @@ const MainLayout = ({ children }) => {
         <>
             <div>
                 <Header />
-                <div className="flex justify-center">
+                <div className="page-wrap">
                     {children}
                 </div>
                 <Footer />
