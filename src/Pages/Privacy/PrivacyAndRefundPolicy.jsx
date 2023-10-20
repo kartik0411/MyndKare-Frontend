@@ -14,7 +14,7 @@ function PrivacyAndRefundPolicy() {
                     <MDBTypography blockquote className='mb-0'>
                         <div className="flex flex-column mb-2">
 
-                            <h2 class="wp-block-heading my-5">Terms &amp; Conditions</h2>
+                            <h2 className="wp-block-heading my-5">Terms &amp; Conditions</h2>
 
 
 
@@ -54,7 +54,7 @@ function PrivacyAndRefundPolicy() {
 
 
 
-                            <h2 class="wp-block-heading my-5">Cancellation Policy</h2>
+                            <h2 className="wp-block-heading my-5">Cancellation Policy</h2>
 
 
 
@@ -66,15 +66,15 @@ function PrivacyAndRefundPolicy() {
 
 
 
-                            <h2 class="wp-block-heading my-5">Refund Policy</h2>
+                            <h2 className="wp-block-heading my-5">Refund Policy</h2>
 
 
 
-                            <p>When you buy our Products/services, book an appointment with an expert your purchase is covered by our No money back guarantee. No refund/credit will be provided for any booking. More query Just send an email to- <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="600809200d190e040b0112054e030f0d">myndkare@gmail.com</a>&nbsp;</p>
+                            <p>When you buy our Products/services, book an appointment with an expert your purchase is covered by our No money back guarantee. No refund/credit will be provided for any booking. More query Just send an email to- <a href="/cdn-cgi/l/email-protection" className="__cf_email__" data-cfemail="600809200d190e040b0112054e030f0d">myndkare@gmail.com</a>&nbsp;</p>
 
 
 
-                            <h2 class="wp-block-heading my-5">Privacy Policy</h2>
+                            <h2 className="wp-block-heading my-5">Privacy Policy</h2>
 
 
 
@@ -98,7 +98,7 @@ function PrivacyAndRefundPolicy() {
 
 
 
-                            <h2 class="wp-block-heading my-5">What we do with the information we gather</h2>
+                            <h2 className="wp-block-heading my-5">What we do with the information we gather</h2>
 
 
 
@@ -110,7 +110,7 @@ function PrivacyAndRefundPolicy() {
 
 
 
-                            <h2 class="wp-block-heading my-5">Security</h2>
+                            <h2 className="wp-block-heading my-5">Security</h2>
 
 
 
@@ -118,7 +118,7 @@ function PrivacyAndRefundPolicy() {
 
 
 
-                            <h2 class="wp-block-heading my-5">How we use cookies</h2>
+                            <h2 className="wp-block-heading my-5">How we use cookies</h2>
 
 
 
@@ -130,7 +130,7 @@ function PrivacyAndRefundPolicy() {
 
 
 
-                            <h2 class="wp-block-heading my-5">Links to other websites</h2>
+                            <h2 className="wp-block-heading my-5">Links to other websites</h2>
 
 
 
@@ -138,7 +138,7 @@ function PrivacyAndRefundPolicy() {
 
 
 
-                            <h2 class="wp-block-heading my-5">Controlling your Personal Information</h2>
+                            <h2 className="wp-block-heading my-5">Controlling your Personal Information</h2>
 
 
 
@@ -150,7 +150,7 @@ function PrivacyAndRefundPolicy() {
 
 
 
-                            <ul><li>if you have previously agreed to us using your personal information for promotional purposes, you may change your mind at any time by writing to or emailing us at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a3cedacdc7c8c2d1c6e3c4cec2cacf8dc0ccce">myndkare@gmail.com</a></li></ul>
+                            <ul><li>if you have previously agreed to us using your personal information for promotional purposes, you may change your mind at any time by writing to or emailing us at <a href="/cdn-cgi/l/email-protection" className="__cf_email__" data-cfemail="a3cedacdc7c8c2d1c6e3c4cec2cacf8dc0ccce">myndkare@gmail.com</a></li></ul>
 
 
 
@@ -158,7 +158,7 @@ function PrivacyAndRefundPolicy() {
 
 
 
-                            <h2 class="wp-block-heading my-5"> Contacting Us</h2>
+                            <h2 className="wp-block-heading my-5"> Contacting Us</h2>
 
 
 
@@ -166,7 +166,7 @@ function PrivacyAndRefundPolicy() {
 
 
 
-                            <p>Email-<a href="/cdn-cgi/l/email-protection#7e1307101a151f0c1b3e19131f1712501d1113" target="_blank" rel="noreferrer noopener"><span class="__cf_email__" data-cfemail="92ffebfcf6f9f3e0f7d2f5fff3fbfebcf1fdff">myndkare@gmail.com</span></a></p>
+                            <p>Email-<a href="/cdn-cgi/l/email-protection#7e1307101a151f0c1b3e19131f1712501d1113" target="_blank" rel="noreferrer noopener"><span className="__cf_email__" data-cfemail="92ffebfcf6f9f3e0f7d2f5fff3fbfebcf1fdff">myndkare@gmail.com</span></a></p>
 
 
 

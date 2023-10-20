@@ -74,15 +74,15 @@ function Login() {
                 <MDBRow>
 
                     <MDBCol col='10' md='6'>
-                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp" class="img-fluid" alt="Sample image" />
+                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp" className="img-fluid" alt="Sample image" />
                     </MDBCol>
 
                     <MDBCol col='4' md='6'>
 
                         <div className="d-flex flex-row align-items-center justify-content-center">
 
-                            <p className="lead fw-normal mb-0 me-3">Sign in with</p>
-
+                            <p className="lead fw-normal mb-0 me-3">Sign in</p>
+                            {/* 
                             <MDBBtn floating size='md' tag='a' className='me-2'>
                                 <MDBIcon fab icon='facebook-f' />
                             </MDBBtn>
@@ -93,12 +93,12 @@ function Login() {
 
                             <MDBBtn floating size='md' tag='a' className='me-2'>
                                 <MDBIcon fab icon='linkedin-in' />
-                            </MDBBtn>
+                            </MDBBtn> */}
 
                         </div>
 
                         <div className="divider d-flex align-items-center my-4">
-                            <p className="text-center fw-bold mx-3 mb-0">Or</p>
+                            <p className="text-center fw-bold mx-3 mb-0"></p>
                         </div>
 
                         <MDBInput wrapperClass='mb-4' label='Email address' id='formControlLg' type='email' size="lg" />

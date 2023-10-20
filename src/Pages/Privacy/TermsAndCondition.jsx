@@ -17,7 +17,7 @@ function TermsAndCondition() {
 
 
                             <header>
-                                <h1 class="entry-title" itemprop="headline">WEBSITE USER TERMS AND CONDITION</h1>
+                                <h1 className="entry-title" itemprop="headline">WEBSITE USER TERMS AND CONDITION</h1>
                             </header>
 
 
@@ -37,7 +37,7 @@ function TermsAndCondition() {
 
 
 
-                            <h3 class="wp-block-heading">1) USE OF THE WEB SITE</h3>
+                            <h3 className="wp-block-heading">1) USE OF THE WEB SITE</h3>
 
 
 
@@ -57,7 +57,7 @@ function TermsAndCondition() {
 
 
 
-                            <h3 class="wp-block-heading">2) REGISTRATION</h3>
+                            <h3 className="wp-block-heading">2) REGISTRATION</h3>
 
 
 
@@ -65,7 +65,7 @@ function TermsAndCondition() {
 
 
 
-                            <h3 class="wp-block-heading">3) LIMITATION OF LIABILITY</h3>
+                            <h3 className="wp-block-heading">3) LIMITATION OF LIABILITY</h3>
 
 
 
@@ -81,7 +81,7 @@ function TermsAndCondition() {
 
 
 
-                            <h3 class="wp-block-heading">4) LINKS TO OTHER WEB SITES</h3>
+                            <h3 className="wp-block-heading">4) LINKS TO OTHER WEB SITES</h3>
 
 
 
@@ -89,7 +89,7 @@ function TermsAndCondition() {
 
 
 
-                            <h3 class="wp-block-heading">5) THE USER&#8217;S CONTENT</h3>
+                            <h3 className="wp-block-heading">5) THE USER&#8217;S CONTENT</h3>
 
 
 
@@ -109,7 +109,7 @@ function TermsAndCondition() {
 
 
 
-                            <h3 class="wp-block-heading">6) PAYMENTS, CANCELLATION &amp; REFUNDS</h3>
+                            <h3 className="wp-block-heading">6) PAYMENTS, CANCELLATION &amp; REFUNDS</h3>
 
 
 
@@ -121,7 +121,7 @@ function TermsAndCondition() {
 
 
 
-                            <h3 class="wp-block-heading">7) ADDITIONAL LEGAL TERMS</h3>
+                            <h3 className="wp-block-heading">7) ADDITIONAL LEGAL TERMS</h3>
 
 
 
@@ -137,7 +137,7 @@ function TermsAndCondition() {
 
 
 
-                            <h3 class="wp-block-heading">8) ANTI-HACKING PROVISION</h3>
+                            <h3 className="wp-block-heading">8) ANTI-HACKING PROVISION</h3>
 
 
 

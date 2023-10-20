@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 //create action
 export const createQuestion = createAsyncThunk(
-  "createQuestion",
+  "createQuestion", // modify it to access the uploaded excel sheet
   async (data, { rejectWithValue }) => {
     const response = await fetch(
       "https://653143e04d4c2e3f333cc2b7.mockapi.io/api/v1/question-crud",
@@ -23,6 +23,7 @@ export const createQuestion = createAsyncThunk(
     }
   }
 );
+
 
 //read action
 export const showQuestions = createAsyncThunk(

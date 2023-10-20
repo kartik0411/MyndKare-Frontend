@@ -1,4 +1,4 @@
-import React, {useState}  from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -16,12 +16,12 @@ function CreateQuestion(props) {
   const [questions, setQuestions] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
-  const getQuestionData = (e) =>{
-    setQuestions({...questions,[e.target.name]: e.target.value})
+
+  const getQuestionData = (e) => {
+    setQuestions({ ...questions, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e) =>{
+  const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(createQuestion(questions));
     handleClose();
@@ -40,107 +40,107 @@ function CreateQuestion(props) {
 
   return (
     <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
-      <DialogTitle>Create Student</DialogTitle>
+      <DialogTitle>Create Question</DialogTitle>
       <DialogContent>
         <form >
-        <div class="pt-4">
-          <TextField
-            fullWidth
-            label="Question"
-            name="question"
-            onChange={getQuestionData}
-            id="outlined-size-small"
-            size="small"
-            multiline
-            maxRows={4}
-          />
-        </div>
-        <div class="pt-4">
-          <TextField
-            style={styles.equalFields}
-            label="Option 1"
-            name="option1"
-            onChange={getQuestionData}
-            id="outlined-size-small"
-            size="small"
-            multiline
-            maxRows={4}
-          />
+          <div className="pt-4">
+            <TextField
+              fullWidth
+              label="Question"
+              name="question"
+              onChange={getQuestionData}
+              id="outlined-size-small"
+              size="small"
+              multiline
+              maxRows={4}
+            />
+          </div>
+          <div className="pt-4">
+            <TextField
+              style={styles.equalFields}
+              label="Option 1"
+              name="option1"
+              onChange={getQuestionData}
+              id="outlined-size-small"
+              size="small"
+              multiline
+              maxRows={4}
+            />
 
-          <TextField
-            style={{ width: "50%" }}
-            label="Option 2"
-            name="option2"
-            onChange={getQuestionData}
-            id="outlined-size-small"
-            size="small"
-            multiline
-            maxRows={4}
-          />
-        </div>
-        <div class="pt-4">
-          <TextField
-            style={styles.equalFields}
-            label="Option 3"
-            name="option3"
-            onChange={getQuestionData}
-            id="outlined-size-small"
-            size="small"
-            multiline
-            maxRows={4}
-          />
+            <TextField
+              style={{ width: "50%" }}
+              label="Option 2"
+              name="option2"
+              onChange={getQuestionData}
+              id="outlined-size-small"
+              size="small"
+              multiline
+              maxRows={4}
+            />
+          </div>
+          <div className="pt-4">
+            <TextField
+              style={styles.equalFields}
+              label="Option 3"
+              name="option3"
+              onChange={getQuestionData}
+              id="outlined-size-small"
+              size="small"
+              multiline
+              maxRows={4}
+            />
 
-          <TextField
-            style={{ width: "50%" }}
-            label="Option 4"
-            name="option4"
-            onChange={getQuestionData}
-            id="outlined-size-small"
-            size="small"
-            multiline
-            maxRows={4}
-          />
-        </div>
-        <div class="pt-4">
-          <TextField
-            style={styles.equalFields}
-            label="Option 5"
-            name="option5"
-            onChange={getQuestionData}
-            id="outlined-size-small"
-            size="small"
-            multiline
-            maxRows={4}
-          />
+            <TextField
+              style={{ width: "50%" }}
+              label="Option 4"
+              name="option4"
+              onChange={getQuestionData}
+              id="outlined-size-small"
+              size="small"
+              multiline
+              maxRows={4}
+            />
+          </div>
+          <div className="pt-4">
+            <TextField
+              style={styles.equalFields}
+              label="Option 5"
+              name="option5"
+              onChange={getQuestionData}
+              id="outlined-size-small"
+              size="small"
+              multiline
+              maxRows={4}
+            />
 
-          <TextField
-            style={{ width: "50%" }}
-            label="Comp"
-            name="comp"
-            onChange={getQuestionData}
-            id="outlined-size-small"
-            size="small"
-          />
-        </div>
-        <div class="pt-4">
-          <TextField
-            style={styles.equalFields}
-            label="Answer"
-            name="answer"
-            onChange={getQuestionData}
-            id="outlined-size-small"
-            size="small"
-          />
+            <TextField
+              style={{ width: "50%" }}
+              label="Comp"
+              name="comp"
+              onChange={getQuestionData}
+              id="outlined-size-small"
+              size="small"
+            />
+          </div>
+          <div className="pt-4">
+            <TextField
+              style={styles.equalFields}
+              label="Answer"
+              name="answer"
+              onChange={getQuestionData}
+              id="outlined-size-small"
+              size="small"
+            />
 
-          <TextField
-            style={{ width: "50%" }}
-            label="Exam"
-            name="exam"
-            onChange={getQuestionData}
-            id="outlined-size-small"
-            size="small"
-          />
-        </div>
+            <TextField
+              style={{ width: "50%" }}
+              label="Exam"
+              name="exam"
+              onChange={getQuestionData}
+              id="outlined-size-small"
+              size="small"
+            />
+          </div>
         </form>
       </DialogContent>
       <DialogActions>

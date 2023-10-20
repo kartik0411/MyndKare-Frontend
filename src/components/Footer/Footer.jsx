@@ -46,17 +46,17 @@ function Footer() {
                         <MDBCol md="3" lg="3" xl="3" className='mx-auto mb-4'>
                             <h5 className='text-lowercase mb-4'>additional sources</h5>
                             <p>
-                                <NavLink to='faq' className='text-reset'>
+                                <NavLink to='/faq' className='text-reset'>
                                     FAQ
                                 </NavLink>
                             </p>
                             <p>
-                                <NavLink to="privacy-and-refund-policy" className='text-reset'>
+                                <NavLink to="/privacy-and-refund-policy" className='text-reset'>
                                     PRIVACY & REFUND POLICY
                                 </NavLink>
                             </p>
                             <p>
-                                <NavLink to='terms-and-condition' className='text-reset'>
+                                <NavLink to='/terms-and-condition' className='text-reset'>
                                     TERMS & CONDITIONS
                                 </NavLink>
                             </p>
