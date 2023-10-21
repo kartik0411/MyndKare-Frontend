@@ -42,11 +42,11 @@ function Question() {
   const [selectedValue, setSelectedValue] = React.useState([]);
   const [editFormValues, setEditFormValues] = React.useState([]);
   const dispatch = useDispatch();
-  const { questions, loading } = useSelector((state) => state.app);
+  const { questions, loading } = useSelector((state) => state.questionDetail);
 
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
-    { field: "question", headerName: "Question", width: 170, editable: true },
+    { field: "question", headerName: "Question", width: 170 },
     {
       field: "option1",
       headerName: "Option 1",
@@ -217,7 +217,7 @@ function Question() {
       {questions &&
         <div style={styles.containerQuestion}>
           <Typography
-            className="text-sky-600 text-4xl pb-4"
+            className="text-sky-600 text-4xl pb-2 pl-2"
             variant="h4"
             gutterBottom
           >

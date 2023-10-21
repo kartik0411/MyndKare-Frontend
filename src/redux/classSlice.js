@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 //create action
-export const createQuestion = createAsyncThunk(
-  "createQuestion", // modify it to access the uploaded excel sheet
+export const createClass = createAsyncThunk(
+  "createClass", // modify it to access the uploaded excel sheet
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      "https://653143e04d4c2e3f333cc2b7.mockapi.io/api/v1/question-crud",
+      "https://6532ced6d80bd20280f61298.mockapi.io/api/v1/class",
       {
         method: "POST",
         headers: {
@@ -26,16 +26,17 @@ export const createQuestion = createAsyncThunk(
 
 
 //read action
-export const showQuestions = createAsyncThunk(
-  "showQuestions",
+export const showClass = createAsyncThunk(
+  "showClass",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "https://653143e04d4c2e3f333cc2b7.mockapi.io/api/v1/question-crud",
+      "https://6532ced6d80bd20280f61298.mockapi.io/api/v1/class",
       { method: "GET" }
     );
 
     try {
       const result = await response.json();
+      console.log(result)
       return result;
     } catch (error) {
       return rejectWithValue(error);
@@ -43,11 +44,11 @@ export const showQuestions = createAsyncThunk(
   }
 );
 //delete action
-export const deleteQuestion = createAsyncThunk(
-  "deleteQuestion",
+export const deleteClass = createAsyncThunk(
+  "deleteClass",
   async (id, { rejectWithValue }) => {
     const response = await fetch(
-      `https://653143e04d4c2e3f333cc2b7.mockapi.io/api/v1/question-crud/${id}`,
+      `https://6532ced6d80bd20280f61298.mockapi.io/api/v1/class/${id}`,
       { method: "DELETE" }
     );
 
@@ -61,11 +62,11 @@ export const deleteQuestion = createAsyncThunk(
 );
 
 //update action
-export const editQuestion = createAsyncThunk(
-  "editQuestion",
+export const editClass = createAsyncThunk(
+  "editClass",
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      `https://653143e04d4c2e3f333cc2b7.mockapi.io/api/v1/question-crud/${data.id}`,
+      `https://6532ced6d80bd20280f61298.mockapi.io/api/v1/class/${data.id}`,
       {
         method: "PUT",
         headers: {
@@ -84,10 +85,10 @@ export const editQuestion = createAsyncThunk(
   }
 );
 
-export const questionSlice = createSlice({
-  name: "questionDetail",
+export const classSlice = createSlice({
+  name: "classDetail",
   initialState: {
-    questions: [],
+    classes: [],
     loading: false,
     error: null,
     searchData: [],
@@ -100,60 +101,60 @@ export const questionSlice = createSlice({
   },
 
   extraReducers: {
-    [createQuestion.pending]: (state) => {
+    [createClass.pending]: (state) => {
       state.loading = true;
     },
-    [createQuestion.fulfilled]: (state, action) => {
+    [createClass.fulfilled]: (state, action) => {
       state.loading = false;
-      state.questions.push(action.payload);
+      state.classes.push(action.payload);
     },
-    [createQuestion.rejected]: (state, action) => {
+    [createClass.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     },
-    [showQuestions.pending]: (state) => {
+    [showClass.pending]: (state) => {
       state.loading = true;
     },
-    [showQuestions.fulfilled]: (state, action) => {
+    [showClass.fulfilled]: (state, action) => {
       state.loading = false;
-      state.questions = action.payload;
+      state.classes = action.payload;
     },
-    [showQuestions.rejected]: (state, action) => {
+    [showClass.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
 
-    [deleteQuestion.pending]: (state) => {
+    [deleteClass.pending]: (state) => {
       state.loading = true;
     },
-    [deleteQuestion.fulfilled]: (state, action) => {
+    [deleteClass.fulfilled]: (state, action) => {
       state.loading = false;
       const { id } = action.payload;
       if (id) {
-        state.questions = state.questions.filter((ele) => ele.id !== id);
+        state.classes = state.classes.filter((ele) => ele.id !== id);
       }
     },
-    [deleteQuestion.rejected]: (state, action) => {
+    [deleteClass.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
 
-    [editQuestion.pending]: (state) => {
+    [editClass.pending]: (state) => {
       state.loading = true;
     },
-    [editQuestion.fulfilled]: (state, action) => {
+    [editClass.fulfilled]: (state, action) => {
       state.loading = false;
-      state.questions = state.questions.map((ele) =>
+      state.classes = state.classes.map((ele) =>
         ele.id === action.payload.id ? action.payload : ele
       );
     },
-    [editQuestion.rejected]: (state, action) => {
+    [editClass.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     },
   },
 });
 
-export default questionSlice.reducer;
+export default classSlice.reducer;
 
-export const { searchUser } = questionSlice.actions;
+export const { searchUser } = classSlice.actions;

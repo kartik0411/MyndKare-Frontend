@@ -4,12 +4,9 @@ import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Padding } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { createQuestion, editQuestion } from "../../redux/questionSlice";
-import { useNavigate } from "react-router-dom";
+import { editQuestion } from "../../redux/questionSlice";
 
 function UpdateQuestion(props) {
   const { onClose, selectedValue, open } = props;

@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 //create action
-export const createQuestion = createAsyncThunk(
-  "createQuestion", // modify it to access the uploaded excel sheet
+export const createSchoolResults = createAsyncThunk(
+  "createSchoolResults", // modify it to access the uploaded excel sheet
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      "https://653143e04d4c2e3f333cc2b7.mockapi.io/api/v1/question-crud",
+      "https://6532b115d80bd20280f5ec6e.mockapi.io/api/v1/schoolResult",
       {
         method: "POST",
         headers: {
@@ -26,16 +26,17 @@ export const createQuestion = createAsyncThunk(
 
 
 //read action
-export const showQuestions = createAsyncThunk(
-  "showQuestions",
+export const showSchoolResult = createAsyncThunk(
+  "showSchoolResult",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "https://653143e04d4c2e3f333cc2b7.mockapi.io/api/v1/question-crud",
+      "https://6532b115d80bd20280f5ec6e.mockapi.io/api/v1/schoolResult",
       { method: "GET" }
     );
 
     try {
       const result = await response.json();
+      console.log(result)
       return result;
     } catch (error) {
       return rejectWithValue(error);
@@ -43,11 +44,11 @@ export const showQuestions = createAsyncThunk(
   }
 );
 //delete action
-export const deleteQuestion = createAsyncThunk(
-  "deleteQuestion",
+export const deleteSchoolResult = createAsyncThunk(
+  "deleteSchoolResult",
   async (id, { rejectWithValue }) => {
     const response = await fetch(
-      `https://653143e04d4c2e3f333cc2b7.mockapi.io/api/v1/question-crud/${id}`,
+      `https://6532b115d80bd20280f5ec6e.mockapi.io/api/v1/schoolResult/${id}`,
       { method: "DELETE" }
     );
 
@@ -61,11 +62,11 @@ export const deleteQuestion = createAsyncThunk(
 );
 
 //update action
-export const editQuestion = createAsyncThunk(
-  "editQuestion",
+export const editSchoolResult = createAsyncThunk(
+  "editSchoolResult",
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      `https://653143e04d4c2e3f333cc2b7.mockapi.io/api/v1/question-crud/${data.id}`,
+      `https://6532b115d80bd20280f5ec6e.mockapi.io/api/v1/schoolResult/${data.id}`,
       {
         method: "PUT",
         headers: {
@@ -84,10 +85,10 @@ export const editQuestion = createAsyncThunk(
   }
 );
 
-export const questionSlice = createSlice({
-  name: "questionDetail",
+export const schoolResultSlice = createSlice({
+  name: "schoolResultDetail",
   initialState: {
-    questions: [],
+    schoolResults: [],
     loading: false,
     error: null,
     searchData: [],
@@ -100,60 +101,60 @@ export const questionSlice = createSlice({
   },
 
   extraReducers: {
-    [createQuestion.pending]: (state) => {
+    [createSchoolResults.pending]: (state) => {
       state.loading = true;
     },
-    [createQuestion.fulfilled]: (state, action) => {
+    [createSchoolResults.fulfilled]: (state, action) => {
       state.loading = false;
-      state.questions.push(action.payload);
+      state.schoolResults.push(action.payload);
     },
-    [createQuestion.rejected]: (state, action) => {
+    [createSchoolResults.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     },
-    [showQuestions.pending]: (state) => {
+    [showSchoolResult.pending]: (state) => {
       state.loading = true;
     },
-    [showQuestions.fulfilled]: (state, action) => {
+    [showSchoolResult.fulfilled]: (state, action) => {
       state.loading = false;
-      state.questions = action.payload;
+      state.schoolResults = action.payload;
     },
-    [showQuestions.rejected]: (state, action) => {
+    [showSchoolResult.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
 
-    [deleteQuestion.pending]: (state) => {
+    [deleteSchoolResult.pending]: (state) => {
       state.loading = true;
     },
-    [deleteQuestion.fulfilled]: (state, action) => {
+    [deleteSchoolResult.fulfilled]: (state, action) => {
       state.loading = false;
       const { id } = action.payload;
       if (id) {
-        state.questions = state.questions.filter((ele) => ele.id !== id);
+        state.schoolResults = state.schoolResults.filter((ele) => ele.id !== id);
       }
     },
-    [deleteQuestion.rejected]: (state, action) => {
+    [deleteSchoolResult.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
 
-    [editQuestion.pending]: (state) => {
+    [editSchoolResult.pending]: (state) => {
       state.loading = true;
     },
-    [editQuestion.fulfilled]: (state, action) => {
+    [editSchoolResult.fulfilled]: (state, action) => {
       state.loading = false;
-      state.questions = state.questions.map((ele) =>
+      state.schoolResults = state.schoolResults.map((ele) =>
         ele.id === action.payload.id ? action.payload : ele
       );
     },
-    [editQuestion.rejected]: (state, action) => {
+    [editSchoolResult.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     },
   },
 });
 
-export default questionSlice.reducer;
+export default schoolResultSlice.reducer;
 
-export const { searchUser } = questionSlice.actions;
+export const { searchUser } = schoolResultSlice.actions;

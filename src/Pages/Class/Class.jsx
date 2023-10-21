@@ -1,18 +1,16 @@
 import React, { useEffect } from "react";
-import { Table } from '../../components/Table'
+import { Table } from "../../components/Table";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { createSchool, showSchool } from "../../redux/schoolSlice";
+import { deleteClass, showClass } from "../../redux/classSlice";
 import { Box, IconButton, Tooltip } from "@mui/material";
 import { Delete, Edit, Preview } from "@mui/icons-material";
-import { deleteSchool } from "../../redux/schoolSlice";
-import CircularProgress from '@mui/material/CircularProgress';
-import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
-import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
-import { read, utils, writeFile } from 'xlsx';
-import UpdateSchool from "./UpdateSchool";
-import CreateSchool from "./CreateSchool";
+import CircularProgress from "@mui/material/CircularProgress";
+import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
+import { read, utils, writeFile } from "xlsx";
+import UpdateClass from "./UpdateClass";
+import CreateClass from "./CreateClass";
 
 const tableOptions = {
   height: "auto",
@@ -35,20 +33,20 @@ const styles = {
   },
 };
 
-function School() {
+function Class() {
   const [createOpen, setCreateOpen] = React.useState(false);
   const [editOpen, setEditOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState([]);
   const [editFormValues, setEditFormValues] = React.useState([]);
   const dispatch = useDispatch();
-  const { schools, loading } = useSelector((state) => state.schoolDetail);
-    console.log(schools)
+  const { classes, loading } = useSelector((state) => state.classDetail);
+
   const columns = [
-    { field: "id", headerName: "ID",  flex: 1 },
+    { field: "id", headerName: "ID", flex: 1 },
     {
-      field: "name",
-      headerName: "Name",
-      flex: 1
+      field: "title",
+      headerName: "Title",
+      flex: 1,
     },
     {
       field: "actions",
@@ -59,22 +57,24 @@ function School() {
         return (
           <Box>
             <Tooltip title="View details">
-              <IconButton onClick={() => { }}>
+              <IconButton onClick={() => {}}>
                 <Preview />
               </IconButton>
             </Tooltip>
             <Tooltip title="Edit details">
-              <IconButton onClick={(e) => {
-                handleEdit(params.row)
-              }}>
+              <IconButton
+                onClick={(e) => {
+                  handleEdit(params.row);
+                }}
+              >
                 <Edit />
               </IconButton>
             </Tooltip>
             <Tooltip title="Delete details">
               <IconButton
                 onClick={() => {
-                  console.log("delete--------", params, params.row.id)
-                  dispatch(deleteSchool(params.row.id))
+                  console.log("delete--------", params, params.row.id);
+                  dispatch(deleteClass(params.row.id));
                 }}
               >
                 <Delete />
@@ -87,27 +87,26 @@ function School() {
   ];
 
   useEffect(() => {
-    dispatch(showSchool())
-    console.log(schools)
-  }, [])
-  console.log(schools)
+    dispatch(showClass());
+  }, []);
+
   const handleCreateOpen = () => {
     setCreateOpen(true);
   };
 
   const exportToExcel = async () => {
-    const worksheet = utils.json_to_sheet(schools);
+    const worksheet = utils.json_to_sheet(classes);
     const workbook = utils.book_new();
-    utils.book_append_sheet(workbook, worksheet, 'Sheet 1');
-    writeFile(workbook, 'data.xlsx');
-  }
+    utils.book_append_sheet(workbook, worksheet, "Sheet 1");
+    writeFile(workbook, "data.xlsx");
+  };
 
   const handleEdit = (value) => {
     setCreateOpen(false);
     setEditOpen(true);
-    setEditFormValues(value)
-    console.log(value)
-  }
+    setEditFormValues(value);
+    console.log(value);
+  };
 
   const handleClose = (value) => {
     setEditOpen(false);
@@ -117,7 +116,10 @@ function School() {
 
   if (loading) {
     return (
-      <Box className="mb-40 mt-40 flex items-center justify-center" sx={{ display: 'flex' }}>
+      <Box
+        className="mb-40 mt-40 flex items-center justify-center"
+        sx={{ display: "flex" }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -125,29 +127,33 @@ function School() {
 
   return (
     <>
-      {schools &&
+      {classes && (
         <div style={styles.containerQuestion}>
           <Typography
             className="text-sky-600 text-4xl pb-2 pl-2"
             variant="h4"
             gutterBottom
           >
-            Schools
+            Classes
           </Typography>
 
           <div className="pb-4">
-            <Button className="mx-2" onClick={handleCreateOpen} variant="contained">
-              Create School
+            <Button
+              className="mx-2"
+              onClick={handleCreateOpen}
+              variant="contained"
+            >
+              Create Classes
             </Button>
           </div>
 
-          <CreateSchool
+          <CreateClass
             selectedValue={selectedValue}
             open={createOpen}
             onClose={handleClose}
           />
 
-          <UpdateSchool
+          <UpdateClass
             selectedValue={editFormValues}
             open={editOpen}
             onClose={handleClose}
@@ -156,7 +162,7 @@ function School() {
           <Table
             height={tableOptions.height}
             width={tableOptions.width}
-            rows={schools}
+            rows={classes}
             columns={columns}
             initialState={tableOptions.initialState}
             pageSizeOptions={tableOptions.pageSizeOptions}
@@ -164,14 +170,18 @@ function School() {
             disableSelectionOnClick={tableOptions.disableSelectionOnClick}
           />
           <div className="flex justify-end">
-            <Button className="my-2" onClick={exportToExcel} variant="contained">
+            <Button
+              className="my-2"
+              onClick={exportToExcel}
+              variant="contained"
+            >
               Download <DownloadRoundedIcon />
             </Button>
           </div>
         </div>
-      }
+      )}
     </>
   );
 }
 
-export default School;
+export default Class;

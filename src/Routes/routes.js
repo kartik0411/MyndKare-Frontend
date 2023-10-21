@@ -1,4 +1,5 @@
-import Courses from "../Pages/Courses/Courses"
+import { classes } from "istanbul-lib-coverage"
+import Class from "../Pages/Class/Class"
 import Exam from "../Pages/Exam/Exam"
 import Home from "../Pages/Home/Home"
 import Login from "../Pages/Login/Login"
@@ -18,7 +19,7 @@ const routes = [
     { path: "/", Component: Home },
     { path: "/school", Component: School },
     { path: "/schoolResult", Component: SchoolResult },
-    { path: "/courses", Component: Courses },
+    { path: "/class", Component: Class },
     { path: "/section", Component: Section },
     { path: "/student", Component: Student },
     { path: "/exam", Component: Exam },

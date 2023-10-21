@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 //create action
-export const createQuestion = createAsyncThunk(
-  "createQuestion", // modify it to access the uploaded excel sheet
+export const createSchool = createAsyncThunk(
+  "createSchool", // modify it to access the uploaded excel sheet
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      "https://653143e04d4c2e3f333cc2b7.mockapi.io/api/v1/question-crud",
+      "https://6532b115d80bd20280f5ec6e.mockapi.io/api/v1/school",
       {
         method: "POST",
         headers: {
@@ -26,16 +26,17 @@ export const createQuestion = createAsyncThunk(
 
 
 //read action
-export const showQuestions = createAsyncThunk(
-  "showQuestions",
+export const showSchool = createAsyncThunk(
+  "showSchool",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "https://653143e04d4c2e3f333cc2b7.mockapi.io/api/v1/question-crud",
+      "https://6532b115d80bd20280f5ec6e.mockapi.io/api/v1/school",
       { method: "GET" }
     );
 
     try {
       const result = await response.json();
+      console.log(result)
       return result;
     } catch (error) {
       return rejectWithValue(error);
@@ -43,11 +44,11 @@ export const showQuestions = createAsyncThunk(
   }
 );
 //delete action
-export const deleteQuestion = createAsyncThunk(
-  "deleteQuestion",
+export const deleteSchool = createAsyncThunk(
+  "deleteSchool",
   async (id, { rejectWithValue }) => {
     const response = await fetch(
-      `https://653143e04d4c2e3f333cc2b7.mockapi.io/api/v1/question-crud/${id}`,
+      `https://6532b115d80bd20280f5ec6e.mockapi.io/api/v1/school/${id}`,
       { method: "DELETE" }
     );
 
@@ -61,11 +62,11 @@ export const deleteQuestion = createAsyncThunk(
 );
 
 //update action
-export const editQuestion = createAsyncThunk(
-  "editQuestion",
+export const editSchool = createAsyncThunk(
+  "editSchool",
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      `https://653143e04d4c2e3f333cc2b7.mockapi.io/api/v1/question-crud/${data.id}`,
+      `https://6532b115d80bd20280f5ec6e.mockapi.io/api/v1/school/${data.id}`,
       {
         method: "PUT",
         headers: {
@@ -84,10 +85,10 @@ export const editQuestion = createAsyncThunk(
   }
 );
 
-export const questionSlice = createSlice({
-  name: "questionDetail",
+export const schoolSlice = createSlice({
+  name: "schoolDetail",
   initialState: {
-    questions: [],
+    schools: [],
     loading: false,
     error: null,
     searchData: [],
@@ -100,60 +101,60 @@ export const questionSlice = createSlice({
   },
 
   extraReducers: {
-    [createQuestion.pending]: (state) => {
+    [createSchool.pending]: (state) => {
       state.loading = true;
     },
-    [createQuestion.fulfilled]: (state, action) => {
+    [createSchool.fulfilled]: (state, action) => {
       state.loading = false;
-      state.questions.push(action.payload);
+      state.schools.push(action.payload);
     },
-    [createQuestion.rejected]: (state, action) => {
+    [createSchool.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     },
-    [showQuestions.pending]: (state) => {
+    [showSchool.pending]: (state) => {
       state.loading = true;
     },
-    [showQuestions.fulfilled]: (state, action) => {
+    [showSchool.fulfilled]: (state, action) => {
       state.loading = false;
-      state.questions = action.payload;
+      state.schools = action.payload;
     },
-    [showQuestions.rejected]: (state, action) => {
+    [showSchool.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
 
-    [deleteQuestion.pending]: (state) => {
+    [deleteSchool.pending]: (state) => {
       state.loading = true;
     },
-    [deleteQuestion.fulfilled]: (state, action) => {
+    [deleteSchool.fulfilled]: (state, action) => {
       state.loading = false;
       const { id } = action.payload;
       if (id) {
-        state.questions = state.questions.filter((ele) => ele.id !== id);
+        state.schools = state.schools.filter((ele) => ele.id !== id);
       }
     },
-    [deleteQuestion.rejected]: (state, action) => {
+    [deleteSchool.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
 
-    [editQuestion.pending]: (state) => {
+    [editSchool.pending]: (state) => {
       state.loading = true;
     },
-    [editQuestion.fulfilled]: (state, action) => {
+    [editSchool.fulfilled]: (state, action) => {
       state.loading = false;
-      state.questions = state.questions.map((ele) =>
+      state.schools = state.schools.map((ele) =>
         ele.id === action.payload.id ? action.payload : ele
       );
     },
-    [editQuestion.rejected]: (state, action) => {
+    [editSchool.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     },
   },
 });
 
-export default questionSlice.reducer;
+export default schoolSlice.reducer;
 
-export const { searchUser } = questionSlice.actions;
+export const { searchUser } = schoolSlice.actions;
