@@ -25,6 +25,7 @@ export function Table(props) {
         pageSizeOptions={pageSizeOptions}
         checkboxSelection={checkboxSelection}
         disableSelectionOnClick={disableSelectionOnClick}
+        getRowId={(row) => row._id}
       />
     </div>
   );

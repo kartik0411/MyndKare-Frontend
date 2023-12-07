@@ -5,7 +5,7 @@ export const createSchool = createAsyncThunk(
   "createSchool", // modify it to access the uploaded excel sheet
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      "https://6532b115d80bd20280f5ec6e.mockapi.io/api/v1/school",
+      "http://localhost:9083/myndkare/v1/schools",
       {
         method: "POST",
         headers: {
@@ -17,8 +17,10 @@ export const createSchool = createAsyncThunk(
 
     try {
       const result = await response.json();
+      console.log("res="+JSON.stringify(result));
       return result;
     } catch (error) {
+      console.log("ye hai asli chutiyap")
       return rejectWithValue(error);
     }
   }
@@ -30,7 +32,7 @@ export const showSchool = createAsyncThunk(
   "showSchool",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "https://6532b115d80bd20280f5ec6e.mockapi.io/api/v1/school",
+      "http://localhost:9083/myndkare/v1/schools",
       { method: "GET" }
     );
 
@@ -48,7 +50,7 @@ export const deleteSchool = createAsyncThunk(
   "deleteSchool",
   async (id, { rejectWithValue }) => {
     const response = await fetch(
-      `https://6532b115d80bd20280f5ec6e.mockapi.io/api/v1/school/${id}`,
+      `http://localhost:9083/myndkare/v1/schools/${id}`,
       { method: "DELETE" }
     );
 
@@ -66,7 +68,7 @@ export const editSchool = createAsyncThunk(
   "editSchool",
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      `https://6532b115d80bd20280f5ec6e.mockapi.io/api/v1/school/${data.id}`,
+      `http://localhost:9083/myndkare/v1/schools`,
       {
         method: "PUT",
         headers: {

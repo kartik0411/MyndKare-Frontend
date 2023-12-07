@@ -24,6 +24,7 @@ function UpdateSchool(props) {
     e.preventDefault();
     dispatch(editSchool(updateSchool));
     handleClose();
+    window.location.reload();
   }
 
   const handleClose = () => {
@@ -36,7 +37,7 @@ function UpdateSchool(props) {
 
   return (
     <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
-      <DialogTitle>Edit Student</DialogTitle>
+      <DialogTitle>Edit School</DialogTitle>
       <DialogContent>
         <form >
           <div className="pt-4">

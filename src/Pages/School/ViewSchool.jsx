@@ -1,25 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import { Padding } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { createSchool, showSchool  } from "../../redux/schoolSlice";
+import { editSchool } from "../../redux/schoolSlice";
 
-function CreateSchool(props) {
+function ViewSchool(props) {
   const { onClose, selectedValue, open } = props;
-  const [schools, setSchools] = useState({});
+  const [updateSchool, setUpdateSchool] = useState({});
   const dispatch = useDispatch();
 
-  const getSchoolData = (e) => {
-    setSchools({ ...schools, [e.target.name]: e.target.value, resultPublish: false })
-  }
+  useEffect(() => {
+    if (selectedValue) {
+        setUpdateSchool(selectedValue);
+    }
+  }, [selectedValue])
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createSchool(schools));
+    dispatch(editSchool(updateSchool));
     handleClose();
     window.location.reload();
   }
@@ -28,9 +31,13 @@ function CreateSchool(props) {
     onClose(selectedValue);
   };
 
+  const updatedQuestion = (e) => {
+    setUpdateSchool({ ...updateSchool, [e.target.name]: e.target.value })
+  }
+
   return (
     <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
-      <DialogTitle>Create School</DialogTitle>
+      <DialogTitle>View School</DialogTitle>
       <DialogContent>
         <form >
           <div className="pt-4">
@@ -38,23 +45,22 @@ function CreateSchool(props) {
               fullWidth
               label="Name"
               name="name"
-              onChange={getSchoolData}
+              value={updateSchool && updateSchool.name}
               id="outlined-size-small"
               size="small"
               multiline
               maxRows={4}
+              // onChange={updatedQuestion}
             />
           </div>
         </form>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit}>Save</Button>
+        <Button onClick={handleClose}>Close</Button>
       </DialogActions>
     </Dialog>
   );
 }
 
-export default CreateSchool
-
+export default ViewSchool
 

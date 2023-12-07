@@ -12,7 +12,9 @@ import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import { read, utils, writeFile } from 'xlsx';
 import UpdateSchool from "./UpdateSchool";
+import ViewSchool from "./ViewSchool";
 import CreateSchool from "./CreateSchool";
+import DeleteSchool from "./DeleteSchool";
 
 const tableOptions = {
   height: "auto",
@@ -38,13 +40,24 @@ const styles = {
 function School() {
   const [createOpen, setCreateOpen] = React.useState(false);
   const [editOpen, setEditOpen] = React.useState(false);
+  const [viewOpen, setViewOpen] = React.useState(false);
+  const [deleteOpen, setDeleteOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState([]);
   const [editFormValues, setEditFormValues] = React.useState([]);
   const dispatch = useDispatch();
-  const { schools, loading } = useSelector((state) => state.schoolDetail);
+  const { schools, loading } = useSelector((state) => {
+    let schoolobject = state.schoolDetail
+    if(state.schoolDetail && state.schoolDetail.schools && state.schoolDetail.schools.length>0 && state.schoolDetail.schools[state.schoolDetail.schools.length-1]._id == null) {
+      let newschoolobject = JSON.parse(JSON.stringify(schoolobject));
+      newschoolobject.schools.pop();
+      return newschoolobject;
+    }
+    else {
+    return schoolobject;
+    }
+  });
     console.log(schools)
   const columns = [
-    { field: "id", headerName: "ID",  flex: 1 },
     {
       field: "name",
       headerName: "Name",
@@ -59,7 +72,9 @@ function School() {
         return (
           <Box>
             <Tooltip title="View details">
-              <IconButton onClick={() => { }}>
+              <IconButton onClick={(e) => { 
+                handleView(params.row)
+              }}>
                 <Preview />
               </IconButton>
             </Tooltip>
@@ -71,12 +86,9 @@ function School() {
               </IconButton>
             </Tooltip>
             <Tooltip title="Delete details">
-              <IconButton
-                onClick={() => {
-                  console.log("delete--------", params, params.row.id)
-                  dispatch(deleteSchool(params.row.id))
-                }}
-              >
+            <IconButton onClick={(e) => {
+                handleDelete(params.row)
+              }}>
                 <Delete />
               </IconButton>
             </Tooltip>
@@ -87,6 +99,7 @@ function School() {
   ];
 
   useEffect(() => {
+    console.log("sdjjhjdsdsh")
     dispatch(showSchool())
     console.log(schools)
   }, [])
@@ -109,9 +122,27 @@ function School() {
     console.log(value)
   }
 
+  const handleDelete = (value) => {
+    setCreateOpen(false);
+    setEditOpen(false);
+    setDeleteOpen(true);
+    setEditFormValues(value)
+    console.log(value)
+  }
+
+  const handleView = (value) => {
+    setCreateOpen(false);
+    setEditOpen(false);
+    setViewOpen(true);
+    setEditFormValues(value)
+    console.log(value)
+  }
+
   const handleClose = (value) => {
     setEditOpen(false);
     setCreateOpen(false);
+    setViewOpen(false);
+    setDeleteOpen(false);
     setSelectedValue(value);
   };
 
@@ -150,6 +181,16 @@ function School() {
           <UpdateSchool
             selectedValue={editFormValues}
             open={editOpen}
+            onClose={handleClose}
+          />
+          <ViewSchool
+            selectedValue={editFormValues}
+            open={viewOpen}
+            onClose={handleClose}
+          />
+          <DeleteSchool
+            selectedValue={editFormValues}
+            open={deleteOpen}
             onClose={handleClose}
           />
 
