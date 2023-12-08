@@ -12,6 +12,7 @@ import { editSchool } from "../../redux/schoolSlice";
 function UpdateSchool(props) {
   const { onClose, selectedValue, open } = props;
   const [updateSchool, setUpdateSchool] = useState({});
+  const [typedschool, settypedSchools] = useState({});
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -24,7 +25,7 @@ function UpdateSchool(props) {
     e.preventDefault();
     dispatch(editSchool(updateSchool));
     handleClose();
-    window.location.reload();
+    // window.location.reload();
   }
 
   const handleClose = () => {
@@ -32,6 +33,7 @@ function UpdateSchool(props) {
   };
 
   const updatedQuestion = (e) => {
+    settypedSchools({typedschool: e.target.value});
     setUpdateSchool({ ...updateSchool, [e.target.name]: e.target.value })
   }
 
@@ -57,7 +59,7 @@ function UpdateSchool(props) {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit}>Update</Button>
+        <Button onClick={handleSubmit} disabled={!typedschool.typedschool}>Update</Button>
       </DialogActions>
     </Dialog>
   );

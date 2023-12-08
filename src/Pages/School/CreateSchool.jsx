@@ -11,9 +11,11 @@ import { createSchool, showSchool  } from "../../redux/schoolSlice";
 function CreateSchool(props) {
   const { onClose, selectedValue, open } = props;
   const [schools, setSchools] = useState({});
+  const [typedschool, settypedSchools] = useState({});
   const dispatch = useDispatch();
 
   const getSchoolData = (e) => {
+    settypedSchools({typedschool: e.target.value});
     setSchools({ ...schools, [e.target.name]: e.target.value, resultPublish: false })
   }
 
@@ -21,7 +23,7 @@ function CreateSchool(props) {
     e.preventDefault();
     dispatch(createSchool(schools));
     handleClose();
-    window.location.reload();
+    // window.location.reload();
   }
 
   const handleClose = () => {
@@ -49,7 +51,7 @@ function CreateSchool(props) {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit}>Save</Button>
+        <Button onClick={handleSubmit}  disabled={!typedschool.typedschool}>Save</Button>
       </DialogActions>
     </Dialog>
   );

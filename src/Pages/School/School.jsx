@@ -4,8 +4,11 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { createSchool, showSchool } from "../../redux/schoolSlice";
-import { Box, IconButton, Tooltip } from "@mui/material";
+import { Box, IconButton, Tooltip} from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 import { Delete, Edit, Preview } from "@mui/icons-material";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 import { deleteSchool } from "../../redux/schoolSlice";
 import CircularProgress from '@mui/material/CircularProgress';
 import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
@@ -40,12 +43,13 @@ const styles = {
 function School() {
   const [createOpen, setCreateOpen] = React.useState(false);
   const [editOpen, setEditOpen] = React.useState(false);
+  // const [snackOpen, setSnackOpen] = React.useState(false);
   const [viewOpen, setViewOpen] = React.useState(false);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState([]);
   const [editFormValues, setEditFormValues] = React.useState([]);
   const dispatch = useDispatch();
-  const { schools, loading } = useSelector((state) => {
+  const { schools, loading, error } = useSelector((state) => {
     let schoolobject = state.schoolDetail
     if(state.schoolDetail && state.schoolDetail.schools && state.schoolDetail.schools.length>0 && state.schoolDetail.schools[state.schoolDetail.schools.length-1]._id == null) {
       let newschoolobject = JSON.parse(JSON.stringify(schoolobject));
@@ -137,20 +141,63 @@ function School() {
     setEditFormValues(value)
     console.log(value)
   }
+  // const handleSnackbarOpen = () => {
+  //   console.log("dekhte hain")
+  //   setCreateOpen(false);
+  //   setEditOpen(false);
+    // setSnackOpen(true);
+  // }
 
   const handleClose = (value) => {
+    console.log("ye to aara")
     setEditOpen(false);
     setCreateOpen(false);
     setViewOpen(false);
     setDeleteOpen(false);
+    // if(snackOpen) {
+    //   console.log("ye kaise aa skta")
+    //   window.location.reload();
+    // }
+    // setSnackOpen(false);
     setSelectedValue(value);
   };
+
+  // const snackaction = (
+  //   <React.Fragment>
+  //     <Button color="secondary" size="small" onClick={handleClose}>
+  //       OK
+  //     </Button>
+  //     <IconButton
+  //       size="small"
+  //       aria-label="close"
+  //       color="inherit"
+  //       onClick={handleClose}
+  //     >
+  //       <CloseIcon fontSize="small" />
+  //     </IconButton>
+  //   </React.Fragment>
+  // );
 
   if (loading) {
     return (
       <Box className="mb-40 mt-40 flex items-center justify-center" sx={{ display: 'flex' }}>
         <CircularProgress />
       </Box>
+    );
+  }
+  if(error) {
+    setTimeout(window.location.reload.bind(window.location), 2000);
+    return (
+    // <Snackbar
+    //   open={setSnackOpen(true)}
+    //   autoHideDuration={6000}
+    //   onClose={handleClose}
+    //   message="Cannot add Duplicate Names"
+    //   action={snackaction}
+    // />
+    <Alert variant="filled" severity="error">
+    Cannot add Duplicate School Names
+  </Alert>
     );
   }
 

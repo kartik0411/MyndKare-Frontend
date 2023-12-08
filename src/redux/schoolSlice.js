@@ -17,10 +17,12 @@ export const createSchool = createAsyncThunk(
 
     try {
       const result = await response.json();
-      console.log("res="+JSON.stringify(result));
-      return result;
+      if(result._id==null) {
+        return rejectWithValue(result.message);
+      } else {
+        return result;
+      }
     } catch (error) {
-      console.log("ye hai asli chutiyap")
       return rejectWithValue(error);
     }
   }
@@ -80,7 +82,11 @@ export const editSchool = createAsyncThunk(
 
     try {
       const result = await response.json();
-      return result;
+      if(result._id==null) {
+        return rejectWithValue(result.message);
+      } else {
+        return result;
+      }
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -112,7 +118,7 @@ export const schoolSlice = createSlice({
     },
     [createSchool.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.payload.message;
+      state.error = action.payload;
     },
     [showSchool.pending]: (state) => {
       state.loading = true;
@@ -152,7 +158,7 @@ export const schoolSlice = createSlice({
     },
     [editSchool.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.payload.message;
+      state.error = action.payload;
     },
   },
 });
