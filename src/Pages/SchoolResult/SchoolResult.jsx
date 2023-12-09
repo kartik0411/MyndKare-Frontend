@@ -43,14 +43,13 @@ function SchoolResult() {
   const { schoolResults, loading } = useSelector((state) => state.schoolResultDetail);
 
   const columns = [
-    { field: "id", headerName: "ID",  flex: 1 },
     {
-      field: "school",
+      field: "name",
       headerName: "School",
       flex: 1
     },
     {
-        field: "result_publish",
+        field: "resultPublish",
         headerName: "Result Publish",
         flex: 1
       },
@@ -62,26 +61,16 @@ function SchoolResult() {
       renderCell: (params) => {
         return (
           <Box>
-            <Tooltip title="View details">
+            {/* <Tooltip title="View details">
               <IconButton onClick={() => { }}>
                 <Preview />
               </IconButton>
-            </Tooltip>
+            </Tooltip> */}
             <Tooltip title="Edit details">
               <IconButton onClick={(e) => {
                 handleEdit(params.row)
               }}>
                 <Edit />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Delete details">
-              <IconButton
-                onClick={() => {
-                  console.log("delete--------", params, params.row.id)
-                  dispatch(deleteSchoolResult(params.row.id))
-                }}
-              >
-                <Delete />
               </IconButton>
             </Tooltip>
           </Box>
@@ -135,14 +124,14 @@ function SchoolResult() {
             variant="h4"
             gutterBottom
           >
-            School results
+            School Results
           </Typography>
 
-          <div className="pb-4">
+          {/* <div className="pb-4">
             <Button className="mx-2" onClick={handleCreateOpen} variant="contained">
               Create Schoolresult
             </Button>
-          </div>
+          </div> */}
 
           <CreateSchoolResult
             selectedValue={selectedValue}

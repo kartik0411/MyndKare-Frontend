@@ -27,6 +27,7 @@ function CreateSchool(props) {
   }
 
   const handleClose = () => {
+    settypedSchools({typedschool: ""});
     onClose(selectedValue);
   };
 

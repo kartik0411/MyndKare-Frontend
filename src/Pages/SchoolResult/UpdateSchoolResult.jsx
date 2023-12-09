@@ -19,10 +19,8 @@ import { FormGroup } from "@mui/material";
 function UpdateSchoolResult(props) {
   const { onClose, selectedValue, open } = props;
   let ok = {key:selectedValue.id,value:selectedValue.school}
-  const [inputs, setInputs] = useState({
-    school: ok,
-    result_publish: selectedValue.result_publish,
-  });
+  const [inputs, setInputs] = useState({});
+  const [typedschool, settypedSchools] = useState(false);
   const { schools } = useSelector((state) => state.schoolDetail);
   console.log(schools)
   const dispatch = useDispatch();
@@ -39,14 +37,23 @@ function UpdateSchoolResult(props) {
     e.preventDefault();
     dispatch(editSchoolResult(inputs));
     handleClose();
+    window.location.reload();
+
   }
 
   const handleClose = () => {
+    settypedSchools({typedschool: false});
     onClose(selectedValue);
   };
 
   const updatedSchoolResult = (e) => {
-    setInputs({ ...inputs, [e.target.name]: e.target.value })
+    let rpvalue = true;
+    if(e.target.value === "off") {
+      rpvalue = false;
+    }
+    // console.log("e hai :"+JSON.stringify(e.target))
+    setInputs({ ...inputs, [e.target.name]: rpvalue })
+    settypedSchools({typedschool: true});
   }
 
   return (
@@ -55,31 +62,25 @@ function UpdateSchoolResult(props) {
       <DialogContent>
       <form>
           <div className="pt-4">
-            <FormControl size="small" fullWidth>
-              <InputLabel id="demo-select-small-label">School ID</InputLabel>
-              <Select
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                name="school"
-                value={inputs && inputs.school}
-                
-                label="School ID"
-                onChange={updatedSchoolResult}
-              >
-                {schools.map((data) => (
-                  <MenuItem key={data.id} value={data.name}>
-                    {data.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+          <TextField
+              fullWidth
+              label="Name"
+              name="name"
+              value={inputs && inputs.name}
+              id="outlined-size-small"
+              size="small"
+              multiline
+              maxRows={4}
+              // onChange={updatedQuestion}
+            />
           </div>
           <div className="pt-4">
             <FormGroup>
               <FormControlLabel
                 control={
                   <Checkbox
-                  checked= {inputs && inputs.result_publish }
+                  name="resultPublish"
+                  checked= {inputs && inputs.resultPublish }
                     onChange={updatedSchoolResult}
                   />
                 }
@@ -107,7 +108,7 @@ function UpdateSchoolResult(props) {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit}>Update</Button>
+        <Button onClick={handleSubmit} disabled={!typedschool.typedschool}>Update</Button>
       </DialogActions>
     </Dialog>
   );

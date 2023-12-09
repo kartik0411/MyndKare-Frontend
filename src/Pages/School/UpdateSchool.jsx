@@ -25,10 +25,11 @@ function UpdateSchool(props) {
     e.preventDefault();
     dispatch(editSchool(updateSchool));
     handleClose();
-    // window.location.reload();
+    window.location.reload();
   }
 
   const handleClose = () => {
+    settypedSchools({typedschool: ""});
     onClose(selectedValue);
   };
 
