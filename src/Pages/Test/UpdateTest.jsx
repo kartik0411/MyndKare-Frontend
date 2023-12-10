@@ -19,7 +19,7 @@ function UpdateTest(props) {
   const { onClose, selectedValue, open } = props;
   const [updateTest, setUpdateTest] = useState({});
   const [typedtest, settypedTests] = useState({});
-  const [selectedTest, setSelectedTest] = useState({});
+  const [selectedTest, setSelectedTest] = useState({type: updateTest.type});
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -50,6 +50,7 @@ function UpdateTest(props) {
       settypedTests({typedtest: updateTest.name});
     }
     setSelectedTest({type: e.target.value});
+    setUpdateTest({ ...updateTest, type: e.target.value})
     // console.log("selectedTest.type"+selectedTest.type)
     // console.log("typedtest.typedtest"+typedtest.typedtest)
     // if(selectedTest && selectedTest.type && (selectedTest.type===1 || selectedTest.type===2) && !typedtest.typedtest)
@@ -92,7 +93,7 @@ function UpdateTest(props) {
               name="row-radio-buttons-group"
               value={selectedTest.type}
               onChange={handleChange}
-              defaultValue={updateTest && updateTest.type}
+              defaultValue={selectedValue && selectedValue.type}
             >
               <FormControlLabel value="1" control={<Radio />} label="RESPONSE BASED(MBTI)" />
               <FormControlLabel value="2" control={<Radio />} label="SCORE BASED(DBDA)" />

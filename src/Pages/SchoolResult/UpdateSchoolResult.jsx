@@ -80,7 +80,7 @@ function UpdateSchoolResult(props) {
                 control={
                   <Checkbox
                   name="resultPublish"
-                  checked= {inputs && inputs.resultPublish }
+                  checked= {inputs  && inputs.resultPublish}
                     onChange={updatedSchoolResult}
                   />
                 }

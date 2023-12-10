@@ -78,6 +78,7 @@ function Test() {
       type: "actions",
       flex: 1,
       renderCell: (params) => {
+        if(params.row.name!='CIS') {
         return (
           <Box>
             <Tooltip title="View details">
@@ -103,6 +104,20 @@ function Test() {
             </Tooltip>
           </Box>
         );
+            }
+            else {
+              return (
+                <Box>
+                  <Tooltip title="View details">
+                    <IconButton onClick={(e) => { 
+                      handleView(params.row)
+                    }}>
+                      <Preview />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+              );
+            }
       },
     },
   ];
