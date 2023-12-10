@@ -1,63 +1,66 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import { Padding } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { createClass, showClass  } from "../../redux/classSlice";
+import { editSection } from "../../redux/sectionSlice";
 
-function CreateClass(props) {
+function ViewSection(props) {
   const { onClose, selectedValue, open } = props;
-  const [classes, setClasses] = useState({});
-  const [typedclass, settypedClasses] = useState({});
+  const [updateSection, setUpdateSection] = useState({});
   const dispatch = useDispatch();
 
-  const getClassData = (e) => {
-    settypedClasses({typedclass: e.target.value});
-    setClasses({ ...classes, [e.target.name]: e.target.value, resultPublish: false })
-  }
+  useEffect(() => {
+    if (selectedValue) {
+        setUpdateSection(selectedValue);
+    }
+  }, [selectedValue])
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createClass(classes));
+    dispatch(editSection(updateSection));
     handleClose();
     window.location.reload();
   }
 
   const handleClose = () => {
-    settypedClasses({typedclass: ""});
     onClose(selectedValue);
   };
 
+  const updatedQuestion = (e) => {
+    setUpdateSection({ ...updateSection, [e.target.name]: e.target.value })
+  }
+
   return (
     <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
-      <DialogTitle>Create Class</DialogTitle>
+      <DialogTitle>View Section</DialogTitle>
       <DialogContent>
         <form >
-          <div className="pt-4">
+          <div sectionName="pt-4">
             <TextField
               fullWidth
               label="Name"
               name="name"
-              onChange={getClassData}
+              value={updateSection && updateSection.name}
               id="outlined-size-small"
               size="small"
               multiline
               maxRows={4}
+              // onChange={updatedQuestion}
             />
           </div>
         </form>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit}  disabled={!typedclass.typedclass}>Save</Button>
+        <Button onClick={handleClose}>Close</Button>
       </DialogActions>
     </Dialog>
   );
 }
 
-export default CreateClass
-
+export default ViewSection
 

@@ -149,7 +149,6 @@ function School() {
   // }
 
   const handleClose = (value) => {
-    console.log("ye to aara")
     setEditOpen(false);
     setCreateOpen(false);
     setViewOpen(false);

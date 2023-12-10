@@ -1,16 +1,23 @@
 import React, { useEffect } from "react";
-import { Table } from "../../components/Table";
+import { Table } from '../../components/Table'
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteClass, showClass } from "../../redux/classSlice";
-import { Box, IconButton, Tooltip } from "@mui/material";
+import { createClass, showClass } from "../../redux/classSlice";
+import { Box, IconButton, Tooltip} from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 import { Delete, Edit, Preview } from "@mui/icons-material";
-import CircularProgress from "@mui/material/CircularProgress";
-import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
-import { read, utils, writeFile } from "xlsx";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+import { deleteClass } from "../../redux/classSlice";
+import CircularProgress from '@mui/material/CircularProgress';
+import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
+import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
+import { read, utils, writeFile } from 'xlsx';
 import UpdateClass from "./UpdateClass";
+import ViewClass from "./ViewClass";
 import CreateClass from "./CreateClass";
+import DeleteClass from "./DeleteClass";
 
 const tableOptions = {
   height: "auto",
@@ -36,17 +43,29 @@ const styles = {
 function Class() {
   const [createOpen, setCreateOpen] = React.useState(false);
   const [editOpen, setEditOpen] = React.useState(false);
+  // const [snackOpen, setSnackOpen] = React.useState(false);
+  const [viewOpen, setViewOpen] = React.useState(false);
+  const [deleteOpen, setDeleteOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState([]);
   const [editFormValues, setEditFormValues] = React.useState([]);
   const dispatch = useDispatch();
-  const { classes, loading } = useSelector((state) => state.classDetail);
-
+  const { classes, loading, error } = useSelector((state) => {
+    let classobject = state.classDetail
+    if(state.classDetail && state.classDetail.classes && state.classDetail.classes.length>0 && state.classDetail.classes[state.classDetail.classes.length-1]._id == null) {
+      let newclassobject = JSON.parse(JSON.stringify(classobject));
+      newclassobject.classes.pop();
+      return newclassobject;
+    }
+    else {
+    return classobject;
+    }
+  });
+    console.log(classes)
   const columns = [
-    { field: "id", headerName: "ID", flex: 1 },
     {
-      field: "title",
-      headerName: "Title",
-      flex: 1,
+      field: "name",
+      headerName: "Name",
+      flex: 1
     },
     {
       field: "actions",
@@ -57,26 +76,23 @@ function Class() {
         return (
           <Box>
             <Tooltip title="View details">
-              <IconButton onClick={() => { }}>
+              <IconButton onClick={(e) => { 
+                handleView(params.row)
+              }}>
                 <Preview />
               </IconButton>
             </Tooltip>
             <Tooltip title="Edit details">
-              <IconButton
-                onClick={(e) => {
-                  handleEdit(params.row);
-                }}
-              >
+              <IconButton onClick={(e) => {
+                handleEdit(params.row)
+              }}>
                 <Edit />
               </IconButton>
             </Tooltip>
             <Tooltip title="Delete details">
-              <IconButton
-                onClick={() => {
-                  console.log("delete--------", params, params.row.id);
-                  dispatch(deleteClass(params.row.id));
-                }}
-              >
+            <IconButton onClick={(e) => {
+                handleDelete(params.row)
+              }}>
                 <Delete />
               </IconButton>
             </Tooltip>
@@ -87,9 +103,11 @@ function Class() {
   ];
 
   useEffect(() => {
-    dispatch(showClass());
-  }, []);
-
+    console.log("sdjjhjdsdsh")
+    dispatch(showClass())
+    console.log(classes)
+  }, [])
+  console.log(classes)
   const handleCreateOpen = () => {
     setCreateOpen(true);
   };
@@ -97,37 +115,94 @@ function Class() {
   const exportToExcel = async () => {
     const worksheet = utils.json_to_sheet(classes);
     const workbook = utils.book_new();
-    utils.book_append_sheet(workbook, worksheet, "Sheet 1");
-    writeFile(workbook, "data.xlsx");
-  };
+    utils.book_append_sheet(workbook, worksheet, 'Sheet 1');
+    writeFile(workbook, 'data.xlsx');
+  }
 
   const handleEdit = (value) => {
     setCreateOpen(false);
     setEditOpen(true);
-    setEditFormValues(value);
-    console.log(value);
-  };
+    setEditFormValues(value)
+    console.log(value)
+  }
+
+  const handleDelete = (value) => {
+    setCreateOpen(false);
+    setEditOpen(false);
+    setDeleteOpen(true);
+    setEditFormValues(value)
+    console.log(value)
+  }
+
+  const handleView = (value) => {
+    setCreateOpen(false);
+    setEditOpen(false);
+    setViewOpen(true);
+    setEditFormValues(value)
+    console.log(value)
+  }
+  // const handleSnackbarOpen = () => {
+  //   console.log("dekhte hain")
+  //   setCreateOpen(false);
+  //   setEditOpen(false);
+    // setSnackOpen(true);
+  // }
 
   const handleClose = (value) => {
     setEditOpen(false);
     setCreateOpen(false);
+    setViewOpen(false);
+    setDeleteOpen(false);
+    // if(snackOpen) {
+    //   console.log("ye kaise aa skta")
+    //   window.location.reload();
+    // }
+    // setSnackOpen(false);
     setSelectedValue(value);
   };
 
+  // const snackaction = (
+  //   <React.Fragment>
+  //     <Button color="secondary" size="small" onClick={handleClose}>
+  //       OK
+  //     </Button>
+  //     <IconButton
+  //       size="small"
+  //       aria-label="close"
+  //       color="inherit"
+  //       onClick={handleClose}
+  //     >
+  //       <CloseIcon fontSize="small" />
+  //     </IconButton>
+  //   </React.Fragment>
+  // );
+
   if (loading) {
     return (
-      <Box
-        className="mb-40 mt-40 flex items-center justify-center"
-        sx={{ display: "flex" }}
-      >
+      <Box className="mb-40 mt-40 flex items-center justify-center" sx={{ display: 'flex' }}>
         <CircularProgress />
       </Box>
+    );
+  }
+  if(error) {
+    setTimeout(window.location.reload.bind(window.location), 2000);
+    return (
+    // <Snackbar
+    //   open={setSnackOpen(true)}
+    //   autoHideDuration={6000}
+    //   onClose={handleClose}
+    //   message="Cannot add Duplicate Names"
+    //   action={snackaction}
+    // />
+    <Alert variant="filled" severity="error">
+    Cannot add Duplicate Class Names
+  </Alert>
     );
   }
 
   return (
     <>
-      {classes && (
+      {classes &&
         <div style={styles.containerQuestion}>
           <Typography
             className="text-sky-600 text-4xl pb-2 pl-2"
@@ -138,12 +213,8 @@ function Class() {
           </Typography>
 
           <div className="pb-4">
-            <Button
-              className="mx-2"
-              onClick={handleCreateOpen}
-              variant="contained"
-            >
-              Create Classes
+            <Button className="mx-2" onClick={handleCreateOpen} variant="contained">
+              Create Class
             </Button>
           </div>
 
@@ -158,6 +229,16 @@ function Class() {
             open={editOpen}
             onClose={handleClose}
           />
+          <ViewClass
+            selectedValue={editFormValues}
+            open={viewOpen}
+            onClose={handleClose}
+          />
+          <DeleteClass
+            selectedValue={editFormValues}
+            open={deleteOpen}
+            onClose={handleClose}
+          />
 
           <Table
             height={tableOptions.height}
@@ -170,16 +251,12 @@ function Class() {
             disableSelectionOnClick={tableOptions.disableSelectionOnClick}
           />
           <div className="flex justify-end">
-            <Button
-              className="my-2"
-              onClick={exportToExcel}
-              variant="contained"
-            >
+            <Button className="my-2" onClick={exportToExcel} variant="contained">
               Download <DownloadRoundedIcon />
             </Button>
           </div>
         </div>
-      )}
+      }
     </>
   );
 }

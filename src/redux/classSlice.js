@@ -5,7 +5,7 @@ export const createClass = createAsyncThunk(
   "createClass", // modify it to access the uploaded excel sheet
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      "https://6532ced6d80bd20280f61298.mockapi.io/api/v1/class",
+      "http://localhost:9083/myndkare/v1/classes",
       {
         method: "POST",
         headers: {
@@ -30,7 +30,7 @@ export const showClass = createAsyncThunk(
   "showClass",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "https://6532ced6d80bd20280f61298.mockapi.io/api/v1/class",
+      "http://localhost:9083/myndkare/v1/classes",
       { method: "GET" }
     );
 
@@ -48,7 +48,7 @@ export const deleteClass = createAsyncThunk(
   "deleteClass",
   async (id, { rejectWithValue }) => {
     const response = await fetch(
-      `https://6532ced6d80bd20280f61298.mockapi.io/api/v1/class/${id}`,
+      `http://localhost:9083/myndkare/v1/classes/${id}`,
       { method: "DELETE" }
     );
 
@@ -66,7 +66,7 @@ export const editClass = createAsyncThunk(
   "editClass",
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      `https://6532ced6d80bd20280f61298.mockapi.io/api/v1/class/${data.id}`,
+      `http://localhost:9083/myndkare/v1/classes`,
       {
         method: "PUT",
         headers: {
@@ -110,7 +110,7 @@ export const classSlice = createSlice({
     },
     [createClass.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.payload.message;
+      state.error = action.payload;
     },
     [showClass.pending]: (state) => {
       state.loading = true;
