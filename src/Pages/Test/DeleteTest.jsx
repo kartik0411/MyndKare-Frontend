@@ -7,22 +7,22 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Padding } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { editSection } from "../../redux/sectionSlice";
+import { deleteTest } from "../../redux/testSlice";
 
-function ViewSection(props) {
+function DeleteTest(props) {
   const { onClose, selectedValue, open } = props;
-  const [updateSection, setUpdateSection] = useState({});
+  const [updateTest, setUpdateTest] = useState({});
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (selectedValue) {
-        setUpdateSection(selectedValue);
+        setUpdateTest(selectedValue);
     }
   }, [selectedValue])
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(editSection(updateSection));
+    dispatch(deleteTest(updateTest._id))
     handleClose();
     window.location.reload();
   }
@@ -32,20 +32,20 @@ function ViewSection(props) {
   };
 
   const updatedQuestion = (e) => {
-    setUpdateSection({ ...updateSection, [e.target.name]: e.target.value })
+    setUpdateTest({ ...updateTest, [e.target.name]: e.target.value })
   }
 
   return (
     <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
-      <DialogTitle>View Section</DialogTitle>
+      <DialogTitle>Are you sure you want to delete the below Test?</DialogTitle>
       <DialogContent>
         <form >
-          <div sectionName="pt-4">
+          <div testName="pt-4">
             <TextField
               fullWidth
               label="Name"
               name="name"
-              value={updateSection && updateSection.name}
+              value={updateTest && updateTest.name}
               id="outlined-size-small"
               size="small"
               multiline
@@ -56,11 +56,12 @@ function ViewSection(props) {
         </form>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Close</Button>
+        <Button onClick={handleClose}>No</Button>
+        <Button onClick={handleSubmit}>Yes</Button>
       </DialogActions>
     </Dialog>
   );
 }
 
-export default ViewSection
+export default DeleteTest
 

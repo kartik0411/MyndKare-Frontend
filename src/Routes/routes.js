@@ -1,5 +1,6 @@
 import { classes } from "istanbul-lib-coverage"
 import Class from "../Pages/Class/Class"
+import Test from "../Pages/Test/Test"
 import Exam from "../Pages/Exam/Exam"
 import Home from "../Pages/Home/Home"
 import Login from "../Pages/Login/Login"
@@ -22,6 +23,7 @@ const routes = [
     { path: "/class", Component: Class },
     { path: "/section", Component: Section },
     { path: "/student", Component: Student },
+    { path: "/test", Component: Test },
     { path: "/exam", Component: Exam },
     { path: "/question", Component: Question },
     { path: "/report", Component: Report },

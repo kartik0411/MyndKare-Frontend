@@ -5,6 +5,7 @@ import schoolResultSlice from "./schoolResultSlice";
 import classSlice from "./classSlice";
 import sectionSlice from "./sectionSlice";
 import examSlice from "./examSlice";
+import testSlice from "./testSlice";
 
 export const store = configureStore({
     reducer : {
@@ -13,6 +14,7 @@ export const store = configureStore({
         schoolResultDetail : schoolResultSlice,
         classDetail : classSlice,
         sectionDetail : sectionSlice,
-        examDetail : examSlice
+        examDetail : examSlice,
+        testDetail : testSlice
     }
 })

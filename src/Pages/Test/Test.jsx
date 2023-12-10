@@ -3,21 +3,21 @@ import { Table } from '../../components/Table'
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { createSection, showSection } from "../../redux/sectionSlice";
+import { createTest, showTest } from "../../redux/testSlice";
 import { Box, IconButton, Tooltip} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import { Delete, Edit, Preview } from "@mui/icons-material";
 import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
-import { deleteSection } from "../../redux/sectionSlice";
+import Alert from "@mui/material/Alert"; 
+import { deleteTest } from "../../redux/testSlice";
 import CircularProgress from '@mui/material/CircularProgress';
 import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import { read, utils, writeFile } from 'xlsx';
-import UpdateSection from "./UpdateSection";
-import ViewSection from "./ViewSection";
-import CreateSection from "./CreateSection";
-import DeleteSection from "./DeleteSection";
+import UpdateTest from "./UpdateTest";
+import ViewTest from "./ViewTest";
+import CreateTest from "./CreateTest";
+import DeleteTest from "./DeleteTest";
 
 const tableOptions = {
   height: "auto",
@@ -40,7 +40,7 @@ const styles = {
   },
 };
 
-function Section() {
+function Test() {
   const [createOpen, setCreateOpen] = React.useState(false);
   const [editOpen, setEditOpen] = React.useState(false);
   // const [snackOpen, setSnackOpen] = React.useState(false);
@@ -49,22 +49,27 @@ function Section() {
   const [selectedValue, setSelectedValue] = React.useState([]);
   const [editFormValues, setEditFormValues] = React.useState([]);
   const dispatch = useDispatch();
-  const { sections, loading, error } = useSelector((state) => {
-    let sectionobject = state.sectionDetail
-    if(state.sectionDetail && state.sectionDetail.sections && state.sectionDetail.sections.length>0 && state.sectionDetail.sections[state.sectionDetail.sections.length-1]._id == null) {
-      let newsectionobject = JSON.parse(JSON.stringify(sectionobject));
-      newsectionobject.sections.pop();
-      return newsectionobject;
-    }
-    else {
-    return sectionobject;
-    }
+  const { tests, loading, error } = useSelector((state) => {
+    // let testobject = state.testDetail
+    // if(state.testDetail && state.testDetail.tests && state.testDetail.tests.length>0 && state.testDetail.tests[state.testDetail.tests.length-1]._id == null) {
+    //   let newtestobject = JSON.parse(JSON.stringify(testobject));
+    //   newtestobject.tests.pop();
+    //   return newtestobject;
+    // }
+    // else {
+    return state.testDetail;
+    // }
   });
-    console.log(sections)
+    console.log(tests)
   const columns = [
     {
       field: "name",
       headerName: "Name",
+      flex: 1
+    },
+    {
+      field: "typeName",
+      headerName: "Type",
       flex: 1
     },
     {
@@ -103,17 +108,16 @@ function Section() {
   ];
 
   useEffect(() => {
-    console.log("sdjjhjdsdsh")
-    dispatch(showSection())
-    console.log(sections)
+    dispatch(showTest())
+    console.log(tests)
   }, [])
-  console.log(sections)
+  console.log(tests)
   const handleCreateOpen = () => {
     setCreateOpen(true);
   };
 
   const exportToExcel = async () => {
-    const worksheet = utils.json_to_sheet(sections);
+    const worksheet = utils.json_to_sheet(tests);
     const workbook = utils.book_new();
     utils.book_append_sheet(workbook, worksheet, 'Sheet 1');
     writeFile(workbook, 'data.xlsx');
@@ -179,7 +183,7 @@ function Section() {
 
   if (loading) {
     return (
-      <Box sectionName="mb-40 mt-40 flex items-center justify-center" sx={{ display: 'flex' }}>
+      <Box testName="mb-40 mt-40 flex items-center justify-center" sx={{ display: 'flex' }}>
         <CircularProgress />
       </Box>
     );
@@ -195,46 +199,46 @@ function Section() {
     //   action={snackaction}
     // />
     <Alert variant="filled" severity="error">
-    Cannot add Duplicate Section Names
+    Cannot add Duplicate Test Names
   </Alert>
     );
   }
 
   return (
     <>
-      {sections &&
+      {tests &&
         <div style={styles.containerQuestion}>
           <Typography
-            sectionName="text-sky-600 text-4xl pb-2 pl-2"
+            testName="text-sky-600 text-4xl pb-2 pl-2"
             variant="h4"
             gutterBottom
           >
-            Sections
+            Tests
           </Typography>
 
-          <div sectionName="pb-4">
-            <Button sectionName="mx-2" onClick={handleCreateOpen} variant="contained">
-              Create Section
+          <div testName="pb-4">
+            <Button testName="mx-2" onClick={handleCreateOpen} variant="contained">
+              Create Test
             </Button>
           </div>
 
-          <CreateSection
+          <CreateTest
             selectedValue={selectedValue}
             open={createOpen}
             onClose={handleClose}
           />
 
-          <UpdateSection
+          <UpdateTest
             selectedValue={editFormValues}
             open={editOpen}
             onClose={handleClose}
           />
-          <ViewSection
+          <ViewTest
             selectedValue={editFormValues}
             open={viewOpen}
             onClose={handleClose}
           />
-          <DeleteSection
+          <DeleteTest
             selectedValue={editFormValues}
             open={deleteOpen}
             onClose={handleClose}
@@ -243,15 +247,15 @@ function Section() {
           <Table
             height={tableOptions.height}
             width={tableOptions.width}
-            rows={sections}
+            rows={tests}
             columns={columns}
             initialState={tableOptions.initialState}
             pageSizeOptions={tableOptions.pageSizeOptions}
             checkboxSelection={tableOptions.checkboxSelection}
             disableSelectionOnClick={tableOptions.disableSelectionOnClick}
           />
-          <div sectionName="flex justify-end">
-            <Button sectionName="my-2" onClick={exportToExcel} variant="contained">
+          <div testName="flex justify-end">
+            <Button testName="my-2" onClick={exportToExcel} variant="contained">
               Download <DownloadRoundedIcon />
             </Button>
           </div>
@@ -261,4 +265,4 @@ function Section() {
   );
 }
 
-export default Section;
+export default Test;
