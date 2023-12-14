@@ -43,7 +43,7 @@ function UpdateSection(props) {
       <DialogTitle>Edit Section</DialogTitle>
       <DialogContent>
         <form >
-          <div sectionName="pt-4">
+          <div className="pt-4">
             <TextField
               fullWidth
               label="Name"

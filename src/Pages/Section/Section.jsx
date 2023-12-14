@@ -179,7 +179,7 @@ function Section() {
 
   if (loading) {
     return (
-      <Box sectionName="mb-40 mt-40 flex items-center justify-center" sx={{ display: 'flex' }}>
+      <Box className="mb-40 mt-40 flex items-center justify-center" sx={{ display: 'flex' }}>
         <CircularProgress />
       </Box>
     );
@@ -205,15 +205,15 @@ function Section() {
       {sections &&
         <div style={styles.containerQuestion}>
           <Typography
-            sectionName="text-sky-600 text-4xl pb-2 pl-2"
+            className="text-sky-600 text-4xl pb-2 pl-2"
             variant="h4"
             gutterBottom
           >
             Sections
           </Typography>
 
-          <div sectionName="pb-4">
-            <Button sectionName="mx-2" onClick={handleCreateOpen} variant="contained">
+          <div className="pb-4">
+            <Button className="mx-2" onClick={handleCreateOpen} variant="contained">
               Create Section
             </Button>
           </div>
@@ -250,8 +250,8 @@ function Section() {
             checkboxSelection={tableOptions.checkboxSelection}
             disableSelectionOnClick={tableOptions.disableSelectionOnClick}
           />
-          <div sectionName="flex justify-end">
-            <Button sectionName="my-2" onClick={exportToExcel} variant="contained">
+          <div className="flex justify-end">
+            <Button className="my-2" onClick={exportToExcel} variant="contained">
               Download <DownloadRoundedIcon />
             </Button>
           </div>

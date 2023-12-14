@@ -5,7 +5,7 @@ export const createExam = createAsyncThunk(
   "createExam", // modify it to access the uploaded excel sheet
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      "https://653379eed80bd20280f685a1.mockapi.io/api/v1/exam",
+      "http://localhost:9083/myndkare/v1/exams",
       {
         method: "POST",
         headers: {
@@ -30,7 +30,7 @@ export const showExam = createAsyncThunk(
   "showExam",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "https://653379eed80bd20280f685a1.mockapi.io/api/v1/exam",
+      "http://localhost:9083/myndkare/v1/exams",
       { method: "GET" }
     );
 
@@ -48,7 +48,7 @@ export const deleteExam = createAsyncThunk(
   "deleteExam",
   async (id, { rejectWithValue }) => {
     const response = await fetch(
-      `https://653379eed80bd20280f685a1.mockapi.io/api/v1/exam/${id}`,
+      `http://localhost:9083/myndkare/v1/exams/${id}`,
       { method: "DELETE" }
     );
 
@@ -66,7 +66,7 @@ export const editExam = createAsyncThunk(
   "editExam",
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      `https://653379eed80bd20280f685a1.mockapi.io/api/v1/exam/${data.id}`,
+      `http://localhost:9083/myndkare/v1/exams`,
       {
         method: "PUT",
         headers: {

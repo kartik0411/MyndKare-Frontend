@@ -71,7 +71,7 @@ function UpdateTest(props) {
       <DialogTitle>Edit Test</DialogTitle>
       <DialogContent>
         <form >
-          <div testName="pt-4">
+          <div className="pt-4">
             <TextField
               fullWidth
               label="Name"

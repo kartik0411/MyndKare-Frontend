@@ -5,16 +5,21 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import { Padding } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { editExam } from "../../redux/examSlice";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
+import Radio from '@mui/material/Radio';
 import Select from "@mui/material/Select";
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 
 function UpdateExam(props) {
   const { onClose, selectedValue, open } = props;
   const [updateExam, setUpdateExam] = useState({});
+  const [typedexam, settypedExams] = useState({});
+  const [selectedExam, setSelectedExam] = useState({type: updateExam.type});
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -27,22 +32,39 @@ function UpdateExam(props) {
     e.preventDefault();
     dispatch(editExam(updateExam));
     handleClose();
+    window.location.reload();
   }
 
   const handleClose = () => {
+    settypedExams({typedexam: ""});
     onClose(selectedValue);
   };
 
-  const updatedExam = (e) => {
-    setUpdateExam({ ...updateExam, [e.target.name]: e.target.value })
+  
+  const handleChange = (e) => {
+    // console.log("isse pehle ki value:"+selectedExam)
+    // console.log("selected exam ki value:"+e.target.value)
+    if(typedexam && typedexam.typedexam && typedexam.typedexam!="") {
+      settypedExams({typedexam: typedexam.typedexam});
+    } else {
+      settypedExams({typedexam: updateExam.name});
+    }
+    setSelectedExam({type: e.target.value});
+    setUpdateExam({ ...updateExam, type: e.target.value})
+    // console.log("selectedExam.type"+selectedExam.type)
+    // console.log("typedexam.typedexam"+typedexam.typedexam)
+    // if(selectedExam && selectedExam.type && (selectedExam.type===1 || selectedExam.type===2) && !typedexam.typedexam)
+    // {
+    //   console.log("ye to aara");
+    //   setsubmitbutton(true);
+    // }
   }
 
-  const styles = {
-    equalFields: {
-      width: "50%",
-      paddingRight: "15px",
-    },
-  };
+
+  const updatedQuestion = (e) => {
+    settypedExams({typedexam: e.target.value});
+    setUpdateExam({ ...updateExam, [e.target.name]: e.target.value, type: selectedExam.type})
+  }
 
   return (
     <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
@@ -52,96 +74,39 @@ function UpdateExam(props) {
           <div className="pt-4">
             <TextField
               fullWidth
-              label="Title"
-              name="title"
-              value={updateExam && updateExam.title}
+              label="Name"
+              name="name"
+              value={updateExam && updateExam.name}
               id="outlined-size-small"
               size="small"
-              onChange={updatedExam}
+              multiline
+              maxRows={4}
+              onChange={updatedQuestion}
             />
-          </div>
-          <div className="pt-4 flex items-center justify-center" >
-          <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
-            <InputLabel id="demo-select-small-label">Timer</InputLabel>
-            <Select
-      
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              name="timer"
-              value={updateExam.timer}
-              label="Timer"
-              onChange={updatedExam}
-            >
-              <MenuItem value="">
-              </MenuItem>
-              <MenuItem value={true}>Yes</MenuItem>
-              <MenuItem value={false}>No</MenuItem>
-            </Select>
-            </FormControl>
-
-            <FormControl sx={{ display: "inline-flex", width: "100%" }} size="small">
-            <InputLabel id="demo-select-small-label">Timer Visible</InputLabel>
-            <Select
-      
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              name="timer_visible"
-              value={updateExam.timer_visible}
-              label="Timer Visible"
-              onChange={updatedExam}
-            >
-              <MenuItem value="">
-              </MenuItem>
-              <MenuItem value={true}>Yes</MenuItem>
-              <MenuItem value={false}>No</MenuItem>
-            </Select>
-            </FormControl>
-          </div>
-        
-          <div className="pt-4">
-            <TextField
-              style={styles.equalFields}
-              label="Duration"
-              name="duration"
-              type="number"
-              value={updateExam && updateExam.duration}
-              onChange={updatedExam}
-              id="outlined-number"
-              size="small"
-            />
-
-            <TextField
-              style={{ width: "50%" }}
-              label="Questions"
-              name="question"
-              value={updateExam && updateExam.question}
-              onChange={updatedExam}
-              id="outlined-number"
-              size="small"
-              type="number"
-            />
-          </div>
-          <div className="pt-4">
-            <TextField
-              style={styles.equalFields}
-              label="Serial"
-              name="serial"
-              value={updateExam && updateExam.serial}
-              onChange={updatedExam}
-              id="outlined-number"
-              size="small"
-              type="number"
-            />  
           </div>
         </form>
+        <FormControl>
+            <FormLabel id="demo-radio-buttons-group-label"></FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+              value={selectedExam.type}
+              onChange={handleChange}
+              defaultValue={selectedValue && selectedValue.type}
+            >
+              <FormControlLabel value="1" control={<Radio />} label="RESPONSE BASED(MBTI)" />
+              <FormControlLabel value="2" control={<Radio />} label="SCORE BASED(DBDA)" />
+            </RadioGroup>
+          </FormControl>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit}>Update</Button>
+        <Button onClick={handleSubmit} disabled={!typedexam.typedexam}>Update</Button>
       </DialogActions>
     </Dialog>
   );
 }
 
-export default UpdateExam;
+export default UpdateExam
 

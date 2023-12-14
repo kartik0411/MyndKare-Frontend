@@ -40,7 +40,7 @@ function DeleteSection(props) {
       <DialogTitle>Are you sure you want to delete the below Section?</DialogTitle>
       <DialogContent>
         <form >
-          <div sectionName="pt-4">
+          <div className="pt-4">
             <TextField
               fullWidth
               label="Name"

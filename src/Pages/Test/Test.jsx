@@ -198,7 +198,7 @@ function Test() {
 
   if (loading) {
     return (
-      <Box testName="mb-40 mt-40 flex items-center justify-center" sx={{ display: 'flex' }}>
+      <Box className="mb-40 mt-40 flex items-center justify-center" sx={{ display: 'flex' }}>
         <CircularProgress />
       </Box>
     );
@@ -224,15 +224,15 @@ function Test() {
       {tests &&
         <div style={styles.containerQuestion}>
           <Typography
-            testName="text-sky-600 text-4xl pb-2 pl-2"
+            className="text-sky-600 text-4xl pb-2 pl-2"
             variant="h4"
             gutterBottom
           >
             Tests
           </Typography>
 
-          <div testName="pb-4">
-            <Button testName="mx-2" onClick={handleCreateOpen} variant="contained">
+          <div className="pb-4">
+            <Button className="mx-2" onClick={handleCreateOpen} variant="contained">
               Create Test
             </Button>
           </div>
@@ -269,8 +269,8 @@ function Test() {
             checkboxSelection={tableOptions.checkboxSelection}
             disableSelectionOnClick={tableOptions.disableSelectionOnClick}
           />
-          <div testName="flex justify-end">
-            <Button testName="my-2" onClick={exportToExcel} variant="contained">
+          <div className="flex justify-end">
+            <Button className="my-2" onClick={exportToExcel} variant="contained">
               Download <DownloadRoundedIcon />
             </Button>
           </div>

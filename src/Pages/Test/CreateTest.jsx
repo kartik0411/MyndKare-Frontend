@@ -31,7 +31,7 @@ function CreateTest(props) {
     e.preventDefault();
     dispatch(createTest(tests));
     handleClose();
-    // window.location.reload();
+    window.location.reload();
   }
 
   const handleChange = (e) => {
@@ -57,7 +57,7 @@ function CreateTest(props) {
       <DialogTitle>Create Test</DialogTitle>
       <DialogContent>
         <form >
-          <div testName="pt-4">
+          <div className="pt-4">
             <TextField
               fullWidth
               label="Name"

@@ -49,7 +49,7 @@ function SchoolResult() {
       flex: 1
     },
     {
-        field: "resultPublish",
+        field: "rpnotbool",
         headerName: "Result Publish",
         flex: 1
       },

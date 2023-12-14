@@ -40,7 +40,7 @@ function DeleteTest(props) {
       <DialogTitle>Are you sure you want to delete the below Test?</DialogTitle>
       <DialogContent>
         <form >
-          <div testName="pt-4">
+          <div className="pt-4">
             <TextField
               fullWidth
               label="Name"

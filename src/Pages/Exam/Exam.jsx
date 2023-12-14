@@ -3,14 +3,21 @@ import { Table } from '../../components/Table'
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
-import {  deleteExam, showExam } from "../../redux/examSlice";
-import { Box, IconButton, Tooltip } from "@mui/material";
+import { createExam, showExam } from "../../redux/examSlice";
+import { Box, IconButton, Tooltip} from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 import { Delete, Edit, Preview } from "@mui/icons-material";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert"; 
+import { deleteExam } from "../../redux/examSlice";
 import CircularProgress from '@mui/material/CircularProgress';
+import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
-import {utils, writeFile } from 'xlsx';
-import CreateExam from "./CreateExam";
+import { read, utils, writeFile } from 'xlsx';
 import UpdateExam from "./UpdateExam";
+import ViewExam from "./ViewExam";
+import CreateExam from "./CreateExam";
+import DeleteExam from "./DeleteExam";
 
 const tableOptions = {
   height: "auto",
@@ -36,49 +43,68 @@ const styles = {
 function Exam() {
   const [createOpen, setCreateOpen] = React.useState(false);
   const [editOpen, setEditOpen] = React.useState(false);
+  // const [snackOpen, setSnackOpen] = React.useState(false);
+  const [viewOpen, setViewOpen] = React.useState(false);
+  const [deleteOpen, setDeleteOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState([]);
   const [editFormValues, setEditFormValues] = React.useState([]);
   const dispatch = useDispatch();
-  const { exams, loading } = useSelector((state) => state.examDetail);
-
+  const { exams, loading, error } = useSelector((state) => {
+    // let examobject = state.examDetail
+    // if(state.examDetail && state.examDetail.exams && state.examDetail.exams.length>0 && state.examDetail.exams[state.examDetail.exams.length-1]._id == null) {
+    //   let newexamobject = JSON.parse(JSON.stringify(examobject));
+    //   newexamobject.exams.pop();
+    //   return newexamobject;
+    // }
+    // else {
+    return state.examDetail;
+    // }
+  });
+    console.log(exams)
   const columns = [
-    { field: "id", headerName: "ID", flex:1},
-    { field: "title", headerName: "Title", flex:1},
     {
-      field: "timer",
-      headerName: "Timer",
-      flex:1
+      field: "name",
+      headerName: "Name",
+      flex: 1
     },
     {
-      field: "timer_visible",
+      field: "timernotbool",
+      headerName: "Timer",
+      flex: 1
+    },
+    {
+      field: "timerVisiblenotbool",
       headerName: "Timer Visible",
-      flex:1
+      flex: 1
     },
     {
       field: "duration",
       headerName: "Duration",
-      flex:1
+      flex: 1
     },
     {
-      field: "question",
-      headerName: "Question",
-      flex:1
+      field: "questions",
+      headerName: "Questions Count",
+      flex: 1
     },
     {
       field: "serial",
       headerName: "Serial",
-      flex:1
+      flex: 1
     },
     {
       field: "actions",
       headerName: "Actions",
       type: "actions",
-      width: 140,
+      flex: 1,
       renderCell: (params) => {
+        if(params.row.name!='CIS') {
         return (
           <Box>
             <Tooltip title="View details">
-              <IconButton onClick={() => { }}>
+              <IconButton onClick={(e) => { 
+                handleView(params.row)
+              }}>
                 <Preview />
               </IconButton>
             </Tooltip>
@@ -90,24 +116,37 @@ function Exam() {
               </IconButton>
             </Tooltip>
             <Tooltip title="Delete details">
-              <IconButton
-                onClick={() => {
-                  dispatch(deleteExam(params.row.id))
-                }}
-              >
+            <IconButton onClick={(e) => {
+                handleDelete(params.row)
+              }}>
                 <Delete />
               </IconButton>
             </Tooltip>
           </Box>
         );
+            }
+            else {
+              return (
+                <Box>
+                  <Tooltip title="View details">
+                    <IconButton onClick={(e) => { 
+                      handleView(params.row)
+                    }}>
+                      <Preview />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+              );
+            }
       },
     },
   ];
 
   useEffect(() => {
     dispatch(showExam())
+    console.log(exams)
   }, [])
-
+  console.log(exams)
   const handleCreateOpen = () => {
     setCreateOpen(true);
   };
@@ -122,20 +161,81 @@ function Exam() {
   const handleEdit = (value) => {
     setCreateOpen(false);
     setEditOpen(true);
-    setEditFormValues(value);
+    setEditFormValues(value)
+    console.log(value)
   }
+
+  const handleDelete = (value) => {
+    setCreateOpen(false);
+    setEditOpen(false);
+    setDeleteOpen(true);
+    setEditFormValues(value)
+    console.log(value)
+  }
+
+  const handleView = (value) => {
+    setCreateOpen(false);
+    setEditOpen(false);
+    setViewOpen(true);
+    setEditFormValues(value)
+    console.log(value)
+  }
+  // const handleSnackbarOpen = () => {
+  //   console.log("dekhte hain")
+  //   setCreateOpen(false);
+  //   setEditOpen(false);
+    // setSnackOpen(true);
+  // }
 
   const handleClose = (value) => {
     setEditOpen(false);
     setCreateOpen(false);
+    setViewOpen(false);
+    setDeleteOpen(false);
+    // if(snackOpen) {
+    //   console.log("ye kaise aa skta")
+    //   window.location.reload();
+    // }
+    // setSnackOpen(false);
     setSelectedValue(value);
   };
+
+  // const snackaction = (
+  //   <React.Fragment>
+  //     <Button color="secondary" size="small" onClick={handleClose}>
+  //       OK
+  //     </Button>
+  //     <IconButton
+  //       size="small"
+  //       aria-label="close"
+  //       color="inherit"
+  //       onClick={handleClose}
+  //     >
+  //       <CloseIcon fontSize="small" />
+  //     </IconButton>
+  //   </React.Fragment>
+  // );
 
   if (loading) {
     return (
       <Box className="mb-40 mt-40 flex items-center justify-center" sx={{ display: 'flex' }}>
         <CircularProgress />
       </Box>
+    );
+  }
+  if(error) {
+    setTimeout(window.location.reload.bind(window.location), 2000);
+    return (
+    // <Snackbar
+    //   open={setSnackOpen(true)}
+    //   autoHideDuration={6000}
+    //   onClose={handleClose}
+    //   message="Cannot add Duplicate Names"
+    //   action={snackaction}
+    // />
+    <Alert variant="filled" severity="error">
+    Cannot add Duplicate Exam Names
+  </Alert>
     );
   }
 
@@ -166,6 +266,16 @@ function Exam() {
           <UpdateExam
             selectedValue={editFormValues}
             open={editOpen}
+            onClose={handleClose}
+          />
+          <ViewExam
+            selectedValue={editFormValues}
+            open={viewOpen}
+            onClose={handleClose}
+          />
+          <DeleteExam
+            selectedValue={editFormValues}
+            open={deleteOpen}
             onClose={handleClose}
           />
 
