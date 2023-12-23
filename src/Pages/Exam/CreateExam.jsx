@@ -16,17 +16,22 @@ import { computeSlots } from "@mui/x-data-grid/internals";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import { createTest, showTest } from "../../redux/testSlice";
+import { showDBDA } from "../../redux/dbdaSlice";
+import { getExamsCount } from "../../redux/examSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 function CreateExam(props)  {
   const { onClose, selectedValue, open } = props;
   const [exams, setExams] = useState({});
   const [test, setTest] = useState({});
+  const [dbdacode, setDBDACode] = useState({});
   const [dbda, setDbda] = useState(false);
+  const [timer, setTimer] = useState(false);
   // const [selectedExam, setSelectedExam] = useState({type: "1"});
   const [typedexam, settypedExams] = useState({});
+  const [typedsection, settypedSections] = useState(false);
   const dispatch = useDispatch();
-  const { tests, loading, error } = useSelector((state) => {
+  let { tests, loading, error } = useSelector((state) => { 
     // let testobject = state.testDetail
     // if(state.testDetail && state.testDetail.tests && state.testDetail.tests.length>0 && state.testDetail.tests[state.testDetail.tests.length-1]._id == null) {
     //   let newtestobject = JSON.parse(JSON.stringify(testobject));
@@ -38,10 +43,54 @@ function CreateExam(props)  {
     // }
   });
 
+  let { dbdas} = useSelector((state) => {
+    return state.dbdaDetail; 
+  });
+
+  let { examsCount} = useSelector((state) => {
+    // setExams({ ...exams, serial: state.examDetail.count })
+    return state.examDetail; 
+  });
+
   useEffect(() => {
     dispatch(showTest())
+    dispatch(showDBDA())
+    dispatch(getExamsCount())
     console.log(tests)
   }, [])
+
+  useEffect(() => {
+    console.log("exams ::"+JSON.stringify(exams))
+    if(exams.testId && exams.timer!=null && exams.serial) {
+      if(dbda) {
+        if(timer) {
+          if(exams.dbdaId && exams.timerVisible!=null && exams.duration) {
+            settypedSections(true)
+          } else {
+            settypedSections(false)
+          }
+        } else {
+          if(exams.dbdaId) {
+            settypedSections(true)
+          } else {
+            settypedSections(false)
+          }
+        }
+      } else {
+        if(timer) {
+          if(exams.timerVisible!=null && exams.duration) {
+            settypedSections(true)
+          } else {
+            settypedSections(false)
+          }
+        } else {
+          settypedSections(true)
+        }
+      }
+    } else {
+      settypedSections(false)
+    }
+ }, [exams]);
 
   const styles = {
     equalFields: {
@@ -51,14 +100,33 @@ function CreateExam(props)  {
   };
   const getExamData = (e) => {
     if(e.target.name === "testId") {
-      if(e.target.value.type==2) {
+      console.log("e.target.value"+e.target.value)
+      let type=1;
+      for(let i=0;i<tests.length;i++) {
+        if((e.target.value === tests[i]._id) ) { 
+          if(tests[i].type === 2) {
+            type=2;
+          }
+         break;
+        }
+      }
+      if(type==2) {
         setDbda(true);
       } else {
+        setExams({ ...exams, dbdaId: null })
         setDbda(false);
       }
-
     }
-    setExams({ ...exams, [e.target.name]: e.target.value._id })
+    if(e.target.name === "timer") { 
+      if(e.target.value==true) { 
+        setTimer(true);
+      } else {
+        setExams({ ...exams, timerVisible: null })
+        setExams({ ...exams, duration: null })
+        setTimer(false);
+      }
+    }
+    setExams({ ...exams, [e.target.name]: e.target.value })
   }
 
   // const getTestData = (e) => {
@@ -67,31 +135,26 @@ function CreateExam(props)  {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(createExam(exams));
+    setTimeout(() => {
+      console.log("Delayed for 1 second.");
+    }, "1000");
     handleClose();
-    // window.location.reload(); 
+    window.location.reload(); 
   }
-
-  // const handleChange = (e) => {
-  //   // console.log("isse pehle ki value:"+selectedExam)
-  //   // console.log("selected exam ki value:"+e.target.value)
-  //   setSelectedExam({type: e.target.value});
-  //   // console.log("selectedExam.type"+selectedExam.type)
-  //   // console.log("typedexam.typedexam"+typedexam.typedexam)
-  //   // if(selectedExam && selectedExam.type && (selectedExam.type===1 || selectedExam.type===2) && !typedexam.typedexam)
-  //   // {
-  //   //   console.log("ye to aara");
-  //   //   setsubmitbutton(true);
-  //   // }
-  // }
-
+  
   const handleClose = () => {
     settypedExams({typedexam: ""});
     onClose(selectedValue);
   };
-
+  tests = tests.filter(item => item.name !== "CIS") 
   const menuItems = tests.map(item => (
     <MenuItem value={item._id}>{item.name}</MenuItem>
-  ));
+    ));
+
+    const dbdasmenuItems = dbdas.map(item => (
+      <MenuItem value={item._id}>{item.code}</MenuItem>
+      ));
 
   return (
     <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
@@ -100,21 +163,7 @@ function CreateExam(props)  {
         <form >
           <div className="pt-4 flex items-center justify-center">
           <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
-            <InputLabel id="demo-select-small-label">Test</InputLabel>
-            <Select
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              name="testId"
-              value={test}
-              label="Test"
-              onChange={getExamData}
-            >
-              {menuItems}
-            </Select>
-            </FormControl>
-
-            {!dbda ? <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
-            <InputLabel id="demo-select-small-label">Test</InputLabel>
+            <InputLabel id="demo-select-small-label" required>Test</InputLabel>
             <Select
               labelId="demo-select-small-label"
               id="demo-select-small"
@@ -125,9 +174,24 @@ function CreateExam(props)  {
             >
               {menuItems}
             </Select>
+            
+            </FormControl>
+
+            {dbda ? <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
+            <InputLabel id="demo-select-small-label" required>DBDA Code</InputLabel>
+            <Select
+              labelId="demo-select-small-label"
+              id="demo-select-small"
+              name="dbdaId"
+              value={dbdacode._id}
+              label="Test"
+              onChange={getExamData}
+            >
+              {dbdasmenuItems}
+            </Select>
             </FormControl>  : false}
             
-            <TextField
+            <TextField sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}
               fullWidth
               label="Name"
               name="name"
@@ -139,8 +203,8 @@ function CreateExam(props)  {
             />
           </div>
           <div className="pt-4 flex items-center justify-center" >
-          <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
-            <InputLabel id="demo-select-small-label">Timer</InputLabel>
+          <FormControl size="small" sx={{ display: "inline-flex", width: "50%", paddingRight:"20px"}}>
+            <InputLabel id="demo-select-small-label"  required>Timer</InputLabel>
             <Select
               labelId="demo-select-small-label"
               id="demo-select-small"
@@ -155,10 +219,22 @@ function CreateExam(props)  {
               <MenuItem value={false}>No</MenuItem>
             </Select>
             </FormControl>
-            <FormControl sx={{ display: "inline-flex", width: "100%" }} size="small">
-            <InputLabel id="demo-select-small-label">Timer Visible</InputLabel>
+            <TextField
+              style={styles.equalFields}
+              label="Serial"
+              name="serial"
+              onChange={getExamData}
+              id="outlined-number"
+              size="small"
+              type="number"
+              defaultValue= {examsCount}
+              required
+            />  
+          </div>
+          <div className="pt-4 flex items-center justify-center">
+          {timer ? <FormControl size="small" sx={{ display: "inline-flex", width: "50%", paddingRight:"20px"}}>
+            <InputLabel id="demo-select-small-label"  required>Timer Visible</InputLabel>
             <Select
-      
               labelId="demo-select-small-label"
               id="demo-select-small"
               name="timerVisible"
@@ -171,35 +247,24 @@ function CreateExam(props)  {
               <MenuItem value={true}>Yes</MenuItem>
               <MenuItem value={false}>No</MenuItem>
             </Select>
-            </FormControl>
-          </div>
-          <div className="pt-4">
-            <TextField
+            </FormControl>  : false}
+          {timer ? <TextField 
               style={styles.equalFields}
-              label="Duration"
+              label="Duration(Seconds)"
               name="duration"
               type="number"
               onChange={getExamData}
               id="outlined-number"
               size="small"
-            />
-            <TextField
-              style={styles.equalFields}
-              label="Serial"
-              name="serial"
-              onChange={getExamData}
-              id="outlined-number"
-              size="small"
-              type="number"
               required
-            />  
+            />  : false}
           </div>
         </form>
         
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit}  disabled={!typedexam.typedexam}>Save</Button>
+        <Button type= "submit" disabled={!typedsection} onClick={handleSubmit} >Save</Button>
       </DialogActions>
     </Dialog>
   );

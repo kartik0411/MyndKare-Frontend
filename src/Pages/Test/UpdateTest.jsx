@@ -82,6 +82,7 @@ function UpdateTest(props) {
               multiline
               maxRows={4}
               onChange={updatedQuestion}
+              required
             />
           </div>
         </form>

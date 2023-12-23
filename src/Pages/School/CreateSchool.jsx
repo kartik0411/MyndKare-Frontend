@@ -46,6 +46,7 @@ function CreateSchool(props) {
               size="small"
               multiline
               maxRows={4}
+              required
             />
           </div>
         </form>

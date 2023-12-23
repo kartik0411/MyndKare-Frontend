@@ -6,6 +6,7 @@ import classSlice from "./classSlice";
 import sectionSlice from "./sectionSlice";
 import examSlice from "./examSlice";
 import testSlice from "./testSlice";
+import dbdaSlice from "./dbdaSlice";
 
 export const store = configureStore({
     reducer : {
@@ -15,6 +16,7 @@ export const store = configureStore({
         classDetail : classSlice,
         sectionDetail : sectionSlice,
         examDetail : examSlice,
-        testDetail : testSlice
+        testDetail : testSlice,
+        dbdaDetail : dbdaSlice
     }
 })

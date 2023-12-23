@@ -67,6 +67,7 @@ function CreateTest(props) {
               size="small"
               multiline
               maxRows={4}
+              required
             />
           </div>
           <FormControl>

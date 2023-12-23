@@ -68,12 +68,12 @@ function Exam() {
       flex: 1
     },
     {
-      field: "timernotbool",
+      field: "timer",
       headerName: "Timer",
       flex: 1
     },
     {
-      field: "timerVisiblenotbool",
+      field: "timerVisible",
       headerName: "Timer Visible",
       flex: 1
     },
@@ -90,7 +90,7 @@ function Exam() {
     {
       field: "serial",
       headerName: "Serial",
-      flex: 1
+      flex: 1 
     },
     {
       field: "actions",
