@@ -19,10 +19,11 @@ function UpdateTest(props) {
   const { onClose, selectedValue, open } = props;
   const [updateTest, setUpdateTest] = useState({});
   const [typedtest, settypedTests] = useState({});
-  const [selectedTest, setSelectedTest] = useState({type: updateTest.type});
+  const [selectedTest, setSelectedTest] = useState({});
   const dispatch = useDispatch();
 
   useEffect(() => {
+    setSelectedTest({type: selectedValue.type})
     if (selectedValue) {
         setUpdateTest(selectedValue);
     }
@@ -37,6 +38,7 @@ function UpdateTest(props) {
 
   const handleClose = () => {
     settypedTests({typedtest: ""});
+    setUpdateTest(selectedValue);
     onClose(selectedValue);
   };
 
@@ -92,7 +94,7 @@ function UpdateTest(props) {
               row
               aria-labelledby="demo-row-radio-buttons-group-label"
               name="row-radio-buttons-group"
-              value={selectedTest.type}
+              value={updateTest.type}
               onChange={handleChange}
               defaultValue={selectedValue && selectedValue.type}
             >

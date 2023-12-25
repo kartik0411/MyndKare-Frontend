@@ -18,6 +18,8 @@ import UpdateExam from "./UpdateExam";
 import ViewExam from "./ViewExam";
 import CreateExam from "./CreateExam";
 import DeleteExam from "./DeleteExam";
+import { createTest, showTest } from "../../redux/testSlice";
+import { showDBDA } from "../../redux/dbdaSlice";
 
 const tableOptions = {
   height: "auto",
@@ -50,15 +52,23 @@ function Exam() {
   const [editFormValues, setEditFormValues] = React.useState([]);
   const dispatch = useDispatch();
   const { exams, loading, error } = useSelector((state) => {
-    // let examobject = state.examDetail
-    // if(state.examDetail && state.examDetail.exams && state.examDetail.exams.length>0 && state.examDetail.exams[state.examDetail.exams.length-1]._id == null) {
-    //   let newexamobject = JSON.parse(JSON.stringify(examobject));
-    //   newexamobject.exams.pop();
-    //   return newexamobject;
-    // }
-    // else {
     return state.examDetail;
     // }
+  });
+  let { tests} = useSelector((state) => { 
+    // let testobject = state.testDetail
+    // if(state.testDetail && state.testDetail.tests && state.testDetail.tests.length>0 && state.testDetail.tests[state.testDetail.tests.length-1]._id == null) {
+    //   let newtestobject = JSON.parse(JSON.stringify(testobject));
+    //   newtestobject.tests.pop();s
+    //   return newtestobject;
+    // }
+    // else {
+    return state.testDetail;
+    // }
+  });
+
+  let { dbdas} = useSelector((state) => {
+    return state.dbdaDetail; 
   });
     console.log(exams)
   const columns = [
@@ -144,6 +154,8 @@ function Exam() {
 
   useEffect(() => {
     dispatch(showExam())
+    dispatch(showTest())
+    dispatch(showDBDA())
     console.log(exams)
   }, [])
   console.log(exams)
@@ -266,11 +278,15 @@ function Exam() {
           <UpdateExam
             selectedValue={editFormValues}
             open={editOpen}
+            testsValues={tests}
+            dbdasValues={dbdas}
             onClose={handleClose}
           />
           <ViewExam
             selectedValue={editFormValues}
             open={viewOpen}
+            testsValues={tests}
+            dbdasValues={dbdas}
             onClose={handleClose}
           />
           <DeleteExam

@@ -27,8 +27,6 @@ function CreateExam(props)  {
   const [dbdacode, setDBDACode] = useState({});
   const [dbda, setDbda] = useState(false);
   const [timer, setTimer] = useState(false);
-  // const [selectedExam, setSelectedExam] = useState({type: "1"});
-  const [typedexam, settypedExams] = useState({});
   const [typedsection, settypedSections] = useState(false);
   const dispatch = useDispatch();
   let { tests, loading, error } = useSelector((state) => { 
@@ -99,8 +97,8 @@ function CreateExam(props)  {
     },
   };
   const getExamData = (e) => {
+    console.log("e.target.value"+JSON.stringify(exams))
     if(e.target.name === "testId") {
-      console.log("e.target.value"+e.target.value)
       let type=1;
       for(let i=0;i<tests.length;i++) {
         if((e.target.value === tests[i]._id) ) { 
@@ -113,7 +111,8 @@ function CreateExam(props)  {
       if(type==2) {
         setDbda(true);
       } else {
-        setExams({ ...exams, dbdaId: null })
+        console.log("jdshdshjdshj")
+        delete exams.dbdaId;
         setDbda(false);
       }
     }
@@ -121,8 +120,8 @@ function CreateExam(props)  {
       if(e.target.value==true) { 
         setTimer(true);
       } else {
-        setExams({ ...exams, timerVisible: null })
-        setExams({ ...exams, duration: null })
+        delete exams.timerVisible;
+        delete exams.duration
         setTimer(false);
       }
     }
@@ -136,15 +135,17 @@ function CreateExam(props)  {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(createExam(exams));
-    setTimeout(() => {
-      console.log("Delayed for 1 second.");
-    }, "1000");
     handleClose();
     window.location.reload(); 
   }
-  
+
   const handleClose = () => {
-    settypedExams({typedexam: ""});
+    setExams({})
+    settypedSections(false)
+    setDbda(false)
+    setTest({})
+    setTimer(false)
+    setDBDACode({})
     onClose(selectedValue);
   };
   tests = tests.filter(item => item.name !== "CIS") 
