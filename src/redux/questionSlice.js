@@ -5,7 +5,7 @@ export const createQuestion = createAsyncThunk(
   "createQuestion", // modify it to access the uploaded excel sheet
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      "https://653143e04d4c2e3f333cc2b7.mockapi.io/api/v1/question-crud",
+      "http://localhost:9083/myndkare/v1/questions",
       {
         method: "POST",
         headers: {
@@ -30,7 +30,7 @@ export const showQuestions = createAsyncThunk(
   "showQuestions",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "https://653143e04d4c2e3f333cc2b7.mockapi.io/api/v1/question-crud",
+      "http://localhost:9083/myndkare/v1/questions",
       { method: "GET" }
     );
 
@@ -45,9 +45,9 @@ export const showQuestions = createAsyncThunk(
 //delete action
 export const deleteQuestion = createAsyncThunk(
   "deleteQuestion",
-  async (id, { rejectWithValue }) => {
+  async (_id, { rejectWithValue }) => {
     const response = await fetch(
-      `https://653143e04d4c2e3f333cc2b7.mockapi.io/api/v1/question-crud/${id}`,
+      `http://localhost:9083/myndkare/v1/questions/${_id}`,
       { method: "DELETE" }
     );
 
@@ -65,7 +65,7 @@ export const editQuestion = createAsyncThunk(
   "editQuestion",
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      `https://653143e04d4c2e3f333cc2b7.mockapi.io/api/v1/question-crud/${data.id}`,
+      `http://localhost:9083/myndkare/v1/questions/${data._id}`,
       {
         method: "PUT",
         headers: {

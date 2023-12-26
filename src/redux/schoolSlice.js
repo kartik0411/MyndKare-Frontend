@@ -5,7 +5,7 @@ export const createSchool = createAsyncThunk(
   "createSchool", // modify it to access the uploaded excel sheet
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      "https://6532b115d80bd20280f5ec6e.mockapi.io/api/v1/school",
+      "http://localhost:9083/myndkare/v1/schools",
       {
         method: "POST",
         headers: {
@@ -17,7 +17,11 @@ export const createSchool = createAsyncThunk(
 
     try {
       const result = await response.json();
-      return result;
+      if(result._id==null) {
+        return rejectWithValue(result.message);
+      } else {
+        return result;
+      }
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -30,7 +34,7 @@ export const showSchool = createAsyncThunk(
   "showSchool",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "https://6532b115d80bd20280f5ec6e.mockapi.io/api/v1/school",
+      "http://localhost:9083/myndkare/v1/schools",
       { method: "GET" }
     );
 
@@ -48,7 +52,7 @@ export const deleteSchool = createAsyncThunk(
   "deleteSchool",
   async (id, { rejectWithValue }) => {
     const response = await fetch(
-      `https://6532b115d80bd20280f5ec6e.mockapi.io/api/v1/school/${id}`,
+      `http://localhost:9083/myndkare/v1/schools/${id}`,
       { method: "DELETE" }
     );
 
@@ -66,7 +70,7 @@ export const editSchool = createAsyncThunk(
   "editSchool",
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      `https://6532b115d80bd20280f5ec6e.mockapi.io/api/v1/school/${data.id}`,
+      `http://localhost:9083/myndkare/v1/schools`,
       {
         method: "PUT",
         headers: {
@@ -78,7 +82,11 @@ export const editSchool = createAsyncThunk(
 
     try {
       const result = await response.json();
-      return result;
+      if(result._id==null) {
+        return rejectWithValue(result.message);
+      } else {
+        return result;
+      }
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -110,7 +118,7 @@ export const schoolSlice = createSlice({
     },
     [createSchool.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.payload.message;
+      state.error = action.payload;
     },
     [showSchool.pending]: (state) => {
       state.loading = true;
@@ -150,7 +158,7 @@ export const schoolSlice = createSlice({
     },
     [editSchool.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.payload.message;
+      state.error = action.payload;
     },
   },
 });

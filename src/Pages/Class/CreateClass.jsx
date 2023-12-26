@@ -6,54 +6,59 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useDispatch } from "react-redux";
-import { createClass } from "../../redux/classSlice";
+import { createClass, showClass  } from "../../redux/classSlice";
 
 function CreateClass(props) {
   const { onClose, selectedValue, open } = props;
   const [classes, setClasses] = useState({});
+  const [typedclass, settypedClasses] = useState({});
   const dispatch = useDispatch();
 
   const getClassData = (e) => {
-    setClasses({ ...classes, [e.target.name]: e.target.value })
+    settypedClasses({typedclass: e.target.value});
+    setClasses({ ...classes, [e.target.name]: e.target.value, resultPublish: false })
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(createClass(classes));
     handleClose();
+    window.location.reload();
   }
 
   const handleClose = () => {
+    settypedClasses({typedclass: ""});
     onClose(selectedValue);
   };
 
   return (
     <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
-      <DialogTitle>Create School</DialogTitle>
+      <DialogTitle>Create Class</DialogTitle>
       <DialogContent>
         <form >
           <div className="pt-4">
             <TextField
               fullWidth
-              label="Title"
-              name="title"
+              label="Name"
+              name="name"
               onChange={getClassData}
               id="outlined-size-small"
               size="small"
               multiline
               maxRows={4}
+              required
             />
           </div>
         </form>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit}>Save</Button>
+        <Button onClick={handleSubmit}  disabled={!typedclass.typedclass}>Save</Button>
       </DialogActions>
     </Dialog>
   );
 }
 
-export default CreateClass;
+export default CreateClass
 
 

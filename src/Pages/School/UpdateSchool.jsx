@@ -12,6 +12,7 @@ import { editSchool } from "../../redux/schoolSlice";
 function UpdateSchool(props) {
   const { onClose, selectedValue, open } = props;
   const [updateSchool, setUpdateSchool] = useState({});
+  const [typedschool, settypedSchools] = useState({});
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -24,19 +25,22 @@ function UpdateSchool(props) {
     e.preventDefault();
     dispatch(editSchool(updateSchool));
     handleClose();
+    window.location.reload();
   }
 
   const handleClose = () => {
+    settypedSchools({typedschool: ""});
     onClose(selectedValue);
   };
 
   const updatedQuestion = (e) => {
+    settypedSchools({typedschool: e.target.value});
     setUpdateSchool({ ...updateSchool, [e.target.name]: e.target.value })
   }
 
   return (
     <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
-      <DialogTitle>Edit Student</DialogTitle>
+      <DialogTitle>Edit School</DialogTitle>
       <DialogContent>
         <form >
           <div className="pt-4">
@@ -50,13 +54,14 @@ function UpdateSchool(props) {
               multiline
               maxRows={4}
               onChange={updatedQuestion}
+              required
             />
           </div>
         </form>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit}>Update</Button>
+        <Button onClick={handleSubmit} disabled={!typedschool.typedschool}>Update</Button>
       </DialogActions>
     </Dialog>
   );

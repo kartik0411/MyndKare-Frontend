@@ -6,24 +6,28 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useDispatch } from "react-redux";
-import { createSchool } from "../../redux/schoolSlice";
+import { createSchool, showSchool  } from "../../redux/schoolSlice";
 
 function CreateSchool(props) {
   const { onClose, selectedValue, open } = props;
   const [schools, setSchools] = useState({});
+  const [typedschool, settypedSchools] = useState({});
   const dispatch = useDispatch();
 
   const getSchoolData = (e) => {
-    setSchools({ ...schools, [e.target.name]: e.target.value })
+    settypedSchools({typedschool: e.target.value});
+    setSchools({ ...schools, [e.target.name]: e.target.value, resultPublish: false })
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(createSchool(schools));
     handleClose();
+    // window.location.reload();
   }
 
   const handleClose = () => {
+    settypedSchools({typedschool: ""});
     onClose(selectedValue);
   };
 
@@ -42,13 +46,14 @@ function CreateSchool(props) {
               size="small"
               multiline
               maxRows={4}
+              required
             />
           </div>
         </form>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit}>Save</Button>
+        <Button onClick={handleSubmit}  disabled={!typedschool.typedschool}>Save</Button>
       </DialogActions>
     </Dialog>
   );

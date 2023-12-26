@@ -1,8 +1,7 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Stack from '@mui/material/Stack';
-import { deepOrange, deepPurple } from '@mui/material/colors';
 import { NavLink } from "react-router-dom";
+import User from '../Pages/User/User';
+import DarkModeSwitch from './Switch/DarkModeSwitch';
 
 export function Header() {
     return (
@@ -49,7 +48,12 @@ export function Header() {
                             </NavLink>
                             <NavLink to="/student" className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
                                 <li>
-                                    Sudent
+                                    Student
+                                </li>
+                            </NavLink>
+                            <NavLink to="/test" className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
+                                <li>
+                                    Test
                                 </li>
                             </NavLink>
                             <NavLink to="/exam" className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
@@ -68,14 +72,12 @@ export function Header() {
                                 </li>
                             </NavLink>
                             <NavLink to="/login" className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
-                                <li>
-                                    Sign Up/Sign In
-                                    {/* <Stack direction="row" spacing={1}>
-                                        <Avatar sx={{ bgcolor: deepPurple[500] }}>OP</Avatar>
-                                    </Stack> */}
+                                <li className='-mt-2'>
+                                    <User />
                                 </li>
                             </NavLink>
                         </ul>
+                        {/* <DarkModeSwitch /> */}
 
                     </div>
                 </div>

@@ -6,24 +6,28 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useDispatch } from "react-redux";
-import { createSection } from "../../redux/sectionSlice";
+import { createSection, showSection  } from "../../redux/sectionSlice";
 
 function CreateSection(props) {
   const { onClose, selectedValue, open } = props;
   const [sections, setSections] = useState({});
+  const [typedsection, settypedSections] = useState({});
   const dispatch = useDispatch();
 
   const getSectionData = (e) => {
-    setSections({ ...sections, [e.target.name]: e.target.value })
+    settypedSections({typedsection: e.target.value});
+    setSections({ ...sections, [e.target.name]: e.target.value, resultPublish: false })
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(createSection(sections));
     handleClose();
+    window.location.reload();
   }
 
   const handleClose = () => {
+    settypedSections({typedsection: ""});
     onClose(selectedValue);
   };
 
@@ -35,25 +39,26 @@ function CreateSection(props) {
           <div className="pt-4">
             <TextField
               fullWidth
-              label="Title"
-              name="title"
+              label="Name"
+              name="name"
               onChange={getSectionData}
               id="outlined-size-small"
               size="small"
               multiline
               maxRows={4}
+              required
             />
           </div>
         </form>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit}>Save</Button>
+        <Button onClick={handleSubmit}  disabled={!typedsection.typedsection}>Save</Button>
       </DialogActions>
     </Dialog>
   );
 }
 
-export default CreateSection;
+export default CreateSection
 
 

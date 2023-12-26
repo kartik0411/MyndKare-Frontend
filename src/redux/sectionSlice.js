@@ -5,7 +5,7 @@ export const createSection = createAsyncThunk(
   "createSection", // modify it to access the uploaded excel sheet
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      "https://6532ced6d80bd20280f61298.mockapi.io/api/v1/section",
+      "http://localhost:9083/myndkare/v1/sections",
       {
         method: "POST",
         headers: {
@@ -30,7 +30,7 @@ export const showSection = createAsyncThunk(
   "showSection",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "https://6532ced6d80bd20280f61298.mockapi.io/api/v1/section",
+      "http://localhost:9083/myndkare/v1/sections",
       { method: "GET" }
     );
 
@@ -48,7 +48,7 @@ export const deleteSection = createAsyncThunk(
   "deleteSection",
   async (id, { rejectWithValue }) => {
     const response = await fetch(
-      `https://6532ced6d80bd20280f61298.mockapi.io/api/v1/section/${id}`,
+      `http://localhost:9083/myndkare/v1/sections/${id}`,
       { method: "DELETE" }
     );
 
@@ -66,7 +66,7 @@ export const editSection = createAsyncThunk(
   "editSection",
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      `https://6532ced6d80bd20280f61298.mockapi.io/api/v1/section/${data.id}`,
+      `http://localhost:9083/myndkare/v1/sections`,
       {
         method: "PUT",
         headers: {
@@ -110,7 +110,7 @@ export const sectionSlice = createSlice({
     },
     [createSection.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.payload.message;
+      state.error = action.payload;
     },
     [showSection.pending]: (state) => {
       state.loading = true;

@@ -7,31 +7,35 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Padding } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { editSchool } from "../../redux/schoolSlice";
+import { editClass } from "../../redux/classSlice";
 
 function UpdateClass(props) {
   const { onClose, selectedValue, open } = props;
-  const [updateSchool, setUpdateSchool] = useState({});
+  const [updateClass, setUpdateClass] = useState({});
+  const [typedclass, settypedClasses] = useState({});
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (selectedValue) {
-        setUpdateSchool(selectedValue);
+        setUpdateClass(selectedValue);
     }
   }, [selectedValue])
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(editSchool(updateSchool));
+    dispatch(editClass(updateClass));
     handleClose();
+    window.location.reload();
   }
 
   const handleClose = () => {
+    settypedClasses({typedclass: ""});
     onClose(selectedValue);
   };
 
   const updatedQuestion = (e) => {
-    setUpdateSchool({ ...updateSchool, [e.target.name]: e.target.value })
+    settypedClasses({typedclass: e.target.value});
+    setUpdateClass({ ...updateClass, [e.target.name]: e.target.value })
   }
 
   return (
@@ -44,23 +48,24 @@ function UpdateClass(props) {
               fullWidth
               label="Name"
               name="name"
-              value={updateSchool && updateSchool.name}
+              value={updateClass && updateClass.name}
               id="outlined-size-small"
               size="small"
               multiline
               maxRows={4}
               onChange={updatedQuestion}
+              required
             />
           </div>
         </form>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit}>Update</Button>
+        <Button onClick={handleSubmit} disabled={!typedclass.typedclass}>Update</Button>
       </DialogActions>
     </Dialog>
   );
 }
 
-export default UpdateClass;
+export default UpdateClass
 

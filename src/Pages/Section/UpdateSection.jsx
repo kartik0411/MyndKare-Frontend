@@ -5,12 +5,14 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import { Padding } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { editSection } from "../../redux/sectionSlice";
 
 function UpdateSection(props) {
   const { onClose, selectedValue, open } = props;
   const [updateSection, setUpdateSection] = useState({});
+  const [typedsection, settypedSections] = useState({});
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,13 +25,16 @@ function UpdateSection(props) {
     e.preventDefault();
     dispatch(editSection(updateSection));
     handleClose();
+    window.location.reload();
   }
 
   const handleClose = () => {
+    settypedSections({typedsection: ""});
     onClose(selectedValue);
   };
 
   const updatedQuestion = (e) => {
+    settypedSections({typedsection: e.target.value});
     setUpdateSection({ ...updateSection, [e.target.name]: e.target.value })
   }
 
@@ -41,25 +46,26 @@ function UpdateSection(props) {
           <div className="pt-4">
             <TextField
               fullWidth
-              label="Title"
-              name="title"
-              value={updateSection && updateSection.title}
+              label="Name"
+              name="name"
+              value={updateSection && updateSection.name}
               id="outlined-size-small"
               size="small"
               multiline
               maxRows={4}
               onChange={updatedQuestion}
+              required
             />
           </div>
         </form>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit}>Update</Button>
+        <Button onClick={handleSubmit} disabled={!typedsection.typedsection}>Update</Button>
       </DialogActions>
     </Dialog>
   );
 }
 
-export default UpdateSection;
+export default UpdateSection
 
