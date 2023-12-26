@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Table } from '../../components/Table'
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import Button from "@mui/material/Button"; 
 import { useDispatch, useSelector } from "react-redux";
 import { createClass, showClass } from "../../redux/classSlice";
 import { Box, IconButton, Tooltip} from "@mui/material";
