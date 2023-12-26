@@ -1,6 +1,6 @@
 {
   "name": "MyndKare",
-  "homepage": "https://kartik0411.github.io/MyndKare-Frontend/",
+  "homepage": "https://kartik0411.github.io/MyndKare",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -28,10 +28,10 @@
     "xlsx": "^0.18.5"
   },
   "scripts": {
-    "predeploy": "CI=false npm run build",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "start": "react-scripts start",
-    "build": "CI=false && react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
