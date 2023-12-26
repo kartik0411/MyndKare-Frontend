@@ -14,6 +14,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import { read, utils, writeFile } from 'xlsx';
+import { createExam, showExam } from "../../redux/examSlice";
 
 const tableOptions = {
   height: "auto",
@@ -42,11 +43,37 @@ function Question() {
   const [selectedValue, setSelectedValue] = React.useState([]);
   const [editFormValues, setEditFormValues] = React.useState([]);
   const dispatch = useDispatch();
-  const { questions, loading } = useSelector((state) => state.questionDetail);
+  const { questions, loading } = useSelector((state) => {if(state.questionDetail) {
+    let questions = JSON.parse(JSON.stringify(state.questionDetail));
+    for(let i=0;i<questions.questions.length;i++) {
+      if(questions.questions[i].dbdaId) {
+        questions.questions[i].answer = questions.questions[i].AnsOrSerial;
+      } else {
+        questions.questions[i].serial = questions.questions[i].AnsOrSerial;
+      }
+    questions.questions[i].option1 = questions.questions[i].options[0];
+    if(questions.questions[i].options.length>1) {
+      questions.questions[i].option2 = questions.questions[i].options[1];
+    }
+    if(questions.questions[i].options.length>2) {
+      questions.questions[i].option3 = questions.questions[i].options[2];
+    }
+    if(questions.questions[i].options.length>3) {
+      questions.questions[i].option4 = questions.questions[i].options[3];
+    }
+    if(questions.questions[i].options.length>4) {
+      questions.questions[i].option5 = questions.questions[i].options[4];
+    }
+  }
+  console.log("questions="+JSON.stringify(questions))
+    return questions;
+  }});
+  const { exams} = useSelector((state) => {
+    return state.examDetail;
+  })
 
   const columns = [
-    { field: "id", headerName: "ID", width: 90 },
-    { field: "question", headerName: "Question", width: 170 },
+    { field: "name", headerName: "Question", width: 170 },
     {
       field: "option1",
       headerName: "Option 1",
@@ -87,21 +114,20 @@ function Question() {
       type: "number",
       width: 105,
     },
-
-    {
-      field: "comp",
-      headerName: "Comp",
-      type: "number",
-      width: 100,
-    },
     {
       field: "answer",
-      headerName: "Answer",
+      headerName: "Answer(DBDA)",
       type: "number",
       width: 100,
     },
     {
-      field: "exam",
+      field: "serial",
+      headerName: "Serial(MBTI)",
+      type: "number",
+      width: 100,
+    },
+    {
+      field: "examName",
       headerName: "Exam",
       description: "This column has a value getter and is not sortable.",
       sortable: false,
@@ -145,6 +171,7 @@ function Question() {
 
   useEffect(() => {
     dispatch(showQuestions())
+    dispatch(showExam())
   }, [])
 
   const handleCreateOpen = () => {
@@ -236,11 +263,13 @@ function Question() {
           <CreateQuestion
             selectedValue={selectedValue}
             open={createOpen}
+            examValues={exams}
             onClose={handleClose}
           />
 
           <UpdateQuestion
             selectedValue={editFormValues}
+            examValues={exams}
             open={editOpen}
             onClose={handleClose}
           />

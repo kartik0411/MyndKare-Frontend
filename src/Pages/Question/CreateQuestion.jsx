@@ -53,6 +53,7 @@ function CreateQuestion(props) {
               size="small"
               multiline
               maxRows={4}
+              required
             />
           </div>
           <div className="pt-4">
@@ -65,6 +66,7 @@ function CreateQuestion(props) {
               size="small"
               multiline
               maxRows={4}
+              required
             />
 
             <TextField
@@ -115,7 +117,7 @@ function CreateQuestion(props) {
 
             <TextField
               style={{ width: "50%" }}
-              label="Comp"
+              label="Answer"
               name="comp"
               onChange={getQuestionData}
               id="outlined-size-small"
