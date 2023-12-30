@@ -192,6 +192,18 @@ function CreateQuestion(props) {
   }
 
   const handleClose = () => {
+    setQuestions({});
+    setDBDA(false);
+    setoption1(null);
+    setoption2(null);
+    setoption3(null);
+    setoption4(null);
+    setoption5(null);
+    setoption2present(false);
+    setoption3present(false);
+    setoption4present(false);
+    setoption5present(false);
+    settypedSections(false);
     onClose(selectedValue);
   };
 

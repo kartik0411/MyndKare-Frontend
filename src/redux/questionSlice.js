@@ -65,7 +65,7 @@ export const editQuestion = createAsyncThunk(
   "editQuestion",
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      `http://localhost:9083/myndkare/v1/questions/${data._id}`,
+      `http://localhost:9083/myndkare/v1/questions`,
       {
         method: "PUT",
         headers: {

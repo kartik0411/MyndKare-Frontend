@@ -23,23 +23,70 @@ function UpdateQuestion(props) {
   const [option3, setoption3] = useState();
   const [option4, setoption4] = useState();
   const [option5, setoption5] = useState();
+  const [exam,setExam] = useState({});
   const [option2present, setoption2present] = useState(false);
   const [option3present, setoption3present] = useState(false);
   const [option4present, setoption4present] = useState(false);
   const [option5present, setoption5present] = useState(false);
   const [typedsection, settypedSections] = useState(false);
+  const [questionChanged, setQuestionChanged] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
 
+  useEffect(() => {
+    // if (testsValues) {
+    //   setTests(testsValues);
+    // }
+    // if(dbdasValues) {
+    //   setDbadas(dbdasValues);
+    // }
+    if (selectedValue) {
+      let value = Object.assign({},selectedValue);
+      for(let i=0;i<examValues?.length;i++) {
+        if(examValues[i]._id === selectedValue.examId) {
+          setExam(examValues[i]);
+          if(examValues[i].dbdaId) {
+            setDBDA(true);
+          } else {
+            setDBDA(false);
+          }
+        }
+      }
+      if(value.options?.length>0) {
+        setoption1(value.options[0]);
+        setoption2present(true);
+        if(value.options?.length>1) {
+          setoption2(value.options[1]);
+          setoption3present(true);
+          if(value.options?.length>2) {
+            setoption3(value.options[2]);
+            setoption4present(true);
+            if(value.options?.length>3) {
+              setoption4(value.options[3]);
+              setoption5present(true);
+              if(value.options?.length>4) {
+                setoption5(value.options[4]);
+              }
+            }
+          }
+        }
+      } 
+      delete value.options;
+      setQuestionChanged(false); 
+      setQuestions(value);
+      settypedSections(false);
+  }
+  }, [selectedValue])
+
  useEffect(() => {
-  console.log("questions="+JSON.stringify(questions)+"option1"+option1+"dbda="+dbda)
   if(questions.options) {
     dispatch(editQuestion(questions));
     handleClose();
+    window.location.reload(); 
   } else {
-    if(questions.name) { 
-      if(option1) {
+    if(questions.name && questionChanged) {
+      if(option1) { 
         if(questions.examId) {
           if(dbda) {
             if(questions.AnsOrSerial) {
@@ -63,8 +110,7 @@ function UpdateQuestion(props) {
  }, [questions]);
 
  useEffect(() => {
-  console.log("questions="+JSON.stringify(questions)+"option1"+option1+"dbda="+dbda)
-  if(questions.name) { 
+  if(questions.name && questionChanged) { 
     if(option1) {
       if(questions.examId) {
         if(dbda) {
@@ -87,8 +133,106 @@ function UpdateQuestion(props) {
   }
 }, [option1]);
 
+useEffect(() => {
+  if(questions.name && questionChanged) { 
+    if(option1) {
+      if(questions.examId) {
+        if(dbda) {
+          if(questions.AnsOrSerial) {
+            settypedSections(true);
+          } else {
+            settypedSections(false);
+          }
+        } else {
+          settypedSections(true);
+        }
+      } else {
+        settypedSections(false);
+      }
+    } else {
+      settypedSections(false);
+    }
+  } else {
+    settypedSections(false);
+  }
+}, [option2]);
+
+useEffect(() => {
+  if(questions.name && questionChanged) { 
+    if(option1) {
+      if(questions.examId) {
+        if(dbda) {
+          if(questions.AnsOrSerial) {
+            settypedSections(true);
+          } else {
+            settypedSections(false);
+          }
+        } else {
+          settypedSections(true);
+        }
+      } else {
+        settypedSections(false);
+      }
+    } else {
+      settypedSections(false);
+    }
+  } else {
+    settypedSections(false);
+  }
+}, [option3]);
+
+useEffect(() => {
+  if(questions.name && questionChanged) { 
+    if(option1) {
+      if(questions.examId) {
+        if(dbda) {
+          if(questions.AnsOrSerial) {
+            settypedSections(true);
+          } else {
+            settypedSections(false);
+          }
+        } else {
+          settypedSections(true);
+        }
+      } else {
+        settypedSections(false);
+      }
+    } else {
+      settypedSections(false);
+    }
+  } else {
+    settypedSections(false);
+  }
+}, [option4]);
+
+useEffect(() => {
+  if(questions.name && questionChanged) { 
+    if(option1) {
+      if(questions.examId) {
+        if(dbda) {
+          if(questions.AnsOrSerial) {
+            settypedSections(true);
+          } else {
+            settypedSections(false);
+          }
+        } else {
+          settypedSections(true);
+        }
+      } else {
+        settypedSections(false);
+      }
+    } else {
+      settypedSections(false);
+    }
+  } else {
+    settypedSections(false);
+  }
+}, [option5]);
+
   const getQuestionData = (e) => {
+    setQuestionChanged(true);
     if(e.target.name === "examId") {
+      setExam(e.target.value);
       if(e.target.value.dbdaId) {
         if(!dbda) {
           delete questions.AnsOrSerial;
@@ -99,7 +243,6 @@ function UpdateQuestion(props) {
         let serial = e.target.value.questions+1;
         setDBDA(false);
         setQuestions({ ...questions, AnsOrSerial: serial, [e.target.name]: e.target.value._id })
-        console.log("e.target.value.questions P"+serial)
       }
     } else if(e.target.name === "option1" || e.target.name === "option2" || e.target.name === "option3" || e.target.name === "option4" || e.target.name === "option5") {
       if(e.target.name === "option1" && e.target.value) {
@@ -187,6 +330,19 @@ function UpdateQuestion(props) {
   }
 
   const handleClose = () => {
+    setDBDA(false);
+    setoption1(null);
+    setoption2(null);
+    setoption3(null);
+    setoption4(null);
+    setoption5(null);
+    setExam({});
+    setoption2present(false);
+    setoption3present(false);
+    setoption4present(false);
+    setoption5present(false);
+    settypedSections(false);
+    setQuestionChanged(false);
     onClose(selectedValue);
   };
 
@@ -212,7 +368,7 @@ function UpdateQuestion(props) {
               labelId="demo-select-small-label"
               id="demo-select-small"
               name="examId"
-              value={questions.examId}
+              value={exam}
               label="Test"
               onChange={getQuestionData}
             >
@@ -313,7 +469,7 @@ function UpdateQuestion(props) {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button type= "submit" disabled={!typedsection} onClick={handleSubmit}>Save</Button>
+        <Button disabled={!typedsection} onClick={handleSubmit}>Update</Button>
       </DialogActions>
     </Dialog>
   );
