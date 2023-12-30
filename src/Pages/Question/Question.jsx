@@ -68,9 +68,10 @@ function Question() {
   console.log("questions="+JSON.stringify(questions))
     return questions;
   }});
-  const { exams} = useSelector((state) => {
+  let { exams} = useSelector((state) => {
     return state.examDetail;
   })
+  exams=exams.filter(item => item.name !== "CIS") 
 
   const columns = [
     { field: "name", headerName: "Question", width: 170 },
