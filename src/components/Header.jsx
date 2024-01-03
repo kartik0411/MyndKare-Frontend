@@ -88,14 +88,14 @@ export function Header() {
                                             <span className="menuTitle">Report</span>
                                         </a>
                                         <div className={showDD ? 'dropdown-menu show' : 'dropdown-menu'}>
-                                            <NavLink className="dropdown-item" to="/loan">
-                                                <span>Manage Loan</span>
+                                            <NavLink className="dropdown-item" to="/mbti">
+                                                <span>MBTI</span>
                                             </NavLink>
-                                            <NavLink className="dropdown-item" to="/loan">
-                                                <span>Manage Loan</span>
+                                            <NavLink className="dropdown-item" to="/dbda">
+                                                <span>DBDA Areas</span>
                                             </NavLink>
-                                            <NavLink className="dropdown-item" to="/loan">
-                                                <span>Manage Loan</span>
+                                            <NavLink className="dropdown-item" to="/dbdaScores">
+                                                <span>DBDA Score Details</span>
                                             </NavLink>
                                         </div>
                                     </div>
