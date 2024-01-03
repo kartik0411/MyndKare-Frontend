@@ -10,6 +10,8 @@ import { Box, IconButton, Tooltip } from "@mui/material";
 import { Delete, Edit, Preview } from "@mui/icons-material";
 import { deleteQuestion } from "../../redux/questionSlice";
 import UpdateQuestion from "./UpdateQuestion";
+import ViewQuestion from "./ViewQuestion";
+import DeleteQuestion from "./DeleteQuestion";
 import CircularProgress from '@mui/material/CircularProgress';
 import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
@@ -40,6 +42,8 @@ const styles = {
 function Question() {
   const [createOpen, setCreateOpen] = React.useState(false);
   const [editOpen, setEditOpen] = React.useState(false);
+  const [viewOpen, setViewOpen] = React.useState(false);
+  const [deleteOpen, setDeleteOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState([]);
   const [editFormValues, setEditFormValues] = React.useState([]);
   const dispatch = useDispatch();
@@ -68,9 +72,10 @@ function Question() {
   console.log("questions="+JSON.stringify(questions))
     return questions;
   }});
-  const { exams} = useSelector((state) => {
+  let { exams} = useSelector((state) => {
     return state.examDetail;
   })
+  exams=exams.filter(item => item.name !== "CIS") 
 
   const columns = [
     { field: "name", headerName: "Question", width: 170 },
@@ -142,7 +147,9 @@ function Question() {
         return (
           <Box>
             <Tooltip title="View details">
-              <IconButton onClick={() => { }}>
+              <IconButton onClick={(e) => {
+                handleView(params.row)
+              }}>
                 <Preview />
               </IconButton>
             </Tooltip>
@@ -155,11 +162,9 @@ function Question() {
             </Tooltip>
             <Tooltip title="Delete details">
               <IconButton
-                onClick={() => {
-                  console.log("delete--------", params, params.row.id)
-                  dispatch(deleteQuestion(params.row.id))
-                }}
-              >
+                onClick={(e) => {
+                  handleDelete(params.row)
+                }}>
                 <Delete />
               </IconButton>
             </Tooltip>
@@ -220,7 +225,24 @@ function Question() {
 
   const handleEdit = (value) => {
     setCreateOpen(false);
+    setViewOpen(false);
     setEditOpen(true);
+    setDeleteOpen(false);
+    setEditFormValues(value)
+    console.log(value)
+  }
+  const handleView = (value) => {
+    setCreateOpen(false);
+    setEditOpen(false);
+    setViewOpen(true);
+    setDeleteOpen(false);
+    setEditFormValues(value)
+  }
+
+  const handleDelete = (value) => {
+    setCreateOpen(false);
+    setEditOpen(false);
+    setDeleteOpen(true);
     setEditFormValues(value)
     console.log(value)
   }
@@ -228,6 +250,8 @@ function Question() {
   const handleClose = (value) => {
     setEditOpen(false);
     setCreateOpen(false);
+    setViewOpen(false);
+    setDeleteOpen(false);
     setSelectedValue(value);
   };
 
@@ -271,6 +295,19 @@ function Question() {
             selectedValue={editFormValues}
             examValues={exams}
             open={editOpen}
+            onClose={handleClose}
+          />
+
+          <ViewQuestion
+            selectedValue={editFormValues}
+            examValues={exams}
+            open={viewOpen}
+            onClose={handleClose}
+          />
+
+          <DeleteQuestion
+            selectedValue={editFormValues}
+            open={deleteOpen}
             onClose={handleClose}
           />
 

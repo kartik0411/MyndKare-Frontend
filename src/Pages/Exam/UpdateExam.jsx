@@ -316,7 +316,7 @@ function UpdateExam(props) {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button type= "submit" disabled={!typedsection} onClick={handleSubmit} >Save</Button>
+        <Button type= "submit" disabled={!typedsection} onClick={handleSubmit} >Update</Button>
       </DialogActions>
     </Dialog>
   );
