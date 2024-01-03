@@ -2,8 +2,23 @@ import * as React from 'react';
 import { NavLink } from "react-router-dom";
 import User from '../Pages/User/User';
 import DarkModeSwitch from './Switch/DarkModeSwitch';
+import { useEffect, useState } from "react";
+import onClickOutside from "react-onclickoutside";
 
 export function Header() {
+    const [showDD, setshowDD] = useState(false);
+    const handleClick = () => {
+        if (showDD) {
+            setshowDD(false);
+        } else {
+            setshowDD(true);
+        }
+    }
+    Header.handleClickOutside = () => {
+        setshowDD(false);
+    };
+
+    //   window.addEventListener("click", setshowDD(false))
     return (
         <>
             <nav className="bg-white border-gray-200 dark:bg-gray-900" >
@@ -66,11 +81,27 @@ export function Header() {
                                     Question
                                 </li>
                             </NavLink>
-                            <NavLink to="/report" className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
-                                <li>
-                                    Report
+                            <li>
+                                <li className="nav-item">
+                                    <div className="dropdown block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700" display="static" onClick={handleClick}>
+                                        <a href="#!" className="nav-link dropdown-toggle">
+                                            <span className="menuTitle">Report</span>
+                                        </a>
+                                        <div className={showDD ? 'dropdown-menu show' : 'dropdown-menu'}>
+                                            <NavLink className="dropdown-item" to="/loan">
+                                                <span>Manage Loan</span>
+                                            </NavLink>
+                                            <NavLink className="dropdown-item" to="/loan">
+                                                <span>Manage Loan</span>
+                                            </NavLink>
+                                            <NavLink className="dropdown-item" to="/loan">
+                                                <span>Manage Loan</span>
+                                            </NavLink>
+                                        </div>
+                                    </div>
                                 </li>
-                            </NavLink>
+                            </li>
+                            {/* </NavLink> */}
                             <NavLink to="/login" className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
                                 <li className='-mt-2'>
                                     <User />
@@ -85,6 +116,9 @@ export function Header() {
         </>
     )
 }
-export default Header;
+const clickOutsideConfig = {
+    handleClickOutside: () => Header.handleClickOutside,
+};
+export default onClickOutside(Header, clickOutsideConfig);
 
 
