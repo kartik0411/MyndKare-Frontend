@@ -23,6 +23,7 @@ import { showDBDA } from "../../redux/dbdaSlice";
 function UpdateExam(props) { 
   let { onClose, selectedValue, open, testsValues,dbdasValues } = props;
   const [exams, setExams] = useState({});
+  const [test,setTest] = useState({});
   const [dbda, setDbda] = useState(false);
   const [timer, setTimer] = useState(false);
   const [examChanged, setExamChanged] = useState(false);
@@ -44,6 +45,11 @@ function UpdateExam(props) {
     // if(dbdasValues) {
     //   setDbadas(dbdasValues);
     // }
+    for(let i=0;i<testsValues.length;i++) {
+      if(testsValues[i]._id === selectedValue.testId) {
+        setTest(testsValues[i]);
+      }
+    }
     if (selectedValue) {
       let value = Object.assign({},selectedValue);
       if(selectedValue.timer=="Yes") {
@@ -122,10 +128,9 @@ function UpdateExam(props) {
   const getExamData = (e) => {
     setExamChanged(true)
     if(e.target.name === "testId") {
-      console.log("e.target.value"+e.target.value)
       let type=1;
       for(let i=0;i<testsValues.length;i++) {
-        if((e.target.value === testsValues[i]._id) ) { 
+        if((e.target.value._id === testsValues[i]._id) ) { 
           if(testsValues[i].type === 2) {
             type=2;
           }
@@ -136,7 +141,7 @@ function UpdateExam(props) {
         setDbda(true);
       } else {
         delete exams.dbdaId
-        setDbda(false);
+        setDbda(false); 
       }
     }
     if(e.target.name === "timer") { 
@@ -148,7 +153,12 @@ function UpdateExam(props) {
         setTimer(false);
       }
     }
-    setExams({ ...exams, [e.target.name]: e.target.value })
+    if(e.target.name === "testId") {
+      setTest(e.target.value);
+      setExams({ ...exams, [e.target.name]: e.target.value._id })
+    } else {
+      setExams({ ...exams, [e.target.name]: e.target.value })
+    }
   }
 
   // const getTestData = (e) => {
@@ -181,6 +191,11 @@ function UpdateExam(props) {
     } else {
       value.name = "";
     }
+    for(let i=0;i<testsValues.length;i++) {
+      if(testsValues[i]._id === selectedValue.testId) {
+        setTest(testsValues[i]);
+      }
+    }
     if(value.dbdaId) {
       setDbda(true);
       if(value.name?.indexOf('-')>-1) {
@@ -198,7 +213,7 @@ function UpdateExam(props) {
   };
   testsValues = testsValues?.filter(item => item.name !== "CIS") 
   const menuItems = testsValues?.map(item => (
-    <MenuItem value={item._id}>{item.name}</MenuItem>
+    <MenuItem value={item}>{item.name}</MenuItem>
     ));
 
     const dbdasmenuItems = dbdasValues?.map(item => (
@@ -217,7 +232,7 @@ function UpdateExam(props) {
               labelId="demo-select-small-label"
               id="demo-select-small"
               name="testId"
-              value={exams.testId}
+              value={test}
               label="Test"
               onChange={getExamData}
             >
@@ -259,7 +274,7 @@ function UpdateExam(props) {
               labelId="demo-select-small-label"
               id="demo-select-small"
               name="timer"
-              value={exams.timer}
+              value={timer}
               label="Timer"
               onChange={getExamData}
             >

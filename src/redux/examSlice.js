@@ -44,6 +44,24 @@ export const showExam = createAsyncThunk(
   }
 );
 
+export const showMBTIExam = createAsyncThunk(
+  "showExam",
+  async (args, { rejectWithValue }) => {
+    const response = await fetch(
+      "http://localhost:9083/myndkare/v1/exams/mbti",
+      { method: "GET" }
+    );
+
+    try {
+      const result = await response.json();
+      console.log(result)
+      return result;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 //read action
 export const getExamsCount = createAsyncThunk(
   "getExamsCount",

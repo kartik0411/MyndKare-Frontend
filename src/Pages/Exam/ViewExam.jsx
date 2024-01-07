@@ -195,7 +195,7 @@ function ViewExam(props) {
     setExamChanged(false);
     onClose(selectedValue);
   };
-  testsValues = testsValues?.filter(item => item.name !== "CIS") 
+  // testsValues = testsValues?.filter(item => item.name !== "CIS") 
   const menuItems = testsValues?.map(item => (
     <MenuItem value={item._id}>{item.name}</MenuItem>
     ));

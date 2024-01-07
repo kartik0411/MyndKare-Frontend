@@ -95,12 +95,18 @@ export function Header() {
                                                 <span>DBDA Areas</span>
                                             </NavLink>
                                             <NavLink className="dropdown-item" to="/dbdaScores">
-                                                <span>DBDA Score Details</span>
+                                                <span>DBDA Score Details</span> 
+                                            </NavLink>
+                                            <NavLink className="dropdown-item" to="/cisInterest">
+                                                <span>CIS Interest Areas</span>
+                                            </NavLink>
+                                            <NavLink className="dropdown-item" to="/cisSten">
+                                                <span>CIS STEN Areas</span>
                                             </NavLink>
                                         </div>
                                     </div>
                                 </li>
-                            </li>
+                            </li> 
                             {/* </NavLink> */}
                             <NavLink to="/login" className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
                                 <li className='-mt-2'>
