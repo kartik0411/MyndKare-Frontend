@@ -6,13 +6,13 @@ import Layout from "../layouts";
 function Wrapper() {
     return (
         <>
-            <BrowserRouter basename="/MyndKare-Frontend">
+            <BrowserRouter basename="/MyndKare">
                 <Routes>
                     {
                         routes.map(({ path, Component }) => (
                             <Route
                                 key={path}
-                                path={path}
+                                path={path} 
                                 element={
                                     <React.Suspense fallback>
                                         <Layout>

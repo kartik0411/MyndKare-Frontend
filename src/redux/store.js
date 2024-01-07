@@ -7,6 +7,10 @@ import sectionSlice from "./sectionSlice";
 import examSlice from "./examSlice";
 import testSlice from "./testSlice";
 import dbdaSlice from "./dbdaSlice";
+import mbtiSlice from "./mbtiSlice";
+import dbdaScoreSlice from "./dbdaScoreSlice";
+import cisInterestSlice from "./cisInterestSlice";
+import cisStenSlice from "./cisStenSlice";
 
 export const store = configureStore({
     reducer : {
@@ -17,6 +21,10 @@ export const store = configureStore({
         sectionDetail : sectionSlice,
         examDetail : examSlice,
         testDetail : testSlice,
-        dbdaDetail : dbdaSlice
+        dbdaDetail : dbdaSlice,
+        mbtiDetail : mbtiSlice,
+        dbdaScoreDetail : dbdaScoreSlice,
+        cisInterestDetail: cisInterestSlice,
+        cisStenDetail : cisStenSlice
     }
 })

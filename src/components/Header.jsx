@@ -95,7 +95,13 @@ export function Header() {
                                                 <span>DBDA Areas</span>
                                             </NavLink>
                                             <NavLink className="dropdown-item" to="/dbdaScores">
-                                                <span>DBDA Score Details</span>
+                                                <span>DBDA Score Details</span> 
+                                            </NavLink>
+                                            <NavLink className="dropdown-item" to="/cisInterest">
+                                                <span>CIS Interest Areas</span>
+                                            </NavLink>
+                                            <NavLink className="dropdown-item" to="/cisSten">
+                                                <span>CIS STEN Areas</span>
                                             </NavLink>
                                         </div>
                                     </div>
