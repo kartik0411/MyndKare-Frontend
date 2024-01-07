@@ -14,7 +14,7 @@ import School from "../Pages/School/School"
 import MBTI from "../Pages/MBTI/MBTI"
 import CISInterestAreas from "../Pages/CISInterestAreas/CISInterestAreas"
 import CISSTENAreas from "../Pages/CISSTENAreas/CISSTENAreas"
-import DBDAAreas from "../Pages/DBDAAreas/DBDAAreas"
+import DBDA from "../Pages/DBDAAreas/DBDA"
 import DBDAScoreDetails from "../Pages/DBDAScoreDetails/DBDAScoreDetails"
 import SchoolResult from "../Pages/SchoolResult/SchoolResult"
 import Section from "../Pages/Section/Section"
@@ -31,7 +31,7 @@ const routes = [
     { path: "/test", Component: Test },
     { path: "/exam", Component: Exam },
     { path: "/mbti", Component: MBTI },
-    { path: "/dbda", Component: DBDAAreas },
+    { path: "/dbda", Component: DBDA },
     { path: "/question", Component: Question },
     { path: "/dbdaScores", Component: DBDAScoreDetails },
     { path: "/cisInterest", Component: CISInterestAreas },

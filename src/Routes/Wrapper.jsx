@@ -1,12 +1,12 @@
 import React from "react";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route, HashRouter } from "react-router-dom";
 import routes from "./routes";
 import Layout from "../layouts";
 
 function Wrapper() {
     return (
         <>
-            <BrowserRouter basename="/MyndKare">
+            <HashRouter>
                 <Routes>
                     {
                         routes.map(({ path, Component }) => (
@@ -24,7 +24,7 @@ function Wrapper() {
                         ))
                     }
                 </Routes>
-            </BrowserRouter>
+            </HashRouter>
         </>
     )
 }

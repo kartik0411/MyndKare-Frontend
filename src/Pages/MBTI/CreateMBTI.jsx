@@ -101,7 +101,7 @@ function CreateMBTI(props)  {
               value={mbtis.output}
               onChange={getMBTIData}
               id="outlined-size-small"
-              size="small"
+              size="small" 
               multiline
               maxRows={4}
             />
