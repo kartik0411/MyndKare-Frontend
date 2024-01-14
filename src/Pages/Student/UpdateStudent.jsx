@@ -1,65 +1,94 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { createStudent, showStudent  } from "../../redux/studentSlice";
+import { Padding } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+import { editStudent } from "../../redux/studentSlice";
 import Radio from '@mui/material/Radio';
 import Select from "@mui/material/Select";
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import { computeSlots } from "@mui/x-data-grid/internals";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
+import { useSelector } from "react-redux";
 import { createTest, showTest } from "../../redux/testSlice";
 import { showDBDA } from "../../redux/dbdaSlice";
-import { getStudentsCount } from "../../redux/studentSlice";
-import { useDispatch, useSelector } from "react-redux";
 
-function CreateStudent(props)  {
-  const { onClose, selectedValue, open } = props;
+function UpdateStudent(props) { 
+  let { onClose, selectedValue, open, testsValues,dbdasValues } = props;
   const [students, setStudents] = useState({});
-  const [test, setTest] = useState({});
-  const [dbdacode, setDBDACode] = useState({});
+  const [test,setTest] = useState({});
   const [dbda, setDbda] = useState(false);
   const [timer, setTimer] = useState(false);
+  const [studentChanged, setStudentChanged] = useState(false);
+  // const [selectedStudent, setSelectedStudent] = useState({type: "1"});
   const [typedsection, settypedSections] = useState(false);
   const dispatch = useDispatch();
-  let { tests, loading, error } = useSelector((state) => { 
-    // let testobject = state.testDetail
-    // if(state.testDetail && state.testDetail.tests && state.testDetail.tests.length>0 && state.testDetail.tests[state.testDetail.tests.length-1]._id == null) {
-    //   let newtestobject = JSON.parse(JSON.stringify(testobject));
-    //   newtestobject.tests.pop();
-    //   return newtestobject;
-    // }
-    // else {
-    return state.testDetail;
-    // }
-  });
 
-  let { dbdas} = useSelector((state) => {
-    return state.dbdaDetail; 
-  });
 
   let { studentsCount} = useSelector((state) => {
     // setStudents({ ...students, serial: state.studentDetail.count })
     return state.studentDetail; 
   });
-
+  // useEffect(()=> {setTest(students.testId)}, [tests])
+  // useEffect(()=> {if(students.dbdaId) {setDbda(students.dbdaId)}}, [dbdas])
   useEffect(() => {
-    dispatch(showTest())
-    dispatch(showDBDA())
-    dispatch(getStudentsCount())
-    console.log(tests)
-  }, [])
+    // if (testsValues) {
+    //   setTests(testsValues);
+    // }
+    // if(dbdasValues) {
+    //   setDbadas(dbdasValues);
+    // }
+    for(let i=0;i<testsValues.length;i++) {
+      if(testsValues[i]._id === selectedValue.testId) {
+        setTest(testsValues[i]);
+      }
+    }
+    if (selectedValue) {
+      let value = Object.assign({},selectedValue);
+      if(selectedValue.timer=="Yes") {
+        value.timer = true;
+        setTimer(true);
+      } else if(selectedValue.timer=="No") {
+        value.timer = false;
+        setTimer(false);
+      }
+      if(selectedValue.timerVisible=="Yes") {
+        value.timerVisible = true;
+      } else if(selectedValue.timer=="No") {
+        value.timerVisible = false;
+      }
+      if(value.name?.indexOf('-')>-1) {
+        value.name= value.name?.substring(value.name?.indexOf('-')+1);
+      } else {
+        value.name = "";
+      }
+      if(value.dbdaId) {
+        setDbda(true);
+        if(value.name?.indexOf('-')>-1) {
+          value.name= value.name?.substring(value.name?.indexOf('-')+1);
+        } else {
+          value.name = "";
+        }
+      } else {
+        setDbda(false);
+      }
+      setStudents(value);
+      settypedSections(false);
+      setStudentChanged(false);
+  }
+  }, [selectedValue])
+
 
   useEffect(() => {
     console.log("students ::"+JSON.stringify(students))
-    if(students.testId && students.timer!=null && students.serial) {
+    if(students.testId && students.timer!=null && students.serial && studentChanged) {
       if(dbda) {
         if(timer) {
           if(students.dbdaId && students.timerVisible!=null && students.duration) {
@@ -76,7 +105,7 @@ function CreateStudent(props)  {
         }
       } else {
         if(timer) {
-          if(students.timerVisible!=null && students.duration) {
+          if(students.timerVisible!=null && students.duration) { 
             settypedSections(true)
           } else {
             settypedSections(false)
@@ -97,12 +126,12 @@ function CreateStudent(props)  {
     },
   };
   const getStudentData = (e) => {
-    console.log("e.target.value"+JSON.stringify(students))
+    setStudentChanged(true)
     if(e.target.name === "testId") {
       let type=1;
-      for(let i=0;i<tests.length;i++) {
-        if((e.target.value === tests[i]._id) ) { 
-          if(tests[i].type === 2) {
+      for(let i=0;i<testsValues.length;i++) {
+        if((e.target.value._id === testsValues[i]._id) ) { 
+          if(testsValues[i].type === 2) {
             type=2;
           }
          break;
@@ -111,9 +140,8 @@ function CreateStudent(props)  {
       if(type==2) {
         setDbda(true);
       } else {
-        console.log("jdshdshjdshj")
-        delete students.dbdaId;
-        setDbda(false);
+        delete students.dbdaId
+        setDbda(false); 
       }
     }
     if(e.target.name === "timer") { 
@@ -121,11 +149,16 @@ function CreateStudent(props)  {
         setTimer(true);
       } else {
         delete students.timerVisible;
-        delete students.duration
+        delete students.duration;
         setTimer(false);
       }
     }
-    setStudents({ ...students, [e.target.name]: e.target.value })
+    if(e.target.name === "testId") {
+      setTest(e.target.value);
+      setStudents({ ...students, [e.target.name]: e.target.value._id })
+    } else {
+      setStudents({ ...students, [e.target.name]: e.target.value })
+    }
   }
 
   // const getTestData = (e) => {
@@ -134,32 +167,62 @@ function CreateStudent(props)  {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createStudent(students));
+    dispatch(editStudent(students));
     handleClose();
     window.location.reload(); 
   }
-
+  
   const handleClose = () => {
-    setStudents({})
-    settypedSections(false)
-    setDbda(false)
-    setTest({})
-    setTimer(false)
-    setDBDACode({})
+    let value = Object.assign({},selectedValue);
+    if(selectedValue.timer==="Yes") {
+      value.timer = true;
+      setTimer(true);
+    } else if(selectedValue.timer==="No") {
+      value.timer = false;
+      setTimer(false);
+    }
+    if(selectedValue.timerVisible=="Yes") {
+      value.timerVisible = true;
+    } else if(selectedValue.timer=="No") {
+      value.timerVisible = false;
+    }
+    if(value.name?.indexOf('-')>-1) {
+      value.name= value.name?.substring(value.name?.indexOf('-')+1);
+    } else {
+      value.name = "";
+    }
+    for(let i=0;i<testsValues.length;i++) {
+      if(testsValues[i]._id === selectedValue.testId) {
+        setTest(testsValues[i]);
+      }
+    }
+    if(value.dbdaId) {
+      setDbda(true);
+      if(value.name?.indexOf('-')>-1) {
+        value.name= value.name?.substring(value.name?.indexOf('-')+1);
+      } else {
+        value.name = "";
+      }
+    } else {
+      setDbda(false);
+    }
+    setStudents(value);
+    settypedSections(false);
+    setStudentChanged(false);
     onClose(selectedValue);
   };
-  tests = tests.filter(item => item.name !== "CIS") 
-  const menuItems = tests.map(item => (
-    <MenuItem value={item._id}>{item.name}</MenuItem>
+  testsValues = testsValues?.filter(item => item.name !== "CIS") 
+  const menuItems = testsValues?.map(item => (
+    <MenuItem value={item}>{item.name}</MenuItem>
     ));
 
-    const dbdasmenuItems = dbdas.map(item => (
+    const dbdasmenuItems = dbdasValues?.map(item => (
       <MenuItem value={item._id}>{item.code}</MenuItem>
       ));
 
   return (
     <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
-      <DialogTitle>Create Student</DialogTitle>
+      <DialogTitle>Edit Student</DialogTitle>
       <DialogContent>
         <form >
           <div className="pt-4 flex items-center justify-center">
@@ -169,7 +232,7 @@ function CreateStudent(props)  {
               labelId="demo-select-small-label"
               id="demo-select-small"
               name="testId"
-              value={test._id}
+              value={test}
               label="Test"
               onChange={getStudentData}
             >
@@ -184,7 +247,7 @@ function CreateStudent(props)  {
               labelId="demo-select-small-label"
               id="demo-select-small"
               name="dbdaId"
-              value={dbdacode._id}
+              value={students.dbdaId}
               label="Test"
               onChange={getStudentData}
             >
@@ -196,6 +259,7 @@ function CreateStudent(props)  {
               fullWidth
               label="Name"
               name="name"
+              value={students.name}
               onChange={getStudentData}
               id="outlined-size-small"
               size="small"
@@ -210,7 +274,7 @@ function CreateStudent(props)  {
               labelId="demo-select-small-label"
               id="demo-select-small"
               name="timer"
-              value={students.timer}
+              value={timer}
               label="Timer"
               onChange={getStudentData}
             >
@@ -224,6 +288,7 @@ function CreateStudent(props)  {
               style={styles.equalFields}
               label="Serial"
               name="serial"
+              value={students.serial}
               onChange={getStudentData}
               id="outlined-number"
               size="small"
@@ -254,6 +319,7 @@ function CreateStudent(props)  {
               label="Duration(Seconds)"
               name="duration"
               type="number"
+              value={students.duration}
               onChange={getStudentData}
               id="outlined-number"
               size="small"
@@ -265,12 +331,11 @@ function CreateStudent(props)  {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button type= "submit" disabled={!typedsection} onClick={handleSubmit} >Save</Button>
+        <Button type= "submit" disabled={!typedsection} onClick={handleSubmit} >Update</Button>
       </DialogActions>
     </Dialog>
   );
 }
 
-export default CreateStudent
-
+export default UpdateStudent
 

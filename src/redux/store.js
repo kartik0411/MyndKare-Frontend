@@ -5,6 +5,7 @@ import schoolResultSlice from "./schoolResultSlice";
 import classSlice from "./classSlice";
 import sectionSlice from "./sectionSlice";
 import examSlice from "./examSlice";
+import studentSlice from "./studentSlice";
 import testSlice from "./testSlice";
 import dbdaSlice from "./dbdaSlice";
 import mbtiSlice from "./mbtiSlice";
@@ -25,6 +26,7 @@ export const store = configureStore({
         mbtiDetail : mbtiSlice,
         dbdaScoreDetail : dbdaScoreSlice,
         cisInterestDetail: cisInterestSlice,
-        cisStenDetail : cisStenSlice
+        cisStenDetail : cisStenSlice,
+        studentDetail : studentSlice
     }
 })

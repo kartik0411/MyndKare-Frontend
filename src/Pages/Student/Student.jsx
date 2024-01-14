@@ -1,189 +1,474 @@
-import { Typography } from "@mui/material";
-import Button from "@mui/material/Button";
+import React, { useEffect } from "react";
 import { Table } from '../../components/Table'
-import { Box, IconButton, Tooltip } from "@mui/material";
-import { Delete, Edit, Preview } from "@mui/icons-material";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button"; 
+import { useDispatch, useSelector } from "react-redux";
+import { createStudent, showStudent } from "../../redux/studentSlice";
+import { Box, IconButton, Tooltip} from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
+import { Delete, Edit, Preview} from "@mui/icons-material";
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import RateReviewIcon from '@mui/icons-material/RateReview';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert"; 
+import { deleteStudent } from "../../redux/studentSlice";
+import CircularProgress from '@mui/material/CircularProgress';
 import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import { read, utils, writeFile } from 'xlsx';
+import UpdateStudent from "./UpdateStudent";
+import ViewStudent from "./ViewStudent";
+import CreateStudent from "./CreateStudent";
+import DeleteStudent from "./DeleteStudent";
+import { createTest, showTest } from "../../redux/testSlice";
+import { showDBDA } from "../../redux/dbdaSlice";
+import { red } from '@mui/material/colors';
 
+const tableOptions = {
+  height: "auto",
+  width: "100%",
+  initialState: {
+    pagination: {
+      paginationModel: {
+        pageSize: 10,
+      },
+    },
+  },
+  pageSizeOptions: [5, 10, 25],
+  checkboxSelection: false,
+  disableSelectionOnClick: true,
+};
 
-export function Student() {
-    const styles = {
-        containerStudent: {
-            padding: "20px 50px 50px 50px",
-        },
-    };
+const styles = {
+  containerQuestion: {
+    padding: "20px 50px 50px 50px",
+  },
+};
 
-    const tableOptions = {
-        height: "auto",
-        width: "100%",
-        initialState: {
-            pagination: {
-                paginationModel: {
-                    pageSize: 10,
-                },
-            },
-        },
-        pageSizeOptions: [5, 10, 25],
-        checkboxSelection: false,
-        disableSelectionOnClick: true,
-    };
+function Student() {
+  const [createOpen, setCreateOpen] = React.useState(false);
+  const [editOpen, setEditOpen] = React.useState(false);
+  // const [snackOpen, setSnackOpen] = React.useState(false);
+  const [viewOpen, setViewOpen] = React.useState(false);
+  const [deleteOpen, setDeleteOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = React.useState([]);
+  const [editFormValues, setEditFormValues] = React.useState([]);
+  const dispatch = useDispatch();
+  const { students, loading, error } = useSelector((state) => {
+    return state.studentDetail;
+    // }
+  });
+  let { tests} = useSelector((state) => { 
+    // let testobject = state.testDetail
+    // if(state.testDetail && state.testDetail.tests && state.testDetail.tests.length>0 && state.testDetail.tests[state.testDetail.tests.length-1]._id == null) {
+    //   let newtestobject = JSON.parse(JSON.stringify(testobject));
+    //   newtestobject.tests.pop();s
+    //   return newtestobject;
+    // }
+    // else {
+    return state.testDetail;
+    // }
+  });
 
-    const columns = [
-        { field: "id", headerName: "ID", width: 90 },
-        { field: "name", headerName: "Name", width: 170, editable: true },
-        {
-            field: "guardianName",
-            headerName: "Guardian's Name",
-            width: 170,
-        },
-        {
-            field: "admissionNo",
-            headerName: "Admission No",
-            type: "number",
-            width: 110,
-        },
-        {
-            field: "school",
-            headerName: "School",
-            width: 220,
-        },
-        {
-            field: "schoolClass",
-            headerName: "School",
-            width: 90,
-        },
+  let { dbdas} = useSelector((state) => {
+    return state.dbdaDetail; 
+  });
+    console.log(students)
+  const columns = [
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 1
+    },
+    {
+      field: "father",
+      headerName: "Father's Name",
+      flex: 1
+    },
+    {
+      field: "admsnno",
+      headerName: "Admission no",
+      flex: 1
+    },
+    {
+      field: "school",
+      headerName: "School",
+      flex: 1
+    },
+    {
+      field: "class",
+      headerName: "School Class",
+      flex: 1
+    },
+    {
+      field: "section",
+      headerName: "Section",
+      flex: 1 
+    },
+    {
+      field: "_id",
+      headerName: "Exam Key",
+      flex: 2 
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      type: "actions",
+      flex: 1,
+      renderCell: (params) => {
+        if(params.row.isAssesmentStarted===false) {
+        return (
+          <Box>
+            <Tooltip title="View details">
+              <IconButton onClick={(e) => { 
+                handleView(params.row)
+              }}>
+                <Preview />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Edit details">
+              <IconButton onClick={(e) => {
+                handleEdit(params.row)
+              }}>
+                <Edit />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Delete details">
+            <IconButton onClick={(e) => {
+                handleDelete(params.row)
+              }}>
+                <Delete  />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="View Tests Status">
+            <IconButton onClick={(e) => {
+              }}>
+                <DashboardIcon  sx={{ color: red[500] }} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="View Final Report">
+            <IconButton onClick={(e) => {
+              }}>
+                <AssessmentIcon  />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Edit Feedback">
+            <IconButton onClick={(e) => {
+              }}>
+                <RateReviewIcon  />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        );
+            }
+            else if(params.row.finalReportFlag===false) {
+              return (
+                <Box>
+                <Tooltip title="View details">
+                  <IconButton onClick={(e) => { 
+                    handleView(params.row)
+                  }}>
+                    <Preview />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Edit details">
+                  <IconButton onClick={(e) => {
+                    handleEdit(params.row)
+                  }}>
+                    <Edit />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Delete details">
+                <IconButton onClick={(e) => {
+                    handleDelete(params.row)
+                  }}>
+                    <Delete  />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="View Tests Status">
+                <IconButton onClick={(e) => {
+                                      handleDelete(params.row)
+                  }}>
+                    <DashboardIcon color="success" />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="View Final Report">
+                <IconButton onClick={(e) => {
+                  }}>
+                    <AssessmentIcon  sx={{ color: red[500] }}/>
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Edit Feedback">
+                <IconButton onClick={(e) => {
+                  }}>
+                    <RateReviewIcon  />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+            );
+            }
+            else if(params.row.feedbackFlag===false) {
+              return (
+                <Box>
+                <Tooltip title="View details">
+                  <IconButton onClick={(e) => { 
+                    handleView(params.row)
+                  }}>
+                    <Preview />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Edit details">
+                  <IconButton onClick={(e) => {
+                    handleEdit(params.row)
+                  }}>
+                    <Edit />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Delete details">
+                <IconButton onClick={(e) => {
+                    handleDelete(params.row)
+                  }}>
+                    <Delete  />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="View Tests Status">
+                <IconButton onClick={(e) => {
+                                      handleDelete(params.row)
+                  }}>
+                    <DashboardIcon color="success" />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="View Final Report">
+                <IconButton onClick={(e) => {
+                  handleDelete(params.row)
+                  }}>
+                    <AssessmentIcon  color="success"/>
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Edit Feedback">
+                <IconButton onClick={(e) => {
+                  handleDelete(params.row)
+                  }}>
+                    <RateReviewIcon sx={{ color: red[500] }} />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+            );
+            } else {
+              return (
+                <Box>
+                <Tooltip title="View details">
+                  <IconButton onClick={(e) => { 
+                    handleView(params.row)
+                  }}>
+                    <Preview />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Edit details">
+                  <IconButton onClick={(e) => {
+                    handleEdit(params.row)
+                  }}>
+                    <Edit />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Delete details">
+                <IconButton onClick={(e) => {
+                    handleDelete(params.row)
+                  }}>
+                    <Delete  />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="View Tests Status">
+                <IconButton onClick={(e) => {
+                                      handleDelete(params.row)
+                  }}>
+                    <DashboardIcon color="success" />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="View Final Report">
+                <IconButton onClick={(e) => {
+                  handleDelete(params.row)
+                  }}>
+                    <AssessmentIcon  color="success"/>
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Edit Feedback">
+                <IconButton onClick={(e) => {
+                  handleDelete(params.row)
+                  }}>
+                    <RateReviewIcon color="success" />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+            );
+            }
+      },
+    },
+  ];
 
-        {
-            field: "section",
-            headerName: "Section",
-            width: 100,
-        },
-        {
-            field: "examKey",
-            headerName: "Exam Key",
-            width: 120,
-        },
-        {
-            field: "actions",
-            headerName: "Actions",
-            type: "actions",
-            width: 150,
-            renderCell: (params) => {
-                return (
-                    <Box>
-                        <Tooltip title="View details">
-                            <IconButton onClick={() => { }}>
-                                <Preview />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Edit details">
-                            <IconButton onClick={(e) => {
-                                console.log("edit--------")
-                            }}>
-                                <Edit />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Delete details">
-                            <IconButton
-                                onClick={() => {
-                                    console.log("delete--------")
+  useEffect(() => {
+    dispatch(showStudent())
+    dispatch(showTest())
+    dispatch(showDBDA())
+    console.log(students)
+  }, [])
+  console.log(students)
+  const handleCreateOpen = () => {
+    setCreateOpen(true);
+  };
 
-                                }}
-                            >
-                                <Delete />
-                            </IconButton>
-                        </Tooltip>
-                    </Box>
-                );
-            },
-        },
-    ];
+  const exportToExcel = async () => {
+    const worksheet = utils.json_to_sheet(students);
+    const workbook = utils.book_new();
+    utils.book_append_sheet(workbook, worksheet, 'Sheet 1');
+    writeFile(workbook, 'data.xlsx');
+  }
 
-    const students = [
-        { id: 1, name: "Solaris Kumar", guardianName: "daniel people", admissionNo: "2013", school: "Oxford School", schoolClass: "X", section: "A", examKey: "alphaBeta" }
-    ]
+  const handleEdit = (value) => {
+    setCreateOpen(false);
+    setEditOpen(true);
+    setEditFormValues(value)
+    console.log(value)
+  }
 
-    const exportToExcel = async () => {
-        const worksheet = utils.json_to_sheet(students);
-        const workbook = utils.book_new();
-        utils.book_append_sheet(workbook, worksheet, 'Sheet 1');
-        writeFile(workbook, 'data.xlsx');
-    }
+  const handleDelete = (value) => {
+    setCreateOpen(false);
+    setEditOpen(false);
+    setDeleteOpen(true);
+    setEditFormValues(value)
+    console.log(value)
+  }
 
-    const uploadStudent = async () => {
-        try {
-            const fileInput = document.createElement('input');
-            fileInput.type = 'file';
-            fileInput.accept = '.xlsx'; // Specify the accepted file type (Excel)
-            fileInput.addEventListener('change', async (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        try {
-                            const data = new Uint8Array(e.target.result);
-                            const workbook = read(data, { type: 'array' });
-                            const sheetName = workbook.SheetNames[0]; // Assuming data is in the first sheet
-                            const sheet = workbook.Sheets[sheetName];
-                            const jsonData = utils.sheet_to_json(sheet);
-                            //   dispatch(createQuestion(jsonData));
-                            students.push(jsonData);
-                            console.log(jsonData, "yeh aya hai");
-                            // setGridData(jsonData);
-                        } catch (error) {
-                            console.error('Error parsing Excel file:', error);
-                        }
-                    };
-                    reader.readAsArrayBuffer(file);
-                }
-            });
+  const handleView = (value) => {
+    setCreateOpen(false);
+    setEditOpen(false);
+    setViewOpen(true);
+    setEditFormValues(value)
+    console.log(value)
+  }
+  // const handleSnackbarOpen = () => {
+  //   console.log("dekhte hain")
+  //   setCreateOpen(false);
+  //   setEditOpen(false);
+    // setSnackOpen(true);
+  // }
 
-            fileInput.click();
-        } catch (error) {
-            console.error('Error uploading question:', error);
-        }
-    };
+  const handleClose = (value) => {
+    setEditOpen(false);
+    setCreateOpen(false);
+    setViewOpen(false);
+    setDeleteOpen(false);
+    // if(snackOpen) {
+    //   console.log("ye kaise aa skta")
+    //   window.location.reload();
+    // }
+    // setSnackOpen(false);
+    setSelectedValue(value);
+  };
 
+  // const snackaction = (
+  //   <React.Fragment>
+  //     <Button color="secondary" size="small" onClick={handleClose}>
+  //       OK
+  //     </Button>
+  //     <IconButton
+  //       size="small"
+  //       aria-label="close"
+  //       color="inherit"
+  //       onClick={handleClose}
+  //     >
+  //       <CloseIcon fontSize="small" />
+  //     </IconButton>
+  //   </React.Fragment>
+  // );
 
+  if (loading) {
     return (
-        <>
-            <div style={styles.containerStudent}>
-                <Typography
-                    className="text-sky-600 text-4xl pb-4"
-                    variant="h4"
-                    gutterBottom
-                >
-                    Students
-                </Typography>
+      <Box className="mb-40 mt-40 flex items-center justify-center" sx={{ display: 'flex' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+  if(error) {
+    setTimeout(window.location.reload.bind(window.location), 2000);
+    return (
+    // <Snackbar
+    //   open={setSnackOpen(true)}
+    //   autoHideDuration={6000}
+    //   onClose={handleClose}
+    //   message="Cannot add Duplicate Names"
+    //   action={snackaction}
+    // />
+    <Alert variant="filled" severity="error">
+    Cannot add Duplicate Student Names
+  </Alert>
+    );
+  }
 
-                <div className="pb-4">
-                    <Button className="mx-2" variant="contained" >
-                        Create Student
-                    </Button>
-                    <Button variant="contained" onClick={uploadStudent} >
-                        <FileUploadRoundedIcon />
-                    </Button>
-                </div>
+  return (
+    <>
+      {students &&
+        <div style={styles.containerQuestion}>
+          <Typography
+            className="text-sky-600 text-4xl pb-2 pl-2"
+            variant="h4"
+            gutterBottom
+          >
+            Students
+          </Typography>
 
-                <Table
-                    height={tableOptions.height}
-                    width={tableOptions.width}
-                    rows={students}
-                    columns={columns}
-                    initialState={tableOptions.initialState}
-                    pageSizeOptions={tableOptions.pageSizeOptions}
-                    checkboxSelection={tableOptions.checkboxSelection}
-                    disableSelectionOnClick={tableOptions.disableSelectionOnClick}
-                />
-                <div className="flex justify-end">
-                    <Button className="my-2" onClick={exportToExcel} variant="contained">
-                        Download <DownloadRoundedIcon />
-                    </Button>
-                </div>
-            </div></>
-    )
+          <div className="pb-4">
+            <Button className="mx-2" onClick={handleCreateOpen} variant="contained">
+              Create Student
+            </Button>
+          </div>
+
+          <CreateStudent
+            selectedValue={selectedValue}
+            open={createOpen}
+            onClose={handleClose}
+          />
+
+          <UpdateStudent
+            selectedValue={editFormValues}
+            open={editOpen}
+            testsValues={tests}
+            dbdasValues={dbdas}
+            onClose={handleClose}
+          />
+          <ViewStudent
+            selectedValue={editFormValues}
+            open={viewOpen}
+            testsValues={tests}
+            dbdasValues={dbdas}
+            onClose={handleClose}
+          />
+          <DeleteStudent
+            selectedValue={editFormValues}
+            open={deleteOpen}
+            onClose={handleClose}
+          />
+
+          <Table
+            height={tableOptions.height}
+            width={tableOptions.width}
+            rows={students}
+            columns={columns}
+            initialState={tableOptions.initialState}
+            pageSizeOptions={tableOptions.pageSizeOptions}
+            checkboxSelection={tableOptions.checkboxSelection}
+            disableSelectionOnClick={tableOptions.disableSelectionOnClick}
+          />
+          <div className="flex justify-end">
+            <Button className="my-2" onClick={exportToExcel} variant="contained">
+              Download <DownloadRoundedIcon />
+            </Button>
+          </div>
+        </div>
+      }
+    </>
+  );
 }
 
 export default Student;
