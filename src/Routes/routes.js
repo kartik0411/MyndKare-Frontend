@@ -15,7 +15,7 @@ import MBTI from "../Pages/MBTI/MBTI"
 import CISInterestAreas from "../Pages/CISInterestAreas/CISInterestAreas"
 import CISSTENAreas from "../Pages/CISSTENAreas/CISSTENAreas"
 import DBDA from "../Pages/DBDAAreas/DBDA"
-import DBDAScoreDetails from "../Pages/DBDAScoreDetails/DBDAScoreDetails"
+import DBDAScore from "../Pages/DBDAScoreDetails/DBDAScore"
 import SchoolResult from "../Pages/SchoolResult/SchoolResult"
 import Section from "../Pages/Section/Section"
 import Student from "../Pages/Student/Student"
@@ -33,7 +33,7 @@ const routes = [
     { path: "/mbti", Component: MBTI },
     { path: "/dbda", Component: DBDA },
     { path: "/question", Component: Question },
-    { path: "/dbdaScores", Component: DBDAScoreDetails },
+    { path: "/dbdaScores", Component: DBDAScore },
     { path: "/cisInterest", Component: CISInterestAreas },
     { path: "/cisSten", Component: CISSTENAreas },
     { path: "/report", Component: Report },

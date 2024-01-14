@@ -56,30 +56,17 @@ function DBDA() {
   });
   let { exams} = useSelector((state) => { 
     console.log("ehjdhdsjhdsjdsj"+JSON.stringify(state.examDetail))
-    // let testobject = state.testDetail
-    // if(state.testDetail && state.testDetail.tests && state.testDetail.tests.length>0 && state.testDetail.tests[state.testDetail.tests.length-1]._id == null) {
-    //   let newtestobject = JSON.parse(JSON.stringify(testobject));
-    //   newtestobject.tests.pop();s
-    //   return newtestobject;
-    // }
-    // else {
     return state.examDetail;
-    // }
   });
   const columns = [
     {
-      field: "examName",
-      headerName: "Exam Name",
+      field: "code",
+      headerName: "Code",
       flex: 1
     },
     {
       field: "name",
-      headerName: "Response",
-      flex: 1
-    },
-    {
-      field: "output",
-      headerName: "Output",
+      headerName: "Name",
       flex: 1
     },
     {
@@ -170,41 +157,15 @@ function DBDA() {
     setEditFormValues(value)
     console.log(value)
   }
-  // const handleSnackbarOpen = () => {
-  //   console.log("dekhte hain")
-  //   setCreateOpen(false);
-  //   setEditOpen(false);
-    // setSnackOpen(true);
-  // }
 
   const handleClose = (value) => {
     setEditOpen(false);
     setCreateOpen(false);
     setViewOpen(false);
     setDeleteOpen(false);
-    // if(snackOpen) {
-    //   console.log("ye kaise aa skta")
-    //   window.location.reload();
-    // }
-    // setSnackOpen(false);
     setSelectedValue(value);
   };
 
-  // const snackaction = (
-  //   <React.Fragment>
-  //     <Button color="secondary" size="small" onClick={handleClose}>
-  //       OK
-  //     </Button>
-  //     <IconButton
-  //       size="small"
-  //       aria-label="close"
-  //       color="inherit"
-  //       onClick={handleClose}
-  //     >
-  //       <CloseIcon fontSize="small" />
-  //     </IconButton>
-  //   </React.Fragment>
-  // );
 
   if (loading) {
     return (
@@ -216,13 +177,6 @@ function DBDA() {
   if(error) {
     setTimeout(window.location.reload.bind(window.location), 2000);
     return (
-    // <Snackbar
-    //   open={setSnackOpen(true)}
-    //   autoHideDuration={6000}
-    //   onClose={handleClose}
-    //   message="Cannot add Duplicate Names"
-    //   action={snackaction}
-    // />
     <Alert variant="filled" severity="error">
     Cannot add Duplicate DBDA Names
   </Alert>

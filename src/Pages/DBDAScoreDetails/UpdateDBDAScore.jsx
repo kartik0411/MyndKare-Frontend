@@ -18,13 +18,13 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import { useSelector } from "react-redux";
 import { createTest, showTest } from "../../redux/testSlice";
-import { showDBDA } from "../../redux/dbdaSlice";
-import { editDBDA} from "../../redux/dbdaSlice";
+import { showDBDAScore } from "../../redux/dbdaScoreSlice";
+import { editDBDAScore} from "../../redux/dbdaScoreSlice";
 
 function UpdateExam(props) { 
   const { onClose, selectedValue, open, examsValues } = props;
   const [exam, setExam] = useState({});
-  const [dbdas, setDBDAs] = useState({});
+  const [dbdaScores, setDBDAScores] = useState({});
   const [valueChanged, setvalueChanged] = useState(false);
   const [typedsection, settypedSections] = useState(false);
   const dispatch = useDispatch();
@@ -32,38 +32,38 @@ function UpdateExam(props) {
   useEffect(()=> {
     console.log("selectedValue"+JSON.stringify(selectedValue));
     if(selectedValue) {
-      setDBDAs(selectedValue);
+      setDBDAScores(selectedValue);
       settypedSections(false);
     }
   },[selectedValue])
 
 
   useEffect(() => {
-    if(valueChanged && dbdas.code && dbdas.name) {
+    if(valueChanged) {
       settypedSections(true);
     } else {
       settypedSections(false)
     }
- }, [dbdas]);
+ }, [dbdaScores]);
 
-  const getDBDAData = (e) => {
+  const getDBDAScoreData = (e) => {
     setvalueChanged(true);
-    setDBDAs({ ...dbdas, [e.target.name]: e.target.value })
+    setDBDAScores({ ...dbdaScores, [e.target.name]: e.target.value })
   }
 
   // const getTestData = (e) => {
-  //   setDBDAs({ ...dbdas, [e.target.name]: e.target.value })
+  //   setDBDAScores({ ...dbdaScores, [e.target.name]: e.target.value })
   // }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(editDBDA(dbdas));
+    dispatch(editDBDAScore(dbdaScores));
     handleClose();
     window.location.reload(); 
   }
 
   const handleClose = () => {
-    setDBDAs(selectedValue);
+    setDBDAScores(selectedValue);
     settypedSections(false)
     setvalueChanged(false);
     onClose(selectedValue);
@@ -71,37 +71,50 @@ function UpdateExam(props) {
 
   return (
     <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
-      <DialogTitle>Edit DBDA</DialogTitle>
+      <DialogTitle>Edit DBDAScore</DialogTitle>
       <DialogContent>
         <form >
           <div className="pt-4 flex items-center justify-center">
           <TextField sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}
               fullWidth
-              label="Code"
-              name="code"
-              value={dbdas.code}
-              onChange={getDBDAData}
+              label="DBDA"
+              name="dbda"
+              value={dbdaScores.dbda}
+              // onChange={getDBDAScoreData}
               id="outlined-size-small"
               size="small"
               multiline
               maxRows={4}
-              // defaultvalue={dbdas.name}
+              // defaultvalue={dbdaScores.name}
               required
             />
             
             <TextField sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}
               fullWidth
-              label="Response"
-              name="name"
-              value={dbdas.name}
-              onChange={getDBDAData}
+              label="Score"
+              name="score"
+              value={dbdaScores.score}
+              // onChange={getDBDAScoreData}
               id="outlined-size-small"
               size="small"
               multiline
               maxRows={4}
-              // defaultvalue={dbdas.name}
+              // defaultvalue={dbdaScores.name}
               required
             />
+          </div>
+          <div className="pt-4 flex items-center justify-center" >
+            <TextField sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}
+              fullWidth
+              label="Detail"
+              name="detail"
+              value={dbdaScores.detail} 
+              onChange={getDBDAScoreData}
+              id="outlined-size-small"
+              multiline
+              maxRows={4}
+              // defaultvalue={dbdaScores.name}
+            />  
           </div>
         </form>
         

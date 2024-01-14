@@ -27,7 +27,7 @@ function CreateDBDA(props)  {
 
 
   useEffect(() => {
-    if(dbdas.examId && dbdas.name) {
+    if(dbdas.code && dbdas.name) {
       settypedSections(true);
     } else {
       settypedSections(false)
@@ -54,9 +54,6 @@ function CreateDBDA(props)  {
     settypedSections(false)
     onClose(selectedValue);
   };
-  const menuItems = examsValues?.map(item => (
-    <MenuItem value={item._id}>{item.name}</MenuItem>
-    ));
 
   return (
     <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
@@ -64,24 +61,22 @@ function CreateDBDA(props)  {
       <DialogContent>
         <form >
           <div className="pt-4 flex items-center justify-center">
-          <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
-            <InputLabel id="demo-select-small-label" required>Exam</InputLabel>
-            <Select
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              name="examId"
-              value={dbdas.examId}
-              label="Exam"
+          <TextField sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}
+              fullWidth
+              label="Code"
+              name="code"
+              value={dbdas.code}
               onChange={getDBDAData}
-            >
-              {menuItems}
-            </Select>
-            
-            </FormControl>
+              id="outlined-size-small" 
+              size="small"
+              multiline
+              maxRows={4}
+              required
+            />
             
             <TextField sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}
               fullWidth
-              label="Response"
+              label="Name"
               name="name"
               value={dbdas.name}
               onChange={getDBDAData}
@@ -90,19 +85,6 @@ function CreateDBDA(props)  {
               multiline
               maxRows={4}
               required
-            />
-          </div>
-          <div className="pt-4 flex items-center justify-center" >
-          <TextField sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}
-              fullWidth
-              label="Output"
-              name="output"
-              value={dbdas.output}
-              onChange={getDBDAData}
-              id="outlined-size-small"
-              size="small" 
-              multiline
-              maxRows={4}
             />
           </div>
         </form>

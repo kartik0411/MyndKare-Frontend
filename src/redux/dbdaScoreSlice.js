@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 //create action
-export const createExam = createAsyncThunk(
-  "createExam", // modify it to access the uploaded excel sheet
+export const createDBDAScore = createAsyncThunk(
+  "createDBDAScore", // modify it to access the uploaded excel sheet
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/exams",
+      "http://localhost:9083/myndkare/v1/dbdaScore",
       {
         method: "POST",
         headers: {
@@ -26,11 +26,11 @@ export const createExam = createAsyncThunk(
 
 
 //read action
-export const showExam = createAsyncThunk(
-  "showExam",
+export const showDBDAScore = createAsyncThunk(
+  "showDBDAScore",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/exams",
+      "http://localhost:9083/myndkare/v1/dbdaScore",
       { method: "GET" }
     );
 
@@ -45,11 +45,11 @@ export const showExam = createAsyncThunk(
 );
 
 //read action
-export const getExamsCount = createAsyncThunk(
-  "getExamsCount",
+export const getDBDAScoresCount = createAsyncThunk(
+  "getDBDAScoresCount",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/examsCount",
+      "http://localhost:9083/myndkare/v1/dbdaScoresCount",
       { method: "GET" }
     );
 
@@ -63,11 +63,11 @@ export const getExamsCount = createAsyncThunk(
   }
 );
 //delete action
-export const deleteExam = createAsyncThunk(
-  "deleteExam",
+export const deleteDBDAScore = createAsyncThunk(
+  "deleteDBDAScore",
   async (id, { rejectWithValue }) => {
     const response = await fetch(
-      `http://localhost:9083/myndkare/v1/exams/${id}`,
+      `http://localhost:9083/myndkare/v1/dbdaScores/${id}`,
       { method: "DELETE" }
     );
 
@@ -81,11 +81,11 @@ export const deleteExam = createAsyncThunk(
 );
 
 //update action
-export const editExam = createAsyncThunk(
-  "editExam",
+export const editDBDAScore = createAsyncThunk(
+  "editDBDAScore",
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      `http://localhost:9083/myndkare/v1/exams`,
+      `http://localhost:9083/myndkare/v1/dbdaScore`,
       {
         method: "PUT",
         headers: {
@@ -104,10 +104,10 @@ export const editExam = createAsyncThunk(
   }
 );
 
-export const examSlice = createSlice({
-  name: "examDetail",
+export const dbdaScoreSlice = createSlice({
+  name: "dbdaScoreDetail",
   initialState: {
-    exams: [],
+    dbdaScores: [],
     loading: false,
     error: null,
     searchData: [],
@@ -120,60 +120,60 @@ export const examSlice = createSlice({
   },
 
   extraReducers: {
-    [createExam.pending]: (state) => {
+    [createDBDAScore.pending]: (state) => {
       state.loading = true;
     },
-    [createExam.fulfilled]: (state, action) => {
+    [createDBDAScore.fulfilled]: (state, action) => {
       state.loading = false;
-      state.exams.push(action.payload);
+      state.dbdaScores.push(action.payload);
     },
-    [createExam.rejected]: (state, action) => {
+    [createDBDAScore.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     },
-    [showExam.pending]: (state) => {
+    [showDBDAScore.pending]: (state) => {
       state.loading = true;
     },
-    [showExam.fulfilled]: (state, action) => {
+    [showDBDAScore.fulfilled]: (state, action) => {
       state.loading = false;
-      state.exams = action.payload;
+      state.dbdaScores = action.payload;
     },
-    [showExam.rejected]: (state, action) => {
+    [showDBDAScore.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
 
-    [deleteExam.pending]: (state) => {
+    [deleteDBDAScore.pending]: (state) => {
       state.loading = true;
     },
-    [deleteExam.fulfilled]: (state, action) => {
+    [deleteDBDAScore.fulfilled]: (state, action) => {
       state.loading = false;
       const { id } = action.payload;
       if (id) {
-        state.exams = state.exams.filter((ele) => ele.id !== id);
+        state.dbdaScores = state.dbdaScores.filter((ele) => ele.id !== id);
       }
     },
-    [deleteExam.rejected]: (state, action) => {
+    [deleteDBDAScore.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
 
-    [editExam.pending]: (state) => {
+    [editDBDAScore.pending]: (state) => {
       state.loading = true;
     },
-    [editExam.fulfilled]: (state, action) => {
+    [editDBDAScore.fulfilled]: (state, action) => {
       state.loading = false;
-      state.exams = state.exams.map((ele) =>
+      state.dbdaScores = state.dbdaScores.map((ele) =>
         ele.id === action.payload.id ? action.payload : ele
       );
     },
-    [editExam.rejected]: (state, action) => {
+    [editDBDAScore.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     },
   },
 });
 
-export default examSlice.reducer;
+export default dbdaScoreSlice.reducer;
 
-export const { searchUser } = examSlice.actions;
+export const { searchUser } = dbdaScoreSlice.actions;
