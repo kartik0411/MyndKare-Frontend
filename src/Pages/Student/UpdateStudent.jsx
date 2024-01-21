@@ -19,105 +19,49 @@ import MenuItem from "@mui/material/MenuItem";
 import { useSelector } from "react-redux";
 import { createTest, showTest } from "../../redux/testSlice";
 import { showDBDA } from "../../redux/dbdaSlice";
+import { DateField } from '@mui/x-date-pickers/DateField';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import dayjs, { Dayjs } from 'dayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { showSchool } from "../../redux/schoolSlice";
+import {showClass } from "../../redux/classSlice";
+import { showSection } from "../../redux/sectionSlice";
 
 function UpdateStudent(props) { 
-  let { onClose, selectedValue, open, testsValues,dbdasValues } = props;
+  let { onClose, selectedValue, open} = props;
   const [students, setStudents] = useState({});
-  const [test,setTest] = useState({});
-  const [dbda, setDbda] = useState(false);
-  const [timer, setTimer] = useState(false);
-  const [studentChanged, setStudentChanged] = useState(false);
-  // const [selectedStudent, setSelectedStudent] = useState({type: "1"});
+  const [dateValue, setDateValue] = useState();
   const [typedsection, settypedSections] = useState(false);
   const dispatch = useDispatch();
-
-
-  let { studentsCount} = useSelector((state) => {
-    // setStudents({ ...students, serial: state.studentDetail.count })
-    return state.studentDetail; 
+  let { schools} = useSelector((state) => {
+    return state.schoolDetail; 
   });
-  // useEffect(()=> {setTest(students.testId)}, [tests])
-  // useEffect(()=> {if(students.dbdaId) {setDbda(students.dbdaId)}}, [dbdas])
+  let { classes} = useSelector((state) => {         
+    return state.classDetail; 
+  });
+  let { sections} = useSelector((state) => {
+    return state.sectionDetail; 
+  });
+
   useEffect(() => {
-    // if (testsValues) {
-    //   setTests(testsValues);
-    // }
-    // if(dbdasValues) {
-    //   setDbadas(dbdasValues);
-    // }
-    for(let i=0;i<testsValues.length;i++) {
-      if(testsValues[i]._id === selectedValue.testId) {
-        setTest(testsValues[i]);
-      }
+    setStudents({ ...students, name: selectedValue.name,father: selectedValue.father,admsnno: selectedValue.admsnno,school: selectedValue.school,class: selectedValue.class, section: selectedValue.section, resultPublish: selectedValue.resultPublish, counsellorId: selectedValue.counsellorId, feedbackFlag: selectedValue.feedbackFlag, finalReportFlag: selectedValue.finalReportFlag, isAssesmentStarted: selectedValue.isAssesmentStarted })
+  }, [selectedValue]);
+  
+
+
+  useEffect(() => {
+    setStudents({ ...students, dob: dateValue, resultPublish: false, counsellorId: "6558ac9039d0ba5397e75965", feedbackFlag: false, finalReportFlag: false, isAssesmentStarted: false })
+  }, [dateValue]);
+
+  useEffect(() => {
+    if(students.name && students.father && students.dob && students.school && students.father && students.class && students.section ) {
+      settypedSections(true);
     }
-    if (selectedValue) {
-      let value = Object.assign({},selectedValue);
-      if(selectedValue.timer=="Yes") {
-        value.timer = true;
-        setTimer(true);
-      } else if(selectedValue.timer=="No") {
-        value.timer = false;
-        setTimer(false);
-      }
-      if(selectedValue.timerVisible=="Yes") {
-        value.timerVisible = true;
-      } else if(selectedValue.timer=="No") {
-        value.timerVisible = false;
-      }
-      if(value.name?.indexOf('-')>-1) {
-        value.name= value.name?.substring(value.name?.indexOf('-')+1);
-      } else {
-        value.name = "";
-      }
-      if(value.dbdaId) {
-        setDbda(true);
-        if(value.name?.indexOf('-')>-1) {
-          value.name= value.name?.substring(value.name?.indexOf('-')+1);
-        } else {
-          value.name = "";
-        }
-      } else {
-        setDbda(false);
-      }
-      setStudents(value);
+    else {
       settypedSections(false);
-      setStudentChanged(false);
-  }
-  }, [selectedValue])
-
-
-  useEffect(() => {
-    console.log("students ::"+JSON.stringify(students))
-    if(students.testId && students.timer!=null && students.serial && studentChanged) {
-      if(dbda) {
-        if(timer) {
-          if(students.dbdaId && students.timerVisible!=null && students.duration) {
-            settypedSections(true)
-          } else {
-            settypedSections(false)
-          }
-        } else {
-          if(students.dbdaId) {
-            settypedSections(true)
-          } else {
-            settypedSections(false)
-          }
-        }
-      } else {
-        if(timer) {
-          if(students.timerVisible!=null && students.duration) { 
-            settypedSections(true)
-          } else {
-            settypedSections(false)
-          }
-        } else {
-          settypedSections(true)
-        }
-      }
-    } else {
-      settypedSections(false)
     }
- }, [students]);
+  }, [students]);
 
   const styles = {
     equalFields: {
@@ -126,40 +70,13 @@ function UpdateStudent(props) {
     },
   };
   const getStudentData = (e) => {
-    setStudentChanged(true)
-    if(e.target.name === "testId") {
-      let type=1;
-      for(let i=0;i<testsValues.length;i++) {
-        if((e.target.value._id === testsValues[i]._id) ) { 
-          if(testsValues[i].type === 2) {
-            type=2;
-          }
-         break;
-        }
-      }
-      if(type==2) {
-        setDbda(true);
-      } else {
-        delete students.dbdaId
-        setDbda(false); 
-      }
-    }
-    if(e.target.name === "timer") { 
-      if(e.target.value==true) { 
-        setTimer(true);
-      } else {
-        delete students.timerVisible;
-        delete students.duration;
-        setTimer(false);
-      }
-    }
-    if(e.target.name === "testId") {
-      setTest(e.target.value);
-      setStudents({ ...students, [e.target.name]: e.target.value._id })
-    } else {
-      setStudents({ ...students, [e.target.name]: e.target.value })
-    }
-  }
+    setStudents({ ...students, [e.target.name]: e.target.value })
+  }  
+  useEffect(() => {
+    dispatch(showClass())
+    dispatch(showSchool())
+    dispatch(showSection())
+  }, [])
 
   // const getTestData = (e) => {
   //   setStudents({ ...students, [e.target.name]: e.target.value })
@@ -171,54 +88,25 @@ function UpdateStudent(props) {
     handleClose();
     window.location.reload(); 
   }
-  
+
   const handleClose = () => {
-    let value = Object.assign({},selectedValue);
-    if(selectedValue.timer==="Yes") {
-      value.timer = true;
-      setTimer(true);
-    } else if(selectedValue.timer==="No") {
-      value.timer = false;
-      setTimer(false);
-    }
-    if(selectedValue.timerVisible=="Yes") {
-      value.timerVisible = true;
-    } else if(selectedValue.timer=="No") {
-      value.timerVisible = false;
-    }
-    if(value.name?.indexOf('-')>-1) {
-      value.name= value.name?.substring(value.name?.indexOf('-')+1);
-    } else {
-      value.name = "";
-    }
-    for(let i=0;i<testsValues.length;i++) {
-      if(testsValues[i]._id === selectedValue.testId) {
-        setTest(testsValues[i]);
-      }
-    }
-    if(value.dbdaId) {
-      setDbda(true);
-      if(value.name?.indexOf('-')>-1) {
-        value.name= value.name?.substring(value.name?.indexOf('-')+1);
-      } else {
-        value.name = "";
-      }
-    } else {
-      setDbda(false);
-    }
-    setStudents(value);
+    setStudents({})
+    setDateValue();
     settypedSections(false);
-    setStudentChanged(false);
     onClose(selectedValue);
   };
-  testsValues = testsValues?.filter(item => item.name !== "CIS") 
-  const menuItems = testsValues?.map(item => (
-    <MenuItem value={item}>{item.name}</MenuItem>
+
+  const schoolmenuItems = schools.map(item => (
+    <MenuItem value={item.name}>{item.name}</MenuItem>
     ));
 
-    const dbdasmenuItems = dbdasValues?.map(item => (
-      <MenuItem value={item._id}>{item.code}</MenuItem>
+    const classmenuItems = classes.map(item => (
+      <MenuItem value={item.name}>{item.name}</MenuItem>
       ));
+
+      const sectionmenuItems = sections.map(item => (
+        <MenuItem value={item.name}>{item.name}</MenuItem>
+        ));
 
   return (
     <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
@@ -226,36 +114,7 @@ function UpdateStudent(props) {
       <DialogContent>
         <form >
           <div className="pt-4 flex items-center justify-center">
-          <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
-            <InputLabel id="demo-select-small-label" required>Test</InputLabel>
-            <Select
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              name="testId"
-              value={test}
-              label="Test"
-              onChange={getStudentData}
-            >
-              {menuItems}
-            </Select>
-            
-            </FormControl>
-
-            {dbda ? <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
-            <InputLabel id="demo-select-small-label" required>DBDA Code</InputLabel>
-            <Select
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              name="dbdaId"
-              value={students.dbdaId}
-              label="Test"
-              onChange={getStudentData}
-            >
-              {dbdasmenuItems}
-            </Select>
-            </FormControl>  : false}
-            
-            <TextField sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}
+          <TextField sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}
               fullWidth
               label="Name"
               name="name"
@@ -265,66 +124,94 @@ function UpdateStudent(props) {
               size="small"
               multiline
               maxRows={4}
+              required
+            />
+
+            <TextField sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}
+              fullWidth
+              label="Father's Name"
+              name="father"
+              value={students.father}
+              onChange={getStudentData}
+              id="outlined-size-small"
+              size="small"
+              multiline
+              maxRows={4}
+              required
             />
           </div>
           <div className="pt-4 flex items-center justify-center" >
-          <FormControl size="small" sx={{ display: "inline-flex", width: "50%", paddingRight:"20px"}}>
-            <InputLabel id="demo-select-small-label"  required>Timer</InputLabel>
+          <TextField sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}
+              fullWidth
+              label="Admission No."
+              name="admsnno"
+              value={students.admsnno}
+              onChange={getStudentData}
+              id="outlined-size-small"
+              size="small"
+              multiline
+              maxRows={4}
+              required
+            />
+          <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
+            <InputLabel id="demo-select-small-label" required>School</InputLabel>
             <Select
               labelId="demo-select-small-label"
               id="demo-select-small"
-              name="timer"
-              value={timer}
-              label="Timer"
+              name="school"
+              value={students.school}
+              label="School"
               onChange={getStudentData}
-            >
-               <MenuItem value="">
-              </MenuItem>
-              <MenuItem value={true}>Yes</MenuItem>
-              <MenuItem value={false}>No</MenuItem>
-            </Select>
-            </FormControl>
-            <TextField
-              style={styles.equalFields}
-              label="Serial"
-              name="serial"
-              value={students.serial}
-              onChange={getStudentData}
-              id="outlined-number"
-              size="small"
-              type="number"
-              defaultValue= {studentsCount}
               required
-            />  
+            >
+              {schoolmenuItems}
+            </Select>
+
+            
+            </FormControl>
           </div>
           <div className="pt-4 flex items-center justify-center">
-          {timer ? <FormControl size="small" sx={{ display: "inline-flex", width: "50%", paddingRight:"20px"}}>
-            <InputLabel id="demo-select-small-label"  required>Timer Visible</InputLabel>
+          <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
+            <InputLabel id="demo-select-small-label" required>Class</InputLabel>
             <Select
               labelId="demo-select-small-label"
               id="demo-select-small"
-              name="timerVisible"
-              value={students.timerVisible}
-              label="Timer Visible"
+              name="class"
+              value={students.class}
+              label="Class"
               onChange={getStudentData}
-            >
-              <MenuItem value="">
-              </MenuItem>
-              <MenuItem value={true}>Yes</MenuItem>
-              <MenuItem value={false}>No</MenuItem>
-            </Select>
-            </FormControl>  : false}
-          {timer ? <TextField 
-              style={styles.equalFields}
-              label="Duration(Seconds)"
-              name="duration"
-              type="number"
-              value={students.duration}
-              onChange={getStudentData}
-              id="outlined-number"
-              size="small"
               required
-            />  : false}
+            >
+              {classmenuItems}
+            </Select>
+            
+            </FormControl>
+            <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
+            <InputLabel id="demo-select-small-label" required>Section</InputLabel>
+            <Select
+              labelId="demo-select-small-label"
+              id="demo-select-small"
+              name="section"
+              value={students.section}
+              label="Section"
+              onChange={getStudentData} 
+              required
+            >
+              {sectionmenuItems}
+            </Select>
+            
+            </FormControl>
+          </div>
+          <div className="pt-4 flex items-center justify-center">
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DemoContainer components={['DateField', 'DateField']}>
+          <DateField label="Date of Birth"
+                    value={students.dob}
+                    onChange={(datevalue) => setDateValue(datevalue)}
+                    format="DD-MM-YYYY"
+                    required />
+                </DemoContainer>
+    </LocalizationProvider>
           </div>
         </form>
         

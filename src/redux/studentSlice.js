@@ -44,11 +44,11 @@ export const showStudent = createAsyncThunk(
   }
 );
 
-export const showMBTIStudent = createAsyncThunk(
+export const showoneStudent = createAsyncThunk(
   "showStudent",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/students/mbti",
+      "http://localhost:9083/myndkare/v1/students/${id}",
       { method: "GET" }
     );
 
