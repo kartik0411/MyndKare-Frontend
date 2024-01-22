@@ -7,7 +7,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Padding } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { editStudent } from "../../redux/studentSlice";
+import { editStudent, showoneStudent } from "../../redux/studentSlice";
 import Radio from '@mui/material/Radio';
 import Select from "@mui/material/Select";
 import RadioGroup from '@mui/material/RadioGroup';
@@ -27,10 +27,13 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { showSchool } from "../../redux/schoolSlice";
 import {showClass } from "../../redux/classSlice";
 import { showSection } from "../../redux/sectionSlice";
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Checkbox from '@mui/material/Checkbox';
 
 function UpdateStudent(props) { 
   let { onClose, selectedValue, open} = props;
   const [students, setStudents] = useState({});
+  const [testids, setTestids] = useState([]);
   const [dateValue, setDateValue] = useState();
   const [typedsection, settypedSections] = useState(false);
   const dispatch = useDispatch();
@@ -43,16 +46,53 @@ function UpdateStudent(props) {
   let { sections} = useSelector((state) => {
     return state.sectionDetail; 
   });
+  let { tests} = useSelector((state) => { 
+    // let testobject = state.testDetail
+    // if(state.testDetail && state.testDetail.tests && state.testDetail.tests.length>0 && state.testDetail.tests[state.testDetail.tests.length-1]._id == null) {
+    //   let newtestobject = JSON.parse(JSON.stringify(testobject));
+    //   newtestobject.tests.pop();s
+    //   return newtestobject;
+    // }
+    // else {
+    return state.testDetail;
+    // }
+  });
+  let { studeeent} = useSelector((state) => {
+    return state.studentDetail; 
+  });
+
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
 
   useEffect(() => {
-    setStudents({ ...students, name: selectedValue.name,father: selectedValue.father,admsnno: selectedValue.admsnno,school: selectedValue.school,class: selectedValue.class, section: selectedValue.section, resultPublish: selectedValue.resultPublish, counsellorId: selectedValue.counsellorId, feedbackFlag: selectedValue.feedbackFlag, finalReportFlag: selectedValue.finalReportFlag, isAssesmentStarted: selectedValue.isAssesmentStarted })
+    let testiids =  tests.map(function(i) {
+      return i._id;
+  })
+    setTestids(testiids); 
+  }, [tests]);
+
+
+  useEffect(() => {
+   console.log("ab hua call"+JSON.stringify(selectedValue));
+   if(selectedValue && selectedValue._id) {
+
+    dispatch(showoneStudent(selectedValue._id));
+  }
   }, [selectedValue]);
+
   
-
-
   useEffect(() => {
     setStudents({ ...students, dob: dateValue, resultPublish: false, counsellorId: "6558ac9039d0ba5397e75965", feedbackFlag: false, finalReportFlag: false, isAssesmentStarted: false })
   }, [dateValue]);
+
 
   useEffect(() => {
     if(students.name && students.father && students.dob && students.school && students.father && students.class && students.section ) {
@@ -76,8 +116,11 @@ function UpdateStudent(props) {
     dispatch(showClass())
     dispatch(showSchool())
     dispatch(showSection())
+    dispatch(showTest())
   }, [])
-
+  const testschanged = (e) => {
+    setTestids(e.target.value)
+  } 
   // const getTestData = (e) => {
   //   setStudents({ ...students, [e.target.name]: e.target.value })
   // }
@@ -107,6 +150,9 @@ function UpdateStudent(props) {
       const sectionmenuItems = sections.map(item => (
         <MenuItem value={item.name}>{item.name}</MenuItem>
         ));
+        const testmenuItems = tests.map(item => (
+          <MenuItem value={item._id}><Checkbox checked={testids.indexOf(item._id) > -1} /> {item.name}</MenuItem>
+          ));
 
   return (
     <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
@@ -212,6 +258,20 @@ function UpdateStudent(props) {
                     required />
                 </DemoContainer>
     </LocalizationProvider>
+    <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
+        <InputLabel id="demo-multiple-checkbox-label">Enabled Tests</InputLabel>
+        <Select
+          labelId="demo-multiple-checkbox-label"
+          id="demo-multiple-checkbox"
+          multiple
+          value={testids}
+          onChange={testschanged}
+          input={<OutlinedInput label="Enabled Tests" />}
+          MenuProps={MenuProps}
+        >
+          {testmenuItems}
+        </Select>
+      </FormControl>
           </div>
         </form>
         

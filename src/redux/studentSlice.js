@@ -45,10 +45,10 @@ export const showStudent = createAsyncThunk(
 );
 
 export const showoneStudent = createAsyncThunk(
-  "showStudent",
-  async (args, { rejectWithValue }) => {
+  "showoneStudent",
+  async (id, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/students/${id}",
+      `http://localhost:9083/myndkare/v1/students/${id}`,
       { method: "GET" }
     );
 
@@ -157,6 +157,19 @@ export const studentSlice = createSlice({
       state.students = action.payload;
     },
     [showStudent.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+
+    [showoneStudent.pending]: (state) => {
+      state.loading = true;
+    },
+    [showoneStudent.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.students = action.payload;
+    },
+    [showoneStudent.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
