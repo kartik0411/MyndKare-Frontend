@@ -5,7 +5,7 @@ export const createStudentTest = createAsyncThunk(
   "createStudentTest", // modify it to access the uploaded excel sheet
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/studentTests",
+      "https://myndkare-backend.onrender.com/myndkare/v1/studentTests",
       {
         method: "POST",
         headers: {
@@ -30,7 +30,7 @@ export const showStudentTest = createAsyncThunk(
   "showStudentTest",
   async (id, { rejectWithValue }) => {
     const response = await fetch(
-      `http://localhost:9083/myndkare/v1/studentExams/${id}`,
+      `https://myndkare-backend.onrender.com/myndkare/v1/studentExams/${id}`,
       { method: "GET" }
     );
 
@@ -48,7 +48,7 @@ export const showoneStudentTest = createAsyncThunk(
   "showoneStudentTest",
   async (id, { rejectWithValue }) => { 
     const response = await fetch(
-      `http://localhost:9083/myndkare/v1/studentTests/${id}`,
+      `https://myndkare-backend.onrender.com/myndkare/v1/studentTests/${id}`,
       { method: "GET" }
     );
 
@@ -67,7 +67,7 @@ export const getStudentTestsCount = createAsyncThunk(
   "getStudentTestsCount",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/studentTestsCount",
+      "https://myndkare-backend.onrender.com/myndkare/v1/studentTestsCount",
       { method: "GET" }
     );
 
@@ -85,7 +85,7 @@ export const deleteStudentTest = createAsyncThunk(
   "deleteStudentTest",
   async (id, { rejectWithValue }) => {
     const response = await fetch(
-      `http://localhost:9083/myndkare/v1/studentTests/${id}`,
+      `https://myndkare-backend.onrender.com/myndkare/v1/studentTests/${id}`,
       { method: "DELETE" }
     );
 
@@ -103,7 +103,7 @@ export const editStudentTest = createAsyncThunk(
   "editStudentTest",
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      `http://localhost:9083/myndkare/v1/studentTests`,
+      `https://myndkare-backend.onrender.com/myndkare/v1/studentTests`,
       {
         method: "PUT",
         headers: {

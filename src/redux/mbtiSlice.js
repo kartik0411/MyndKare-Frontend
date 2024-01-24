@@ -5,7 +5,7 @@ export const createMBTI = createAsyncThunk(
   "createMBTI", // modify it to access the uploaded excel sheet
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/mbti",
+      "https://myndkare-backend.onrender.com/myndkare/v1/mbti",
       {
         method: "POST",
         headers: {
@@ -30,7 +30,7 @@ export const showMBTI = createAsyncThunk(
   "showMBTI",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/mbti",
+      "https://myndkare-backend.onrender.com/myndkare/v1/mbti",
       { method: "GET" }
     );
 
@@ -49,7 +49,7 @@ export const getMBTIsCount = createAsyncThunk(
   "getMBTIsCount",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/mbtiCount",
+      "https://myndkare-backend.onrender.com/myndkare/v1/mbtiCount",
       { method: "GET" }
     );
 
@@ -67,7 +67,7 @@ export const deleteMBTI = createAsyncThunk(
   "deleteMBTI",
   async (id, { rejectWithValue }) => {
     const response = await fetch(
-      `http://localhost:9083/myndkare/v1/mbti/${id}`,
+      `https://myndkare-backend.onrender.com/myndkare/v1/mbti/${id}`,
       { method: "DELETE" }
     );
 
@@ -85,7 +85,7 @@ export const editMBTI = createAsyncThunk(
   "editMBTI",
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      `http://localhost:9083/myndkare/v1/mbti`,
+      `https://myndkare-backend.onrender.com/myndkare/v1/mbti`,
       {
         method: "PUT",
         headers: {

@@ -5,7 +5,7 @@ export const createTest = createAsyncThunk(
   "createTest", // modify it to access the uploaded excel sheet
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/tests",
+      "https://myndkare-backend.onrender.com/myndkare/v1/tests",
       {
         method: "POST",
         headers: {
@@ -30,7 +30,7 @@ export const showTest = createAsyncThunk(
   "showTest",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/tests",
+      "https://myndkare-backend.onrender.com/myndkare/v1/tests",
       { method: "GET" }
     );
 
@@ -48,7 +48,7 @@ export const deleteTest = createAsyncThunk(
   "deleteTest",
   async (id, { rejectWithValue }) => {
     const response = await fetch(
-      `http://localhost:9083/myndkare/v1/tests/${id}`,
+      `https://myndkare-backend.onrender.com/myndkare/v1/tests/${id}`,
       { method: "DELETE" }
     );
 
@@ -66,7 +66,7 @@ export const editTest = createAsyncThunk(
   "editTest",
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      `http://localhost:9083/myndkare/v1/tests`,
+      `https://myndkare-backend.onrender.com/myndkare/v1/tests`,
       {
         method: "PUT",
         headers: {

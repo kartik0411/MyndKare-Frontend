@@ -5,7 +5,7 @@ export const createDBDA = createAsyncThunk(
   "createDBDA", // modify it to access the uploaded excel sheet
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/dbda",
+      "https://myndkare-backend.onrender.com/myndkare/v1/dbda",
       {
         method: "POST",
         headers: {
@@ -30,7 +30,7 @@ export const showDBDA = createAsyncThunk(
   "showDBDA",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/dbda",
+      "https://myndkare-backend.onrender.com/myndkare/v1/dbda",
       { method: "GET" }
     );
 
@@ -48,7 +48,7 @@ export const deleteDBDA = createAsyncThunk(
   "deleteDBDA",
   async (id, { rejectWithValue }) => {
     const response = await fetch(
-      `http://localhost:9083/myndkare/v1/dbda/${id}`,
+      `https://myndkare-backend.onrender.com/myndkare/v1/dbda/${id}`,
       { method: "DELETE" }
     );
 
@@ -66,7 +66,7 @@ export const editDBDA = createAsyncThunk(
   "editDBDA",
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      `http://localhost:9083/myndkare/v1/dbda`,
+      `https://myndkare-backend.onrender.com/myndkare/v1/dbda`,
       {
         method: "PUT",
         headers: {

@@ -5,7 +5,7 @@ export const createSchool = createAsyncThunk(
   "createSchool", // modify it to access the uploaded excel sheet
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/schools",
+      "https://myndkare-backend.onrender.com/myndkare/v1/schools",
       {
         method: "POST",
         headers: {
@@ -34,7 +34,7 @@ export const showSchool = createAsyncThunk(
   "showSchool",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/schools",
+      "https://myndkare-backend.onrender.com/myndkare/v1/schools",
       { method: "GET" }
     );
 
@@ -52,7 +52,7 @@ export const deleteSchool = createAsyncThunk(
   "deleteSchool",
   async (id, { rejectWithValue }) => {
     const response = await fetch(
-      `http://localhost:9083/myndkare/v1/schools/${id}`,
+      `https://myndkare-backend.onrender.com/myndkare/v1/schools/${id}`,
       { method: "DELETE" }
     );
 
@@ -70,7 +70,7 @@ export const editSchool = createAsyncThunk(
   "editSchool",
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      `http://localhost:9083/myndkare/v1/schools`,
+      `https://myndkare-backend.onrender.com/myndkare/v1/schools`,
       {
         method: "PUT",
         headers: {

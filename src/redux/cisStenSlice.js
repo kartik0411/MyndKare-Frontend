@@ -5,7 +5,7 @@ export const createExam = createAsyncThunk(
   "createExam", // modify it to access the uploaded excel sheet
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/exams",
+      "https://myndkare-backend.onrender.com/myndkare/v1/exams",
       {
         method: "POST",
         headers: {
@@ -30,7 +30,7 @@ export const showExam = createAsyncThunk(
   "showExam",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/exams",
+      "https://myndkare-backend.onrender.com/myndkare/v1/exams",
       { method: "GET" }
     );
 
@@ -49,7 +49,7 @@ export const getExamsCount = createAsyncThunk(
   "getExamsCount",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/examsCount",
+      "https://myndkare-backend.onrender.com/myndkare/v1/examsCount",
       { method: "GET" }
     );
 
@@ -67,7 +67,7 @@ export const deleteExam = createAsyncThunk(
   "deleteExam",
   async (id, { rejectWithValue }) => {
     const response = await fetch(
-      `http://localhost:9083/myndkare/v1/exams/${id}`,
+      `https://myndkare-backend.onrender.com/myndkare/v1/exams/${id}`,
       { method: "DELETE" }
     );
 
@@ -85,7 +85,7 @@ export const editExam = createAsyncThunk(
   "editExam",
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      `http://localhost:9083/myndkare/v1/exams`,
+      `https://myndkare-backend.onrender.com/myndkare/v1/exams`,
       {
         method: "PUT",
         headers: {
