@@ -1,98 +1,111 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect,useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Padding } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
-import { editStudent, showoneStudent } from "../../redux/studentSlice";
+import { createStudent, showStudent  } from "../../redux/studentSlice";
+import { showStudentTest  } from "../../redux/studentTestSlice";
 import Radio from '@mui/material/Radio';
 import Select from "@mui/material/Select";
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import { computeSlots } from "@mui/x-data-grid/internals";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import { useSelector } from "react-redux";
-import { createTest, showTest } from "../../redux/testSlice";
+import { showSchool } from "../../redux/schoolSlice";
+import {showClass } from "../../redux/classSlice";
+import { showSection } from "../../redux/sectionSlice";
 import { showDBDA } from "../../redux/dbdaSlice";
+import { getStudentsCount } from "../../redux/studentSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { DateField } from '@mui/x-date-pickers/DateField';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import dayjs, { Dayjs } from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { showSchool } from "../../redux/schoolSlice";
-import {showClass } from "../../redux/classSlice";
-import { showSection } from "../../redux/sectionSlice";
+import { showTest } from "../../redux/testSlice";
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Checkbox from '@mui/material/Checkbox';
+import { Table } from '../../components/Table'
 
-function UpdateStudent(props) { 
-  let { onClose, selectedValue, open} = props;
+
+function StudentTest(props)  {
+  const { onClose, selectedValue, open } = props;
   const [students, setStudents] = useState({});
-  const [testids, setTestids] = useState([]);
   const [dateValue, setDateValue] = useState();
-  const [typedsection, settypedSections] = useState(false);
+  const [testids, setTestids] = useState([]);
+  const [typedsection, settypedSections] = useState(false); 
   const dispatch = useDispatch();
   let { schools} = useSelector((state) => {
     return state.schoolDetail; 
   });
-  let { classes} = useSelector((state) => {         
+  let { classes} = useSelector((state) => {
     return state.classDetail; 
   });
   let { sections} = useSelector((state) => {
     return state.sectionDetail; 
   });
-  let { tests} = useSelector((state) => { 
-    // let testobject = state.testDetail
-    // if(state.testDetail && state.testDetail.tests && state.testDetail.tests.length>0 && state.testDetail.tests[state.testDetail.tests.length-1]._id == null) {
-    //   let newtestobject = JSON.parse(JSON.stringify(testobject));
-    //   newtestobject.tests.pop();s
-    //   return newtestobject;
-    // }
-    // else {
-    return state.testDetail;
-    // }
+  
+  let { tests} = useSelector((state) => {
+    return state.testDetail; 
   });
-  // let { studeeent} = useSelector((state) => {
-  //   return state.studentDetail; 
-  // });
 
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
+  let { studentExams } = useSelector((state) => {
+    return state.studentTestDetail; 
+  });
+
+  const columns = [
+    {
+      field: "examName",
+      headerName: "Exam Name",
+      flex: 1
     },
-  };
+    {
+      field: "startTime",
+      headerName: "Start Time",
+      flex: 1
+    },
+    {
+      field: "endTime",
+      headerName: "End Time",
+      flex: 1
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      flex: 1
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      type: "actions",
+      flex: 1
+    }
+  ];
 
   useEffect(() => {
     let testiids =  tests.map(function(i) {
       return i._id;
   })
-    setTestids(testiids); 
+    setTestids(testiids);
   }, [tests]);
 
-
   useEffect(() => {
-   console.log("ab hua call"+JSON.stringify(selectedValue));
-   if(selectedValue && selectedValue._id) {
+    setStudents(selectedValue);
+    if(selectedValue && selectedValue._id) {
+      console.log("JSON.stringify(selectedValue)"+JSON.stringify(selectedValue));
+      dispatch(showStudentTest(selectedValue._id))
 
-    // dispatch(showoneStudent(selectedValue._id));
-  }
+    }
   }, [selectedValue]);
 
-  
   useEffect(() => {
     setStudents({ ...students, dob: dateValue, resultPublish: false, counsellorId: "6558ac9039d0ba5397e75965", feedbackFlag: false, finalReportFlag: false, isAssesmentStarted: false })
   }, [dateValue]);
-
 
   useEffect(() => {
     if(students.name && students.father && students.dob && students.school && students.father && students.class && students.section ) {
@@ -109,25 +122,54 @@ function UpdateStudent(props) {
       paddingRight: "15px",
     },
   };
+  const tableOptions = {
+    height: "auto",
+    width: "100%",
+    initialState: {
+      pagination: {
+        paginationModel: {
+          pageSize: 10,
+        },
+      },
+    },
+    pageSizeOptions: [5, 10, 25],
+    checkboxSelection: false,
+    disableSelectionOnClick: true,
+  };
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
   const getStudentData = (e) => {
     setStudents({ ...students, [e.target.name]: e.target.value })
   }  
+  const testschanged = (e) => {
+    setTestids(e.target.value)
+  } 
+  
   useEffect(() => {
     dispatch(showClass())
     dispatch(showSchool())
     dispatch(showSection())
     dispatch(showTest())
   }, [])
-  const testschanged = (e) => {
-    setTestids(e.target.value)
-  } 
+
   // const getTestData = (e) => {
   //   setStudents({ ...students, [e.target.name]: e.target.value })
   // }
 
   const handleSubmit = (e) => {
+    let stud = new Object();
+    stud.student = students;
+    stud.studentTests = testids;
     e.preventDefault();
-    dispatch(editStudent(students));
+    dispatch(createStudent(stud));
     handleClose();
     window.location.reload(); 
   }
@@ -136,6 +178,10 @@ function UpdateStudent(props) {
     setStudents({})
     setDateValue();
     settypedSections(false);
+    let testiids =  tests.map(function(i) {
+      return i._id;
+  })
+    setTestids(testiids);
     onClose(selectedValue);
   };
 
@@ -143,20 +189,34 @@ function UpdateStudent(props) {
     <MenuItem value={item.name}>{item.name}</MenuItem>
     ));
 
-    const classmenuItems = classes.map(item => (
-      <MenuItem value={item.name}>{item.name}</MenuItem>
-      ));
+  const classmenuItems = classes.map(item => (
+    <MenuItem value={item.name}>{item.name}</MenuItem>
+    ));
 
-      const sectionmenuItems = sections.map(item => (
-        <MenuItem value={item.name}>{item.name}</MenuItem>
-        ));
-        const testmenuItems = tests.map(item => (
-          <MenuItem value={item._id}><Checkbox checked={testids.indexOf(item._id) > -1} /> {item.name}</MenuItem>
-          ));
+  const sectionmenuItems = sections.map(item => (
+    <MenuItem value={item.name}>{item.name}</MenuItem>
+    ));
+  const testmenuItems = tests.map(item => (
+    <MenuItem value={item._id}><Checkbox checked={testids.indexOf(item._id) > -1} /> {item.name}</MenuItem>
+    ));
 
   return (
     <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
-      <DialogTitle>Edit Student</DialogTitle>
+      <DialogTitle>Student Exams Status</DialogTitle>
+      <DialogContent>
+      <Table
+            height={tableOptions.height}
+            width={tableOptions.width}
+            rows={studentExams}
+            columns={columns}
+            initialState={tableOptions.initialState}
+            pageSizeOptions={tableOptions.pageSizeOptions}
+            checkboxSelection={tableOptions.checkboxSelection}
+            disableSelectionOnClick={tableOptions.disableSelectionOnClick}
+          />
+        
+      </DialogContent>
+      <DialogTitle>Test Reports</DialogTitle>
       <DialogContent>
         <form >
           <div className="pt-4 flex items-center justify-center">
@@ -250,7 +310,7 @@ function UpdateStudent(props) {
           </div>
           <div className="pt-4 flex items-center justify-center">
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['DateField', 'DateField']}>
+      <DemoContainer components={['DateField', 'DateField']}  size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
           <DateField label="Date of Birth"
                     value={students.dob}
                     onChange={(datevalue) => setDateValue(datevalue)}
@@ -277,12 +337,12 @@ function UpdateStudent(props) {
         
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button type= "submit" disabled={!typedsection} onClick={handleSubmit} >Update</Button>
+        <Button onClick={handleClose}>Close</Button>
       </DialogActions>
     </Dialog>
   );
 }
 
-export default UpdateStudent
+export default StudentTest
+
 

@@ -20,6 +20,7 @@ import { read, utils, writeFile } from 'xlsx';
 import UpdateStudent from "./UpdateStudent";
 import ViewStudent from "./ViewStudent";
 import CreateStudent from "./CreateStudent";
+import StudentTest from "./StudentTest";
 import DeleteStudent from "./DeleteStudent";
 import { createTest, showTest } from "../../redux/testSlice";
 import { showDBDA } from "../../redux/dbdaSlice";
@@ -48,6 +49,7 @@ const styles = {
 
 function Student() {
   const [createOpen, setCreateOpen] = React.useState(false);
+  const [studenttestOpen, setstudenttestOpen] = React.useState(false);
   const [editOpen, setEditOpen] = React.useState(false);
   // const [snackOpen, setSnackOpen] = React.useState(false);
   const [viewOpen, setViewOpen] = React.useState(false);
@@ -188,7 +190,7 @@ function Student() {
                 </Tooltip>
                 <Tooltip title="View Tests Status">
                 <IconButton onClick={(e) => {
-                                      handleDelete(params.row)
+                                      handlestudenttest(params.row)
                   }}>
                     <DashboardIcon color="success" />
                   </IconButton>
@@ -234,7 +236,7 @@ function Student() {
                 </Tooltip>
                 <Tooltip title="View Tests Status">
                 <IconButton onClick={(e) => {
-                                      handleDelete(params.row)
+                                      handlestudenttest(params.row)
                   }}>
                     <DashboardIcon color="success" />
                   </IconButton>
@@ -281,7 +283,7 @@ function Student() {
                 </Tooltip>
                 <Tooltip title="View Tests Status">
                 <IconButton onClick={(e) => {
-                                      handleDelete(params.row)
+                                      handlestudenttest(params.row)
                   }}>
                     <DashboardIcon color="success" />
                   </IconButton>
@@ -314,7 +316,7 @@ function Student() {
     console.log(students)
   }, [])
   console.log(students)
-  const handleCreateOpen = () => {
+  const handleCreateOpen = () => { 
     setCreateOpen(true);
   };
 
@@ -340,6 +342,15 @@ function Student() {
     console.log(value)
   }
 
+  const handlestudenttest = (value) => {
+    setCreateOpen(false);
+    setEditOpen(false);
+    setDeleteOpen(false);
+    setstudenttestOpen(true);
+    setEditFormValues(value)
+    console.log(value)
+  }
+
   const handleView = (value) => {
     setCreateOpen(false);
     setEditOpen(false);
@@ -359,6 +370,7 @@ function Student() {
     setCreateOpen(false);
     setViewOpen(false);
     setDeleteOpen(false);
+    setstudenttestOpen(false);
     // if(snackOpen) {
     //   console.log("ye kaise aa skta")
     //   window.location.reload();
@@ -442,6 +454,11 @@ function Student() {
             open={viewOpen}
             testsValues={tests}
             dbdasValues={dbdas}
+            onClose={handleClose}
+          />
+          <StudentTest
+            selectedValue={editFormValues}
+            open={studenttestOpen}
             onClose={handleClose}
           />
           <DeleteStudent

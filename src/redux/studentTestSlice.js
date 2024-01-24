@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 //create action
-export const createStudent = createAsyncThunk(
-  "createStudent", // modify it to access the uploaded excel sheet
+export const createStudentTest = createAsyncThunk(
+  "createStudentTest", // modify it to access the uploaded excel sheet
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/students",
+      "http://localhost:9083/myndkare/v1/studentTests",
       {
         method: "POST",
         headers: {
@@ -26,11 +26,11 @@ export const createStudent = createAsyncThunk(
 
 
 //read action
-export const showStudent = createAsyncThunk(
-  "showStudent",
-  async (args, { rejectWithValue }) => {
+export const showStudentTest = createAsyncThunk(
+  "showStudentTest",
+  async (id, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/allstudents",
+      `http://localhost:9083/myndkare/v1/studentExams/${id}`,
       { method: "GET" }
     );
 
@@ -44,11 +44,11 @@ export const showStudent = createAsyncThunk(
   }
 );
 
-export const showoneStudent = createAsyncThunk(
-  "showoneStudent",
+export const showoneStudentTest = createAsyncThunk(
+  "showoneStudentTest",
   async (id, { rejectWithValue }) => { 
     const response = await fetch(
-      `http://localhost:9083/myndkare/v1/students/${id}`,
+      `http://localhost:9083/myndkare/v1/studentTests/${id}`,
       { method: "GET" }
     );
 
@@ -63,11 +63,11 @@ export const showoneStudent = createAsyncThunk(
 );
 
 //read action
-export const getStudentsCount = createAsyncThunk(
-  "getStudentsCount",
+export const getStudentTestsCount = createAsyncThunk(
+  "getStudentTestsCount",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "http://localhost:9083/myndkare/v1/studentsCount",
+      "http://localhost:9083/myndkare/v1/studentTestsCount",
       { method: "GET" }
     );
 
@@ -81,11 +81,11 @@ export const getStudentsCount = createAsyncThunk(
   }
 );
 //delete action
-export const deleteStudent = createAsyncThunk(
-  "deleteStudent",
+export const deleteStudentTest = createAsyncThunk(
+  "deleteStudentTest",
   async (id, { rejectWithValue }) => {
     const response = await fetch(
-      `http://localhost:9083/myndkare/v1/students/${id}`,
+      `http://localhost:9083/myndkare/v1/studentTests/${id}`,
       { method: "DELETE" }
     );
 
@@ -99,11 +99,11 @@ export const deleteStudent = createAsyncThunk(
 );
 
 //update action
-export const editStudent = createAsyncThunk(
-  "editStudent",
+export const editStudentTest = createAsyncThunk(
+  "editStudentTest",
   async (data, { rejectWithValue }) => {
     const response = await fetch(
-      `http://localhost:9083/myndkare/v1/students`,
+      `http://localhost:9083/myndkare/v1/studentTests`,
       {
         method: "PUT",
         headers: {
@@ -122,10 +122,10 @@ export const editStudent = createAsyncThunk(
   }
 );
 
-export const studentSlice = createSlice({
-  name: "studentDetail",
+export const studentTestSlice = createSlice({
+  name: "studentTestDetail",
   initialState: {
-    students: [],
+    studentTests: [],
     loading: false,
     error: null,
     searchData: [],
@@ -138,73 +138,73 @@ export const studentSlice = createSlice({
   },
 
   extraReducers: {
-    [createStudent.pending]: (state) => {
+    [createStudentTest.pending]: (state) => {
       state.loading = true;
     },
-    [createStudent.fulfilled]: (state, action) => {
+    [createStudentTest.fulfilled]: (state, action) => {
       state.loading = false;
-      state.students.push(action.payload);
+      state.studentTests.push(action.payload);
     },
-    [createStudent.rejected]: (state, action) => {
+    [createStudentTest.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     },
-    [showStudent.pending]: (state) => {
+    [showStudentTest.pending]: (state) => {
       state.loading = true;
     },
-    [showStudent.fulfilled]: (state, action) => {
+    [showStudentTest.fulfilled]: (state, action) => {
       state.loading = false;
-      state.students = action.payload;
+      state.studentTests = action.payload;
     },
-    [showStudent.rejected]: (state, action) => {
+    [showStudentTest.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
 
 
-    [showoneStudent.pending]: (state) => {
+    [showoneStudentTest.pending]: (state) => {
       state.loading = true;
     },
-    [showoneStudent.fulfilled]: (state, action) => {
+    [showoneStudentTest.fulfilled]: (state, action) => {
       state.loading = false;
-      state.students = action.payload;
+      state.studentTests = action.payload;
     },
-    [showoneStudent.rejected]: (state, action) => {
+    [showoneStudentTest.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
 
-    [deleteStudent.pending]: (state) => {
+    [deleteStudentTest.pending]: (state) => {
       state.loading = true;
     },
-    [deleteStudent.fulfilled]: (state, action) => {
+    [deleteStudentTest.fulfilled]: (state, action) => {
       state.loading = false;
       const { id } = action.payload;
       if (id) {
-        state.students = state.students.filter((ele) => ele.id !== id);
+        state.studentTests = state.studentTests.filter((ele) => ele.id !== id);
       }
     },
-    [deleteStudent.rejected]: (state, action) => {
+    [deleteStudentTest.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
 
-    [editStudent.pending]: (state) => {
+    [editStudentTest.pending]: (state) => {
       state.loading = true;
     },
-    [editStudent.fulfilled]: (state, action) => {
+    [editStudentTest.fulfilled]: (state, action) => {
       state.loading = false;
-      state.students = state.students.map((ele) =>
+      state.studentTests = state.studentTests.map((ele) =>
         ele.id === action.payload.id ? action.payload : ele
       );
     },
-    [editStudent.rejected]: (state, action) => {
+    [editStudentTest.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     },
   },
 });
 
-export default studentSlice.reducer;
+export default studentTestSlice.reducer;
 
-export const { searchUser } = studentSlice.actions;
+export const { searchUser } = studentTestSlice.actions;
