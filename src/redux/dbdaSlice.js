@@ -49,7 +49,7 @@ export const deleteDBDA = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     const response = await fetch(
       `https://myndkare-backend.onrender.com/myndkare/v1/dbda/${id}`,
-      { method: "DELETE" }
+      { method: "DELETE" } 
     );
 
     try {
