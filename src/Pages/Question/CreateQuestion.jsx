@@ -37,12 +37,10 @@ function CreateQuestion(props) {
   const navigate = useNavigate();
 
 
- useEffect(async () => {
+ useEffect(() => {
   console.log("questions="+JSON.stringify(questions)+"option1"+option1+"dbda="+dbda)
   if(questions.options) {
-    await axios.post("/questions",questions);
-    handleClose();
-    window.location.reload(); 
+    saveData();
   } else {
     if(questions.name) { 
       if(option1) {
@@ -67,6 +65,13 @@ function CreateQuestion(props) {
     } 
   }
  }, [questions]);
+
+  const saveData = async() =>{
+    await axios.post("/questions",questions);
+    handleClose();
+    window.location.reload(); 
+  }
+
 
  useEffect(() => {
   console.log("questions="+JSON.stringify(questions)+"option1"+option1+"dbda="+dbda)
