@@ -20,6 +20,7 @@ import { useSelector } from "react-redux";
 import { createTest, showTest } from "../../redux/testSlice";
 import { showDBDA } from "../../redux/dbdaSlice";
 import { editDBDA} from "../../redux/dbdaSlice";
+import axios from "../../axiosConfig";
 
 function UpdateExam(props) { 
   const { onClose, selectedValue, open, examsValues } = props;
@@ -55,9 +56,9 @@ function UpdateExam(props) {
   //   setDBDAs({ ...dbdas, [e.target.name]: e.target.value })
   // }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(editDBDA(dbdas));
+    await axios.put("/dbda",dbdas);
     handleClose();
     window.location.reload(); 
   }

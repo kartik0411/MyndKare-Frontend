@@ -15,6 +15,7 @@ import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { editSchoolResult } from "../../redux/schoolResultSlice";
 import { FormGroup } from "@mui/material";
+import axios from "../../axiosConfig";
 
 function UpdateSchoolResult(props) {
   const { onClose, selectedValue, open } = props;
@@ -33,9 +34,9 @@ function UpdateSchoolResult(props) {
     }
   }, [selectedValue])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(editSchoolResult(inputs));
+    await axios.put("/schools",inputs);
     handleClose();
     window.location.reload();
 

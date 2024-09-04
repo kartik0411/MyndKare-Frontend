@@ -19,6 +19,7 @@ import { createTest, showTest } from "../../redux/testSlice";
 import { showDBDA } from "../../redux/dbdaSlice";
 import { getMBTIsCount } from "../../redux/mbtiSlice";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "../../axiosConfig";
 
 function CreateMBTI(props)  {
   const { onClose, selectedValue, open, examsValues } = props;
@@ -43,9 +44,9 @@ function CreateMBTI(props)  {
   //   setMBTIs({ ...mbtis, [e.target.name]: e.target.value })
   // }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(createMBTI(mbtis));
+    await axios.post("/mbti",mbtis);
     handleClose();
     window.location.reload(); 
   }

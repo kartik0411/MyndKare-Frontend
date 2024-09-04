@@ -12,6 +12,7 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import { useNavigate } from "react-router-dom";
+import axios from "../../axiosConfig";
 
 
 function UpdateQuestion(props) {
@@ -79,9 +80,9 @@ function UpdateQuestion(props) {
   }
   }, [selectedValue])
 
- useEffect(() => {
+ useEffect(async () => {
   if(questions.options) {
-    dispatch(editQuestion(questions));
+    await axios.put("/questions",questions);
     handleClose();
     window.location.reload(); 
   } else {

@@ -19,6 +19,7 @@ import { createTest, showTest } from "../../redux/testSlice";
 import { showDBDA } from "../../redux/dbdaSlice";
 import { getExamsCount } from "../../redux/examSlice";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "../../axiosConfig";
 
 function CreateExam(props)  {
   const { onClose, selectedValue, open } = props;
@@ -132,9 +133,9 @@ function CreateExam(props)  {
   //   setExams({ ...exams, [e.target.name]: e.target.value })
   // }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(createExam(exams));
+    await axios.post("/exams",exams);
     handleClose();
     window.location.reload(); 
   }

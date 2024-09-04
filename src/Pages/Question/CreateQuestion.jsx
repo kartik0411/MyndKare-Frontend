@@ -15,6 +15,7 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import { fabClasses } from "@mui/material";
+import axios from "../../axiosConfig";
 
 
 
@@ -36,10 +37,10 @@ function CreateQuestion(props) {
   const navigate = useNavigate();
 
 
- useEffect(() => {
+ useEffect(async () => {
   console.log("questions="+JSON.stringify(questions)+"option1"+option1+"dbda="+dbda)
   if(questions.options) {
-    dispatch(createQuestion(questions));
+    await axios.post("/questions",questions);
     handleClose();
     window.location.reload(); 
   } else {

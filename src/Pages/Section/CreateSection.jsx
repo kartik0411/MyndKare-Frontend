@@ -7,6 +7,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useDispatch } from "react-redux";
 import { createSection, showSection  } from "../../redux/sectionSlice";
+import axios from "../../axiosConfig";
 
 function CreateSection(props) {
   const { onClose, selectedValue, open } = props;
@@ -19,9 +20,9 @@ function CreateSection(props) {
     setSections({ ...sections, [e.target.name]: e.target.value, resultPublish: false })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(createSection(sections));
+    await axios.post("/sections",sections);
     handleClose();
     window.location.reload();
   }

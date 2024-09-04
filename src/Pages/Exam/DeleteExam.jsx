@@ -8,6 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Padding } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { deleteExam } from "../../redux/examSlice";
+import axios from "../../axiosConfig";
 
 function DeleteExam(props) {
   const { onClose, selectedValue, open } = props;
@@ -20,9 +21,9 @@ function DeleteExam(props) {
     }
   }, [selectedValue])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(deleteExam(updateExam._id))
+    await axios.delete("/exams/"+updateExam._id);
     handleClose();
     window.location.reload();
   }

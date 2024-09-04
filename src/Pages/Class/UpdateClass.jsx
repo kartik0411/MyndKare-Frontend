@@ -8,6 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Padding } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { editClass } from "../../redux/classSlice";
+import axios from "../../axiosConfig";
 
 function UpdateClass(props) {
   const { onClose, selectedValue, open } = props;
@@ -21,9 +22,9 @@ function UpdateClass(props) {
     }
   }, [selectedValue])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(editClass(updateClass));
+    await axios.put("/classes",updateClass);
     handleClose();
     window.location.reload();
   }

@@ -8,6 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Padding } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { deleteQuestion } from "../../redux/questionSlice";
+import axios from "../../axiosConfig";
 
 function DeleteQuestion(props) {
   const { onClose, selectedValue, open } = props;
@@ -20,9 +21,9 @@ function DeleteQuestion(props) {
     }
   }, [selectedValue])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(deleteQuestion(updateQuestion._id))
+    await axios.delete("/questions/"+updateQuestion._id);
     handleClose();
     window.location.reload();
   }

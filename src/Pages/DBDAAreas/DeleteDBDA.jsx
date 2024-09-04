@@ -8,6 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Padding } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { deleteDBDA } from "../../redux/dbdaSlice";
+import axios from "../../axiosConfig";
 
 function DeleteDBDA(props) {
   const { onClose, selectedValue, open } = props;
@@ -20,9 +21,9 @@ function DeleteDBDA(props) {
     }
   }, [selectedValue])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(deleteDBDA(updateDBDA._id))
+    await axios.delete("/dbda/"+updateDBDA._id);
     handleClose();
     window.location.reload();
   }

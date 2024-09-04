@@ -18,6 +18,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { createTest, showTest } from "../../redux/testSlice";
 import { getDBDAsCount } from "../../redux/dbdaSlice";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "../../axiosConfig";
 
 function CreateDBDA(props)  {
   const { onClose, selectedValue, open, examsValues } = props;
@@ -42,9 +43,9 @@ function CreateDBDA(props)  {
   //   setDBDAs({ ...dbdas, [e.target.name]: e.target.value })
   // }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(createDBDA(dbdas));
+    await axios.post("/dbda",dbdas);
     handleClose();
     window.location.reload(); 
   }
