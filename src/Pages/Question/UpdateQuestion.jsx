@@ -80,11 +80,9 @@ function UpdateQuestion(props) {
   }
   }, [selectedValue])
 
- useEffect(async () => {
+ useEffect(() => {
   if(questions.options) {
-    await axios.put("/questions",questions);
-    handleClose();
-    window.location.reload(); 
+    saveData();
   } else {
     if(questions.name && questionChanged) {
       if(option1) { 
@@ -109,6 +107,12 @@ function UpdateQuestion(props) {
     } 
   }
  }, [questions]);
+
+ const saveData = async() =>{
+  await axios.put("/questions",questions);
+  handleClose();
+  window.location.reload(); 
+}
 
  useEffect(() => {
   if(questions.name && questionChanged) { 
