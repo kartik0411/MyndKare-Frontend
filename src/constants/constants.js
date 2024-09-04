@@ -1,4 +1,4 @@
-export const API_BASE_URL = "http://localhost:9083/myndkare/v1";
+export const API_BASE_URL = "https://myndkare-backend.onrender.com/myndkare/v1";
 
 export const USER_LOGIN_REQUEST = "USER_LOGIN_REQUEST";
 export const USER_LOGIN_SUCCESS = "USER_LOGIN_SUCCESS";
