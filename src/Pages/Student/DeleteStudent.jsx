@@ -8,6 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Padding } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { deleteStudent } from "../../redux/studentSlice";
+import axios from "../../axiosConfig";
 
 function DeleteStudent(props) {
   const { onClose, selectedValue, open } = props;
@@ -20,9 +21,9 @@ function DeleteStudent(props) {
     }
   }, [selectedValue])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(deleteStudent(updateStudent._id))
+    await axios.delete("/students/"+updateStudent._id);
     handleClose();
     window.location.reload();
   }

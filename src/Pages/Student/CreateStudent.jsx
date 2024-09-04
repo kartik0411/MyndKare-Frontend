@@ -29,6 +29,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { showTest } from "../../redux/testSlice";
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Checkbox from '@mui/material/Checkbox';
+import axios from "../../axiosConfig";
 
 
 function CreateStudent(props)  {
@@ -49,8 +50,12 @@ function CreateStudent(props)  {
   });
 
   let { tests} = useSelector((state) => {
-    return state.testDetail; 
+    return state.testDetail;
   });
+  // let [ schools, setSchools] = useState([]);
+  // let [ classes, setClasses] = useState([]);
+  // let [ sections, setSections] = useState([]);
+  // let [ tests, setTests] = useState([]);
 
   useEffect(() => {
     let testiids =  tests.map(function(i) {
@@ -96,22 +101,31 @@ function CreateStudent(props)  {
   } 
   
   useEffect(() => {
+    // getData();
     dispatch(showClass())
     dispatch(showSchool())
     dispatch(showSection())
     dispatch(showTest())
-  }, [])
+  }, []);
 
-  // const getTestData = (e) => {
-  //   setStudents({ ...students, [e.target.name]: e.target.value })
-  // }
+  // const getData = async() =>{
+  //   let classesToPopulate = await axios.get("/classes");
+  //   setClasses(classesToPopulate.data);
+  //   let schoolsToPopulate = await axios.get("/schools");
+  //   setSchools(schoolsToPopulate.data);
+  //   let sectionsToPopulate = await axios.get("/sections");
+  //   setSections(sectionsToPopulate.data);
+  //   let testsToPopulate = await axios.get("/tests");
+  //   setTests(testsToPopulate.data);
+  //   }
 
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     let stud = new Object();
     stud.student = students;
     stud.studentTests = testids;
     e.preventDefault();
-    dispatch(createStudent(stud));
+    await axios.post("/students",stud);
     handleClose();
     window.location.reload(); 
   }

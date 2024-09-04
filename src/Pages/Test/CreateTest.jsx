@@ -14,6 +14,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { computeSlots } from "@mui/x-data-grid/internals";
+import axios from "../../axiosConfig";
 
 function CreateTest(props) {
   const { onClose, selectedValue, open } = props;
@@ -27,9 +28,9 @@ function CreateTest(props) {
     setTests({ ...tests, [e.target.name]: e.target.value, type: selectedTest.type })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(createTest(tests));
+    await axios.post("/tests",tests);
     handleClose();
     window.location.reload();
   }

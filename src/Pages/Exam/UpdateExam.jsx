@@ -19,6 +19,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { useSelector } from "react-redux";
 import { createTest, showTest } from "../../redux/testSlice";
 import { showDBDA } from "../../redux/dbdaSlice";
+import axios from "../../axiosConfig";
 
 function UpdateExam(props) { 
   let { onClose, selectedValue, open, testsValues,dbdasValues } = props;
@@ -165,9 +166,9 @@ function UpdateExam(props) {
   //   setExams({ ...exams, [e.target.name]: e.target.value })
   // }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(editExam(exams));
+    await axios.put("/exams",exams);
     handleClose();
     window.location.reload(); 
   }

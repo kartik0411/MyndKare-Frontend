@@ -20,6 +20,7 @@ import { useSelector } from "react-redux";
 import { createTest, showTest } from "../../redux/testSlice";
 import { showDBDA } from "../../redux/dbdaSlice";
 import { editMBTI, showMBTI  } from "../../redux/mbtiSlice";
+import axios from "../../axiosConfig";
 
 function UpdateExam(props) { 
   const { onClose, selectedValue, open, examsValues } = props;
@@ -65,9 +66,9 @@ function UpdateExam(props) {
   //   setMBTIs({ ...mbtis, [e.target.name]: e.target.value })
   // }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(editMBTI(mbtis));
+    await axios.put("/mbti",mbtis);
     handleClose();
     window.location.reload(); 
   }

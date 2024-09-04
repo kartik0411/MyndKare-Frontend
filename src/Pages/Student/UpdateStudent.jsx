@@ -29,6 +29,7 @@ import {showClass } from "../../redux/classSlice";
 import { showSection } from "../../redux/sectionSlice";
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Checkbox from '@mui/material/Checkbox';
+import axios from "../../axiosConfig";
 
 function UpdateStudent(props) { 
   let { onClose, selectedValue, open} = props;
@@ -125,9 +126,9 @@ function UpdateStudent(props) {
   //   setStudents({ ...students, [e.target.name]: e.target.value })
   // }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(editStudent(students));
+    await axios.put("/students",students);
     handleClose();
     window.location.reload(); 
   }

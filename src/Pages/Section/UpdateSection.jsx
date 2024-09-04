@@ -8,6 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Padding } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { editSection } from "../../redux/sectionSlice";
+import axios from "../../axiosConfig";
 
 function UpdateSection(props) {
   const { onClose, selectedValue, open } = props;
@@ -21,9 +22,9 @@ function UpdateSection(props) {
     }
   }, [selectedValue])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(editSection(updateSection));
+    await axios.put("/sections",updateSection);
     handleClose();
     window.location.reload();
   }

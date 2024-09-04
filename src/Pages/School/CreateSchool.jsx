@@ -7,6 +7,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useDispatch } from "react-redux";
 import { createSchool, showSchool  } from "../../redux/schoolSlice";
+import axios from "../../axiosConfig";
 
 function CreateSchool(props) {
   const { onClose, selectedValue, open } = props;
@@ -19,11 +20,11 @@ function CreateSchool(props) {
     setSchools({ ...schools, [e.target.name]: e.target.value, resultPublish: false })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(createSchool(schools));
+    await axios.post("/schools",schools);
     handleClose();
-    // window.location.reload();
+    window.location.reload();
   }
 
   const handleClose = () => {

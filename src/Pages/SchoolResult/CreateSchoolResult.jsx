@@ -14,6 +14,7 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { FormGroup } from "@mui/material";
+import axios from "../../axiosConfig";
 
 function CreateSchoolResult(props) {
   const { onClose, selectedValue, open } = props;
@@ -32,10 +33,11 @@ function CreateSchoolResult(props) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(createSchoolResults(inputs));
+    await axios.post("/schools",inputs);
     handleClose();
+    window.location.reload();
   };
 
   const handleClose = () => {

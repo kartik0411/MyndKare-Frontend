@@ -8,6 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Padding } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { deleteMBTI } from "../../redux/mbtiSlice";
+import axios from "../../axiosConfig";
 
 function DeleteMBTI(props) {
   const { onClose, selectedValue, open } = props;
@@ -20,9 +21,9 @@ function DeleteMBTI(props) {
     }
   }, [selectedValue])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(deleteMBTI(updateMBTI._id))
+    await axios.delete("/mbti/"+updateMBTI._id);
     handleClose();
     window.location.reload();
   }

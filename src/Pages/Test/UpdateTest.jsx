@@ -14,6 +14,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import axios from "../../axiosConfig";
 
 function UpdateTest(props) {
   const { onClose, selectedValue, open } = props;
@@ -29,9 +30,9 @@ function UpdateTest(props) {
     }
   }, [selectedValue])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(editTest(updateTest));
+    await axios.put("/tests",updateTest);
     handleClose();
     window.location.reload();
   }
