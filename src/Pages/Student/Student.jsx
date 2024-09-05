@@ -24,7 +24,7 @@ import StudentTest from "./StudentTest";
 import DeleteStudent from "./DeleteStudent";
 import { createTest, showTest } from "../../redux/testSlice";
 import { showDBDA } from "../../redux/dbdaSlice";
-import { red } from '@mui/material/colors';
+import { red, yellow, green } from '@mui/material/colors';
 
 const tableOptions = {
   height: "auto",
@@ -146,19 +146,19 @@ function Student() {
             <Tooltip title="View Tests Status">
             <IconButton onClick={(e) => {
               }}>
-                <DashboardIcon  sx={{ color: red[500] }} />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="View Final Report">
-            <IconButton onClick={(e) => {
-              }}>
-                <AssessmentIcon  />
+                <DashboardIcon  sx={{ color: red[100] }} />
               </IconButton>
             </Tooltip>
             <Tooltip title="Edit Feedback">
             <IconButton onClick={(e) => {
               }}>
-                <RateReviewIcon  />
+                <RateReviewIcon    sx={{ color: red[100] }} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="View Final Report">
+            <IconButton onClick={(e) => {
+              }}>
+                <AssessmentIcon    sx={{ color: red[100] }} />
               </IconButton>
             </Tooltip>
           </Box>
@@ -192,19 +192,19 @@ function Student() {
                 <IconButton onClick={(e) => {
                                       handlestudenttest(params.row)
                   }}>
-                    <DashboardIcon color="success" />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="View Final Report">
-                <IconButton onClick={(e) => {
-                  }}>
-                    <AssessmentIcon  sx={{ color: red[500] }}/>
+                    <DashboardIcon sx={{ color: yellow[700] }} />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Edit Feedback">
                 <IconButton onClick={(e) => {
                   }}>
-                    <RateReviewIcon  />
+                    <RateReviewIcon  sx={{ color: red[100] }} />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="View Final Report">
+                <IconButton onClick={(e) => {
+                  }}>
+                    <AssessmentIcon  sx={{ color: red[100] }}/>
                   </IconButton>
                 </Tooltip>
               </Box>
@@ -241,18 +241,66 @@ function Student() {
                     <DashboardIcon color="success" />
                   </IconButton>
                 </Tooltip>
+                <Tooltip title="Edit Feedback">
+                <IconButton onClick={(e) => {
+                  handleDelete(params.row)
+                  }}>
+                    <RateReviewIcon sx={{ color: yellow[700] }} />
+                  </IconButton>
+                </Tooltip>
                 <Tooltip title="View Final Report">
                 <IconButton onClick={(e) => {
                   handleDelete(params.row)
                   }}>
-                    <AssessmentIcon  color="success"/>
+                    <AssessmentIcon  sx={{ color: yellow[700] }}/>
+                  </IconButton>
+                </Tooltip>
+              </Box>
+            );
+            } 
+            else if(params.row.resultPublish===false) {
+              return (
+                <Box>
+                <Tooltip title="View details">
+                  <IconButton onClick={(e) => { 
+                    handleView(params.row)
+                  }}>
+                    <Preview />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Edit details">
+                  <IconButton onClick={(e) => {
+                    handleEdit(params.row)
+                  }}>
+                    <Edit />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Delete details">
+                <IconButton onClick={(e) => {
+                    handleDelete(params.row)
+                  }}>
+                    <Delete  />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="View Tests Status">
+                <IconButton onClick={(e) => {
+                                      handlestudenttest(params.row)
+                  }}>
+                    <DashboardIcon color="success" />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Edit Feedback">
                 <IconButton onClick={(e) => {
                   handleDelete(params.row)
                   }}>
-                    <RateReviewIcon sx={{ color: red[500] }} />
+                    <RateReviewIcon color="success" />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="View Final Report">
+                <IconButton onClick={(e) => {
+                  handleDelete(params.row)
+                  }}>
+                    <AssessmentIcon  sx={{ color: yellow[700] }}/>
                   </IconButton>
                 </Tooltip>
               </Box>
@@ -288,18 +336,18 @@ function Student() {
                     <DashboardIcon color="success" />
                   </IconButton>
                 </Tooltip>
-                <Tooltip title="View Final Report">
-                <IconButton onClick={(e) => {
-                  handleDelete(params.row)
-                  }}>
-                    <AssessmentIcon  color="success"/>
-                  </IconButton>
-                </Tooltip>
                 <Tooltip title="Edit Feedback">
                 <IconButton onClick={(e) => {
                   handleDelete(params.row)
                   }}>
                     <RateReviewIcon color="success" />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="View Final Report">
+                <IconButton onClick={(e) => {
+                  handleDelete(params.row)
+                  }}>
+                    <AssessmentIcon color="success"/>
                   </IconButton>
                 </Tooltip>
               </Box>
