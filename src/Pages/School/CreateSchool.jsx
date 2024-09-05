@@ -17,7 +17,7 @@ function CreateSchool(props) {
 
   const getSchoolData = (e) => {
     settypedSchools({typedschool: e.target.value});
-    setSchools({ ...schools, [e.target.name]: e.target.value, resultPublish: false })
+    setSchools({ ...schools, [e.target.name]: e.target.value, lastPublish: null })
   }
 
   const handleSubmit = async (e) => {

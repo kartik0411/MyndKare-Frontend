@@ -1,40 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import { Padding } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { createSection, showSection  } from "../../redux/sectionSlice";
 import axios from "../../axiosConfig";
 
-function CreateSection(props) {
+function PublishSchoolResult(props) {
   const { onClose, selectedValue, open } = props;
-  const [sections, setSections] = useState({});
-  const [typedsection, settypedSections] = useState({});
+  const [updateSchool, setUpdateSchool] = useState({});
   const dispatch = useDispatch();
 
-  const getSectionData = (e) => {
-    settypedSections({typedsection: e.target.value});
-    setSections({ ...sections, [e.target.name]: e.target.value })
-  }
+  useEffect(() => {
+    if (selectedValue) {
+        setUpdateSchool(selectedValue);
+    }
+  }, [selectedValue])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post("/sections",sections);
+    await axios.get("/schools/resultPublish/"+updateSchool._id);
     handleClose();
     window.location.reload();
   }
 
   const handleClose = () => {
-    settypedSections({typedsection: ""});
     onClose(selectedValue);
   };
 
+  const updatedQuestion = (e) => {
+    setUpdateSchool({ ...updateSchool, [e.target.name]: e.target.value })
+  }
+
   return (
     <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
-      <DialogTitle>Create Section</DialogTitle>
+      <DialogTitle>Are you sure you want to Publish the Result of the below School?</DialogTitle>
       <DialogContent>
         <form >
           <div className="pt-4">
@@ -42,24 +45,24 @@ function CreateSection(props) {
               fullWidth
               label="Name"
               name="name"
-              onChange={getSectionData}
+              value={updateSchool && updateSchool.name}
               id="outlined-size-small"
               size="small"
               multiline
               maxRows={4}
-              required
+              // onChange={updatedQuestion}
             />
           </div>
         </form>
       </DialogContent>
+      <DialogContent >Note: Report will be published only for students with completed Feedback Forms from Counselors. </DialogContent >
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit}  disabled={!typedsection.typedsection}>Save</Button>
+        <Button onClick={handleClose}>No</Button>
+        <Button onClick={handleSubmit}>Yes</Button>
       </DialogActions>
     </Dialog>
   );
 }
 
-export default CreateSection
-
+export default PublishSchoolResult
 
