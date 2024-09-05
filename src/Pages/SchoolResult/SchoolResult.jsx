@@ -10,8 +10,9 @@ import { deleteSchool } from "../../redux/schoolSlice";
 import CircularProgress from '@mui/material/CircularProgress';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import { read, utils, writeFile } from 'xlsx';
-import UpdateSchoolResult from "./UpdateSchoolResult";
+import PublishSchoolResult from "./PublishSchoolResult";
 import CreateSchoolResult from "./CreateSchoolResult";
+import SendIcon from '@mui/icons-material/Send';
 
 const tableOptions = {
   height: "auto",
@@ -49,8 +50,8 @@ function SchoolResult() {
       flex: 1
     },
     {
-        field: "resultPublish",
-        headerName: "Result Publish",
+        field: "lastPublish",
+        headerName: "Last Published",
         flex: 1
       },
     {
@@ -66,13 +67,18 @@ function SchoolResult() {
                 <Preview />
               </IconButton>
             </Tooltip> */}
-            <Tooltip title="Edit details">
+            {/* <Tooltip title="Edit details">
               <IconButton onClick={(e) => {
                 handleEdit(params.row)
               }}>
                 <Edit />
               </IconButton>
-            </Tooltip>
+            </Tooltip> */}
+            <Button size="small" variant="outlined" onClick={(e) => {
+                handleEdit(params.row)
+              }}>
+              Publish Result
+            </Button>
           </Box>
         );
       },
@@ -139,7 +145,7 @@ function SchoolResult() {
             onClose={handleClose}
           />
 
-          <UpdateSchoolResult
+          <PublishSchoolResult
             selectedValue={editFormValues}
             open={editOpen}
             onClose={handleClose}

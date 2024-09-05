@@ -80,12 +80,12 @@ function UpdateSchoolResult(props) {
               <FormControlLabel
                 control={
                   <Checkbox
-                  name="resultPublish"
-                  checked= {inputs  && inputs.resultPublish}
+                  name="lastPublish"
+                  checked= {inputs  && inputs.lastPublish}
                     onChange={updatedSchoolResult}
                   />
                 }
-                label="Publish result"
+                label="Publish Result"
               />
             </FormGroup>
           </div>

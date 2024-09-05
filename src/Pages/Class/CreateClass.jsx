@@ -17,7 +17,7 @@ function CreateClass(props) {
 
   const getClassData = (e) => {
     settypedClasses({typedclass: e.target.value});
-    setClasses({ ...classes, [e.target.name]: e.target.value, resultPublish: false })
+    setClasses({ ...classes, [e.target.name]: e.target.value })
   }
 
   const handleSubmit = async (e) => {
