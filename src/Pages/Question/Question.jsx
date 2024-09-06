@@ -78,23 +78,28 @@ function Question() {
   exams=exams.filter(item => item.name !== "CIS") 
 
   const columns = [
-    { field: "name", headerName: "Question", width: 170 },
+    {
+      renderCell: (params) => (
+        <div>
+          { params.row.images.map((image,i) =>
+            <img
+            src={
+              image
+            }
+            alt=""
+          />
+          )}
+          
+          {params.row.name}
+        </div>
+      ),
+      field: "name", 
+      headerName: "Question",
+      width: 170 },
     {
       field: "option1",
       headerName: "Option 1",
       width: 105,
-
-      // renderCell: (params) => (
-      //   <div>
-      //     <img
-      //       src={
-      //         "https://www.shutterstock.com/image-photo/man-holding-megaphone-free-samples-260nw-371075918.jpg"
-      //       }
-      //       alt=""
-      //     />
-      //     {params.row.option1}
-      //   </div>
-      // ),
     },
     {
       field: "option2",
