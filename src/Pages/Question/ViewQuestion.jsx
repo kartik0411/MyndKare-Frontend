@@ -30,6 +30,7 @@ function ViewQuestion(props) {
   const [option5present, setoption5present] = useState(false);
   const [typedsection, settypedSections] = useState(false);
   const [questionChanged, setQuestionChanged] = useState(false);
+  const [images, setImages] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -73,6 +74,11 @@ function ViewQuestion(props) {
         }
       } 
       delete value.options;
+      if(value.images && value.images?.length>0) {
+        let imagesurljoined = value.images.join(",");
+        setImages(imagesurljoined);
+        delete value.images;
+      }
       setQuestionChanged(false); 
       setQuestions(value);
       settypedSections(false);
@@ -81,6 +87,10 @@ function ViewQuestion(props) {
 
  useEffect(() => {
   if(questions.options) {
+    if(images!=null && typeof images === "string" && images!="") {
+      const imagesurlArray = images.split(",");
+      questions.images = imagesurlArray;
+    }
     dispatch(editQuestion(questions));
     handleClose();
     window.location.reload(); 
@@ -108,6 +118,31 @@ function ViewQuestion(props) {
     } 
   }
  }, [questions]);
+
+ useEffect(() => {
+  if(questions.name && questionChanged) { 
+    if(option1) {
+      if(questions.examId) {
+        if(dbda) {
+          if(questions.AnsOrSerial) {
+            settypedSections(true);
+          } else {
+            settypedSections(false);
+          }
+        } else {
+          settypedSections(true);
+        }
+      } else {
+        settypedSections(false);
+      }
+    } else {
+      settypedSections(false);
+    }
+  } else {
+    settypedSections(false);
+  }
+}, [images]);
+
 
  useEffect(() => {
   if(questions.name && questionChanged) { 
@@ -305,7 +340,9 @@ useEffect(() => {
         setoption5(e.target.value)
       }
     } 
-    else { 
+    else if(e.target.name === "images") {
+      setImages(e.target.value)
+    } else { 
       setQuestions({ ...questions, [e.target.name]: e.target.value })
     }
   }
@@ -337,6 +374,7 @@ useEffect(() => {
     setoption4(null);
     setoption5(null);
     setExam({});
+    setImages(null);
     setoption2present(false);
     setoption3present(false);
     setoption4present(false);
@@ -361,8 +399,8 @@ useEffect(() => {
       <DialogTitle>View Question</DialogTitle>
       <DialogContent>
         <form >
-        <div className="pt-4">
-        <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
+        <div className="pt-4 flex items-center justify-center">
+        <FormControl size="small" sx={{ display: "inline-flex", width: "30%", paddingRight:"20px"}}>
             <InputLabel id="demo-select-small-label" required>Exams</InputLabel>
             <Select
               labelId="demo-select-small-label"
@@ -375,6 +413,18 @@ useEffect(() => {
               {menuItems}
             </Select>
             </FormControl>
+            <TextField sx={{ display: "inline-flex", width: "70%", paddingRight:"20px"}}
+              fullWidth
+              label="Comma separated Image URLs: url1,url2..."
+              name="images"
+              value = {images}
+              // onChange={getQuestionData}
+              id="outlined-size-small"
+              size="small"
+              multiline
+              maxRows={4}
+              disabled = {!images}
+            />
             </div>
             <div className="pt-4">
             <TextField

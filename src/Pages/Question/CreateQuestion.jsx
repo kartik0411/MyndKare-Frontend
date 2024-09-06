@@ -33,6 +33,7 @@ function CreateQuestion(props) {
   const [option4present, setoption4present] = useState(false);
   const [option5present, setoption5present] = useState(false);
   const [typedsection, settypedSections] = useState(false);
+  const [images, setImages] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -40,6 +41,10 @@ function CreateQuestion(props) {
  useEffect(() => {
   console.log("questions="+JSON.stringify(questions)+"option1"+option1+"dbda="+dbda)
   if(questions.options) {
+    if(images!=null && typeof images === "string" && images!="") {
+      const imagesurlArray = images.split(",");
+      questions.images = imagesurlArray;
+    }
     saveData();
   } else {
     if(questions.name) { 
@@ -172,8 +177,9 @@ function CreateQuestion(props) {
       if(e.target.name === "option5") {
         setoption5(e.target.value)
       }
-    } 
-    else { 
+    } else if(e.target.name === "images") {
+      setImages(e.target.value)
+    } else { 
       setQuestions({ ...questions, [e.target.name]: e.target.value })
     }
   }
@@ -210,6 +216,7 @@ function CreateQuestion(props) {
     setoption4present(false);
     setoption5present(false);
     settypedSections(false);
+    setImages(null);
     onClose(selectedValue);
   };
 
@@ -228,8 +235,8 @@ function CreateQuestion(props) {
       <DialogTitle>Create Question</DialogTitle>
       <DialogContent>
         <form >
-        <div className="pt-4">
-        <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
+        <div className="pt-4 flex items-center justify-center">
+        <FormControl size="small" sx={{ display: "inline-flex", width: "30%", paddingRight:"20px"}}>
             <InputLabel id="demo-select-small-label" required>Exams</InputLabel>
             <Select
               labelId="demo-select-small-label"
@@ -242,6 +249,17 @@ function CreateQuestion(props) {
               {menuItems}
             </Select>
             </FormControl>
+            <TextField sx={{ display: "inline-flex", width: "70%", paddingRight:"20px"}}
+              fullWidth
+              label="Comma separated Image URLs: url1,url2..."
+              name="images"
+              value = {images}
+              onChange={getQuestionData}
+              id="outlined-size-small"
+              size="small"
+              multiline
+              maxRows={4}
+            />
             </div>
             <div className="pt-4">
             <TextField
