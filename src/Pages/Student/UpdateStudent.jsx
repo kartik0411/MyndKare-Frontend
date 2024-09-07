@@ -1,99 +1,59 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect,useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Padding } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
-import { editStudent, showoneStudent } from "../../redux/studentSlice";
+import { editStudent, showStudent  } from "../../redux/studentSlice";
 import Radio from '@mui/material/Radio';
 import Select from "@mui/material/Select";
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import { computeSlots } from "@mui/x-data-grid/internals";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import { useSelector } from "react-redux";
-import { createTest, showTest } from "../../redux/testSlice";
+import { showSchool } from "../../redux/schoolSlice";
+import {showClass } from "../../redux/classSlice";
+import { showSection } from "../../redux/sectionSlice";
 import { showDBDA } from "../../redux/dbdaSlice";
+import { getStudentsCount } from "../../redux/studentSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { DateField } from '@mui/x-date-pickers/DateField';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import dayjs, { Dayjs } from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { showSchool } from "../../redux/schoolSlice";
-import {showClass } from "../../redux/classSlice";
-import { showSection } from "../../redux/sectionSlice";
+import { showTest } from "../../redux/testSlice";
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Checkbox from '@mui/material/Checkbox';
 import axios from "../../axiosConfig";
 
-function UpdateStudent(props) { 
-  let { onClose, selectedValue, open} = props;
+
+function UpdateStudent(props)  {
+  const { onClose, selectedValue, open } = props;
   const [students, setStudents] = useState({});
-  const [testids, setTestids] = useState([]);
   const [dateValue, setDateValue] = useState();
+  const [testids, setTestids] = useState([]);
   const [typedsection, settypedSections] = useState(false);
   const dispatch = useDispatch();
-  let { schools} = useSelector((state) => {
-    return state.schoolDetail; 
-  });
-  let { classes} = useSelector((state) => {         
-    return state.classDetail; 
-  });
-  let { sections} = useSelector((state) => {
-    return state.sectionDetail; 
-  });
-  let { tests} = useSelector((state) => { 
-    // let testobject = state.testDetail
-    // if(state.testDetail && state.testDetail.tests && state.testDetail.tests.length>0 && state.testDetail.tests[state.testDetail.tests.length-1]._id == null) {
-    //   let newtestobject = JSON.parse(JSON.stringify(testobject));
-    //   newtestobject.tests.pop();s
-    //   return newtestobject;
-    // }
-    // else {
-    return state.testDetail;
-    // }
-  });
-  // let { studeeent} = useSelector((state) => {
-  //   return state.studentDetail; 
-  // });
+  let [schools, setSchools] = useState([]);
+  let [classes, setClasses] = useState([]);
+  let [sections, setSections] = useState([]);
+  let [tests, setTests] = useState([]);
 
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
-  };
+  // useEffect(() => {
+  //   let testiids =  tests.map(function(i) {
+  //     return i._id;
+  // })
+  //   setTestids(testiids);
+  // }, [tests]);
 
-  useEffect(() => {
-    let testiids =  tests.map(function(i) {
-      return i._id;
-  })
-    setTestids(testiids); 
-  }, [tests]);
-
-
-  useEffect(() => {
-   console.log("ab hua call"+JSON.stringify(selectedValue));
-   if(selectedValue && selectedValue._id) {
-
-    // dispatch(showoneStudent(selectedValue._id));
-  }
-  }, [selectedValue]);
-
-  
-  useEffect(() => {
+  useEffect(() => { 
     setStudents({ ...students, dob: dateValue, resultPublish: false, counsellorId: "6558ac9039d0ba5397e75965", feedbackFlag: false, finalReportFlag: false, isAssesmentStarted: false })
   }, [dateValue]);
-
 
   useEffect(() => {
     if(students.name && students.father && students.dob && students.school && students.father && students.class && students.section ) {
@@ -110,25 +70,62 @@ function UpdateStudent(props) {
       paddingRight: "15px",
     },
   };
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
   const getStudentData = (e) => {
     setStudents({ ...students, [e.target.name]: e.target.value })
   }  
-  useEffect(() => {
-    dispatch(showClass())
-    dispatch(showSchool())
-    dispatch(showSection())
-    dispatch(showTest())
-  }, [])
   const testschanged = (e) => {
     setTestids(e.target.value)
   } 
-  // const getTestData = (e) => {
-  //   setStudents({ ...students, [e.target.name]: e.target.value })
-  // }
+  
+  useEffect(() => {
+    console.log(JSON.stringify(selectedValue))
+    getData();
+
+  }, []);
+
+  useEffect(() => {
+    console.log(JSON.stringify(selectedValue))
+    let studentdata = JSON.parse(JSON.stringify(selectedValue));
+    studentdata.dob = null;
+    setStudents(studentdata);
+    getStudentTestIds();
+  }, [selectedValue]);
+
+  const getStudentTestIds = async() =>{
+    if(selectedValue && selectedValue._id) {
+      let studentDetails = await axios.get("/students/"+selectedValue._id);
+      setTestids(studentDetails.data.tests);
+    }
+  }
+
+  const getData = async() =>{
+    let classesToPopulate = await axios.get("/classes");
+    setClasses(classesToPopulate.data);
+    let schoolsToPopulate = await axios.get("/schools");
+    setSchools(schoolsToPopulate.data);
+    let sectionsToPopulate = await axios.get("/sections");
+    setSections(sectionsToPopulate.data);
+    let testsToPopulate = await axios.get("/tests");
+    setTests(testsToPopulate.data);
+    }
+
 
   const handleSubmit = async (e) => {
+    let stud = new Object();
+    stud.student = students;
+    stud.studentTests = testids;
     e.preventDefault();
-    await axios.put("/students",students);
+    await axios.put("/students",stud);
     handleClose();
     window.location.reload(); 
   }
@@ -137,6 +134,7 @@ function UpdateStudent(props) {
     setStudents({})
     setDateValue();
     settypedSections(false);
+    setTestids([]);
     onClose(selectedValue);
   };
 
@@ -144,16 +142,16 @@ function UpdateStudent(props) {
     <MenuItem value={item.name}>{item.name}</MenuItem>
     ));
 
-    const classmenuItems = classes.map(item => (
-      <MenuItem value={item.name}>{item.name}</MenuItem>
-      ));
+  const classmenuItems = classes.map(item => (
+    <MenuItem value={item.name}>{item.name}</MenuItem>
+    ));
 
-      const sectionmenuItems = sections.map(item => (
-        <MenuItem value={item.name}>{item.name}</MenuItem>
-        ));
-        const testmenuItems = tests.map(item => (
-          <MenuItem value={item._id}><Checkbox checked={testids.indexOf(item._id) > -1} /> {item.name}</MenuItem>
-          ));
+  const sectionmenuItems = sections.map(item => (
+    <MenuItem value={item.name}>{item.name}</MenuItem>
+    ));
+  const testmenuItems = tests.map(item => (
+    <MenuItem value={item._id}><Checkbox checked={testids.indexOf(item._id) > -1} /> {item.name}</MenuItem>
+    ));
 
   return (
     <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
@@ -251,9 +249,9 @@ function UpdateStudent(props) {
           </div>
           <div className="pt-4 flex items-center justify-center">
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['DateField', 'DateField']}>
+      <DemoContainer components={['DateField', 'DateField']}  size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
           <DateField label="Date of Birth"
-                    value={students.dob}
+                    value={students.dob}  
                     onChange={(datevalue) => setDateValue(datevalue)}
                     format="DD-MM-YYYY"
                     required />
@@ -267,7 +265,7 @@ function UpdateStudent(props) {
           multiple
           value={testids}
           onChange={testschanged}
-          input={<OutlinedInput label="Enabled Tests" />}
+          input={<OutlinedInput label="Enabled Tests" />} 
           MenuProps={MenuProps}
         >
           {testmenuItems}
@@ -286,4 +284,5 @@ function UpdateStudent(props) {
 }
 
 export default UpdateStudent
+
 
