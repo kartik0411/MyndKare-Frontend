@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { Table } from '../../components/Table'
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button"; 
@@ -25,6 +25,8 @@ import DeleteStudent from "./DeleteStudent";
 import { createTest, showTest } from "../../redux/testSlice";
 import { showDBDA } from "../../redux/dbdaSlice";
 import { red, yellow, green } from '@mui/material/colors';
+import axios from "../../axiosConfig";
+import MenuItem from "@mui/material/MenuItem";
 
 const tableOptions = {
   height: "auto",
@@ -57,6 +59,9 @@ function Student() {
   const [selectedValue, setSelectedValue] = React.useState([]);
   const [editFormValues, setEditFormValues] = React.useState([]);
   const dispatch = useDispatch();
+  let [schoolsmenuItems, setSchoolsmenuItems] = useState([]);
+  let [classesmenuItems, setClassesmenuItems] = useState([]);
+  let [sectionsmenuItems, setSectionsmenuItems] = useState([]);
   const { students, loading, error } = useSelector((state) => {
     return state.studentDetail;
     // }
@@ -72,6 +77,7 @@ function Student() {
     return state.testDetail;
     // }
   });
+  
 
   let { dbdas} = useSelector((state) => {
     return state.dbdaDetail; 
@@ -357,16 +363,37 @@ function Student() {
     },
   ];
 
+  const getData = async() =>{
+    let classesToPopulate = await axios.get("/classes");
+    let schoolsToPopulate = await axios.get("/schools");
+    let sectionsToPopulate = await axios.get("/sections");
+    console.log("data hoe gaya set")
+    const schools = schoolsToPopulate.data.map(item => (
+      <MenuItem value={item.name}>{item.name}</MenuItem>
+    ));
+    setSchoolsmenuItems(schools);
+    const classes = classesToPopulate.data.map(item => (
+      <MenuItem value={item.name}>{item.name}</MenuItem>
+    ));
+    setClassesmenuItems(classes);
+    const sections = sectionsToPopulate.data.map(item => (
+      <MenuItem value={item.name}>{item.name}</MenuItem>
+    ));
+    setSectionsmenuItems(sections);
+    }
+
   useEffect(() => {
     dispatch(showStudent())
     dispatch(showTest())
     dispatch(showDBDA())
+    getData();
     console.log(students)
   }, [])
   console.log(students)
   const handleCreateOpen = () => { 
     setCreateOpen(true);
   };
+
 
   const exportToExcel = async () => {
     const worksheet = utils.json_to_sheet(students);
@@ -496,6 +523,10 @@ function Student() {
             testsValues={tests}
             dbdasValues={dbdas}
             onClose={handleClose}
+            schools={schoolsmenuItems}
+            classes={classesmenuItems}
+            sections={sectionsmenuItems}
+            tests={tests}
           />
           <ViewStudent
             selectedValue={editFormValues}

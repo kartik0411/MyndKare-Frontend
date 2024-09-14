@@ -33,17 +33,12 @@ import axios from "../../axiosConfig";
 
 
 function UpdateStudent(props)  {
-  const { onClose, selectedValue, open } = props;
+  const { onClose, selectedValue, open, schools, classes, sections, tests  } = props;
   const [students, setStudents] = useState({});
   const [dateValue, setDateValue] = useState();
   const [testids, setTestids] = useState([]);
   const [typedsection, settypedSections] = useState(false);
   const dispatch = useDispatch();
-  let [schools, setSchools] = useState([]);
-  let [classes, setClasses] = useState([]);
-  let [sections, setSections] = useState([]);
-  let [tests, setTests] = useState([]);
-
   // useEffect(() => {
   //   let testiids =  tests.map(function(i) {
   //     return i._id;
@@ -56,6 +51,7 @@ function UpdateStudent(props)  {
   }, [dateValue]);
 
   useEffect(() => {
+    console.log(JSON.stringify(students));
     if(students.name && students.father && students.dob && students.school && students.father && students.class && students.section ) {
       settypedSections(true);
     }
@@ -87,18 +83,13 @@ function UpdateStudent(props)  {
     setTestids(e.target.value)
   } 
   
-  useEffect(() => {
-    console.log(JSON.stringify(selectedValue))
-    getData();
-
-  }, []);
 
   useEffect(() => {
     console.log(JSON.stringify(selectedValue))
+    getStudentTestIds();
     let studentdata = JSON.parse(JSON.stringify(selectedValue));
     studentdata.dob = null;
     setStudents(studentdata);
-    getStudentTestIds();
   }, [selectedValue]);
 
   const getStudentTestIds = async() =>{
@@ -107,17 +98,6 @@ function UpdateStudent(props)  {
       setTestids(studentDetails.data.tests);
     }
   }
-
-  const getData = async() =>{
-    let classesToPopulate = await axios.get("/classes");
-    setClasses(classesToPopulate.data);
-    let schoolsToPopulate = await axios.get("/schools");
-    setSchools(schoolsToPopulate.data);
-    let sectionsToPopulate = await axios.get("/sections");
-    setSections(sectionsToPopulate.data);
-    let testsToPopulate = await axios.get("/tests");
-    setTests(testsToPopulate.data);
-    }
 
 
   const handleSubmit = async (e) => {
@@ -131,155 +111,149 @@ function UpdateStudent(props)  {
   }
 
   const handleClose = () => {
-    setStudents({})
+    let studentdata = JSON.parse(JSON.stringify(selectedValue));
+    studentdata.dob = null;
+    setStudents(studentdata);
+    getStudentTestIds();
     setDateValue();
     settypedSections(false);
-    setTestids([]);
     onClose(selectedValue);
   };
-
-  const schoolmenuItems = schools.map(item => (
-    <MenuItem value={item.name}>{item.name}</MenuItem>
-    ));
-
-  const classmenuItems = classes.map(item => (
-    <MenuItem value={item.name}>{item.name}</MenuItem>
-    ));
-
-  const sectionmenuItems = sections.map(item => (
-    <MenuItem value={item.name}>{item.name}</MenuItem>
-    ));
   const testmenuItems = tests.map(item => (
     <MenuItem value={item._id}><Checkbox checked={testids.indexOf(item._id) > -1} /> {item.name}</MenuItem>
-    ));
+  ));
 
   return (
-    <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
-      <DialogTitle>Edit Student</DialogTitle>
-      <DialogContent>
-        <form >
-          <div className="pt-4 flex items-center justify-center">
-          <TextField sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}
-              fullWidth
-              label="Name"
-              name="name"
-              value={students.name}
-              onChange={getStudentData}
-              id="outlined-size-small"
-              size="small"
-              multiline
-              maxRows={4}
-              required
-            />
+    <>
+      {students?.school && schools.length>0 &&
+        <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
+          <DialogTitle>Edit Student</DialogTitle>
+          <DialogContent>
+            <form >
+              <div className="pt-4 flex items-center justify-center">
+                <TextField sx={{ display: "inline-flex", width: "100%", paddingRight: "20px" }}
+                  fullWidth
+                  label="Name"
+                  name="name"
+                  value={students.name}
+                  onChange={getStudentData}
+                  id="outlined-size-small"
+                  size="small"
+                  multiline
+                  maxRows={4}
+                  required
+                />
 
-            <TextField sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}
-              fullWidth
-              label="Father's Name"
-              name="father"
-              value={students.father}
-              onChange={getStudentData}
-              id="outlined-size-small"
-              size="small"
-              multiline
-              maxRows={4}
-              required
-            />
-          </div>
-          <div className="pt-4 flex items-center justify-center" >
-          <TextField sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}
-              fullWidth
-              label="Admission No."
-              name="admsnno"
-              value={students.admsnno}
-              onChange={getStudentData}
-              id="outlined-size-small"
-              size="small"
-              multiline
-              maxRows={4}
-              required
-            />
-          <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
-            <InputLabel id="demo-select-small-label" required>School</InputLabel>
-            <Select
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              name="school"
-              value={students.school}
-              label="School"
-              onChange={getStudentData}
-              required
-            >
-              {schoolmenuItems}
-            </Select>
+                <TextField sx={{ display: "inline-flex", width: "100%", paddingRight: "20px" }}
+                  fullWidth
+                  label="Father's Name"
+                  name="father"
+                  value={students.father}
+                  onChange={getStudentData}
+                  id="outlined-size-small"
+                  size="small"
+                  multiline
+                  maxRows={4}
+                  required
+                />
+              </div>
+              <div className="pt-4 flex items-center justify-center" >
+                <TextField sx={{ display: "inline-flex", width: "100%", paddingRight: "20px" }} 
+                  fullWidth
+                  label="Admission No."
+                  name="admsnno"
+                  value={students.admsnno}
+                  onChange={getStudentData}
+                  id="outlined-size-small"
+                  size="small"
+                  multiline
+                  maxRows={4}
+                  required
+                />
+                <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight: "20px" }}>
+                  <InputLabel id="demo-select-small-label" required>School</InputLabel>
+                  <Select
+                    labelId="demo-select-small-label"
+                    id="demo-select-small"
+                    name="school"
+                    value={students.school}
+                    label="School"
+                    onChange={getStudentData}
+                    required
+                  >
+                    {schools}
+                  </Select>
 
-            
-            </FormControl>
-          </div>
-          <div className="pt-4 flex items-center justify-center">
-          <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
-            <InputLabel id="demo-select-small-label" required>Class</InputLabel>
-            <Select
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              name="class"
-              value={students.class}
-              label="Class"
-              onChange={getStudentData}
-              required
-            >
-              {classmenuItems}
-            </Select>
-            
-            </FormControl>
-            <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
-            <InputLabel id="demo-select-small-label" required>Section</InputLabel>
-            <Select
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              name="section"
-              value={students.section}
-              label="Section"
-              onChange={getStudentData} 
-              required
-            >
-              {sectionmenuItems}
-            </Select>
-            
-            </FormControl>
-          </div>
-          <div className="pt-4 flex items-center justify-center">
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['DateField', 'DateField']}  size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
-          <DateField label="Date of Birth"
-                    value={students.dob}  
-                    onChange={(datevalue) => setDateValue(datevalue)}
-                    format="DD-MM-YYYY"
-                    required />
-                </DemoContainer>
-    </LocalizationProvider>
-    <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
-        <InputLabel id="demo-multiple-checkbox-label">Enabled Tests</InputLabel>
-        <Select
-          labelId="demo-multiple-checkbox-label"
-          id="demo-multiple-checkbox"
-          multiple
-          value={testids}
-          onChange={testschanged}
-          input={<OutlinedInput label="Enabled Tests" />} 
-          MenuProps={MenuProps}
-        >
-          {testmenuItems}
-        </Select>
-      </FormControl>
-          </div>
-        </form>
-        
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button type= "submit" disabled={!typedsection} onClick={handleSubmit} >Update</Button>
-      </DialogActions>
-    </Dialog>
+
+                </FormControl>
+              </div>
+              <div className="pt-4 flex items-center justify-center">
+                <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight: "20px" }}>
+                  <InputLabel id="demo-select-small-label" required>Class</InputLabel>
+                  <Select
+                    labelId="demo-select-small-label"
+                    id="demo-select-small"
+                    name="class"
+                    value={students.class}
+                    label="Class"
+                    onChange={getStudentData}
+                    required
+                  >
+                    {classes}
+                  </Select>
+
+                </FormControl>
+                <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight: "20px" }}>
+                  <InputLabel id="demo-select-small-label" required>Section</InputLabel>
+                  <Select
+                    labelId="demo-select-small-label"
+                    id="demo-select-small"
+                    name="section"
+                    value={students.section}
+                    label="Section"
+                    onChange={getStudentData}
+                    required
+                  >
+                    {sections}
+                  </Select>
+
+                </FormControl>
+              </div>
+              <div className="pt-4 flex items-center justify-center">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={['DateField', 'DateField']} size="small" sx={{ display: "inline-flex", width: "100%", paddingRight: "20px" }}>
+                    <DateField label="Date of Birth"
+                      value={students.dob}
+                      onChange={(datevalue) => setDateValue(datevalue)}
+                      format="DD-MM-YYYY"
+                      required />
+                  </DemoContainer>
+                </LocalizationProvider>
+                <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight: "20px" }}>
+                  <InputLabel id="demo-multiple-checkbox-label">Enabled Tests</InputLabel>
+                  <Select
+                    labelId="demo-multiple-checkbox-label"
+                    id="demo-multiple-checkbox"
+                    multiple
+                    value={testids}
+                    onChange={testschanged}
+                    input={<OutlinedInput label="Enabled Tests" />}
+                    MenuProps={MenuProps}
+                  >
+                    {testmenuItems}
+                  </Select>
+                </FormControl>
+              </div>
+            </form>
+
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit" disabled={!typedsection} onClick={handleSubmit} >Update</Button>
+          </DialogActions>
+        </Dialog>
+      }
+    </>
   );
 }
 
