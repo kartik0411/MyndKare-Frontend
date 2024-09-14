@@ -23,7 +23,7 @@ import { getStudentsCount } from "../../redux/studentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { DateField } from '@mui/x-date-pickers/DateField';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { showTest } from "../../redux/testSlice";
@@ -33,12 +33,18 @@ import axios from "../../axiosConfig";
 
 
 function UpdateStudent(props)  {
-  const { onClose, selectedValue, open, schools, classes, sections, tests  } = props;
+  const { onClose, selectedValue, open } = props;
   const [students, setStudents] = useState({});
   const [dateValue, setDateValue] = useState();
   const [testids, setTestids] = useState([]);
   const [typedsection, settypedSections] = useState(false);
+  const [studentChanged, setStudentChanged] = useState(false); 
+  const [testsChanged, setTestsChanged] = useState(false);
   const dispatch = useDispatch();
+  let [schools, setSchools] = useState([]);
+  let [classes, setClasses] = useState([]);
+  let [sections, setSections] = useState([]);
+  let [tests, setTests] = useState([]);
   // useEffect(() => {
   //   let testiids =  tests.map(function(i) {
   //     return i._id;
@@ -46,19 +52,36 @@ function UpdateStudent(props)  {
   //   setTestids(testiids);
   // }, [tests]);
 
-  useEffect(() => { 
-    setStudents({ ...students, dob: dateValue, resultPublish: false, counsellorId: "6558ac9039d0ba5397e75965", feedbackFlag: false, finalReportFlag: false, isAssesmentStarted: false })
-  }, [dateValue]);
+  // useEffect(() => { 
+  //   setStudents({ ...students, dob: dateValue, resultPublish: false, counsellorId: "6558ac9039d0ba5397e75965", feedbackFlag: false, finalReportFlag: false, isAssesmentStarted: false })
+  // }, [dateValue]);
+
+  useEffect(() => {
+    console.log(JSON.stringify(selectedValue))
+    getData();
+
+  }, []);
+
+  const getData = async() =>{
+    let classesToPopulate = await axios.get("/classes");
+    setClasses(classesToPopulate.data);
+    let schoolsToPopulate = await axios.get("/schools");
+    setSchools(schoolsToPopulate.data);
+    let sectionsToPopulate = await axios.get("/sections");
+    setSections(sectionsToPopulate.data);
+    let testsToPopulate = await axios.get("/tests");
+    setTests(testsToPopulate.data);
+    }
 
   useEffect(() => {
     console.log(JSON.stringify(students));
-    if(students.name && students.father && students.dob && students.school && students.father && students.class && students.section ) {
+    if(studentChanged && students.name && students.father && students.school && students.father && students.class && students.section && dateValue) {
       settypedSections(true);
     }
     else {
       settypedSections(false);
     }
-  }, [students]);
+  }, [students, dateValue,testids]);
 
   const styles = {
     equalFields: {
@@ -77,9 +100,12 @@ function UpdateStudent(props)  {
     },
   };
   const getStudentData = (e) => {
+    setStudentChanged(true);
     setStudents({ ...students, [e.target.name]: e.target.value })
   }  
   const testschanged = (e) => {
+    setStudentChanged(true);
+    setTestsChanged(true);
     setTestids(e.target.value)
   } 
   
@@ -88,6 +114,9 @@ function UpdateStudent(props)  {
     console.log(JSON.stringify(selectedValue))
     getStudentTestIds();
     let studentdata = JSON.parse(JSON.stringify(selectedValue));
+    let dob = new Date(studentdata.dob);
+    console.log("daaate of b "+dob)
+    setDateValue(dob);
     studentdata.dob = null;
     setStudents(studentdata);
   }, [selectedValue]);
@@ -103,7 +132,9 @@ function UpdateStudent(props)  {
   const handleSubmit = async (e) => {
     let stud = new Object();
     stud.student = students;
+    stud.student.dob = dateValue;
     stud.studentTests = testids;
+    stud.testsUpdated = testsChanged;
     e.preventDefault();
     await axios.put("/students",stud);
     handleClose();
@@ -112,13 +143,24 @@ function UpdateStudent(props)  {
 
   const handleClose = () => {
     let studentdata = JSON.parse(JSON.stringify(selectedValue));
-    studentdata.dob = null;
     setStudents(studentdata);
     getStudentTestIds();
-    setDateValue();
     settypedSections(false);
+    setStudentChanged(false);
     onClose(selectedValue);
   };
+
+  const schoolmenuItems = schools.map(item => (
+    <MenuItem value={item.name}>{item.name}</MenuItem>
+    ));
+
+  const classmenuItems = classes.map(item => (
+    <MenuItem value={item.name}>{item.name}</MenuItem>
+    ));
+
+  const sectionmenuItems = sections.map(item => (
+    <MenuItem value={item.name}>{item.name}</MenuItem>
+    ));
   const testmenuItems = tests.map(item => (
     <MenuItem value={item._id}><Checkbox checked={testids.indexOf(item._id) > -1} /> {item.name}</MenuItem>
   ));
@@ -181,7 +223,7 @@ function UpdateStudent(props)  {
                     onChange={getStudentData}
                     required
                   >
-                    {schools}
+                    {schoolmenuItems}
                   </Select>
 
 
@@ -199,7 +241,7 @@ function UpdateStudent(props)  {
                     onChange={getStudentData}
                     required
                   >
-                    {classes}
+                    {classmenuItems}
                   </Select>
 
                 </FormControl>
@@ -214,7 +256,7 @@ function UpdateStudent(props)  {
                     onChange={getStudentData}
                     required
                   >
-                    {sections}
+                    {sectionmenuItems}
                   </Select>
 
                 </FormControl>
@@ -223,8 +265,8 @@ function UpdateStudent(props)  {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer components={['DateField', 'DateField']} size="small" sx={{ display: "inline-flex", width: "100%", paddingRight: "20px" }}>
                     <DateField label="Date of Birth"
-                      value={students.dob}
-                      onChange={(datevalue) => setDateValue(datevalue)}
+                      value={dayjs(dateValue)}
+                      onChange={(datevalue) =>   {setStudentChanged(true); setDateValue(datevalue);}}
                       format="DD-MM-YYYY"
                       required />
                   </DemoContainer>
@@ -236,7 +278,7 @@ function UpdateStudent(props)  {
                     id="demo-multiple-checkbox"
                     multiple
                     value={testids}
-                    onChange={testschanged}
+                    onChange={!students.isAssesmentStarted && testschanged}
                     input={<OutlinedInput label="Enabled Tests" />}
                     MenuProps={MenuProps}
                   >

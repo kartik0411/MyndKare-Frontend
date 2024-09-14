@@ -1,116 +1,87 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect,useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Padding } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
-import { editStudent } from "../../redux/studentSlice";
+import { editStudent, showStudent  } from "../../redux/studentSlice";
+import Radio from '@mui/material/Radio';
+import Select from "@mui/material/Select";
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { computeSlots } from "@mui/x-data-grid/internals";
-import Radio from '@mui/material/Radio';
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import { useSelector } from "react-redux";
+import { showSchool } from "../../redux/schoolSlice";
+import {showClass } from "../../redux/classSlice";
+import { showSection } from "../../redux/sectionSlice";
+import { showDBDA } from "../../redux/dbdaSlice";
+import { getStudentsCount } from "../../redux/studentSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { DateField } from '@mui/x-date-pickers/DateField';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import dayjs from 'dayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { showTest } from "../../redux/testSlice";
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Checkbox from '@mui/material/Checkbox';
+import axios from "../../axiosConfig";
 
-function ViewStudent(props) {
-  let { onClose, selectedValue, open, testsValues,dbdasValues } = props;
+
+function ViewStudent(props)  {
+  const { onClose, selectedValue, open } = props;
   const [students, setStudents] = useState({});
-  const [dbda, setDbda] = useState(false);
-  const [timer, setTimer] = useState(false);
-  const [studentChanged, setStudentChanged] = useState(false);
-  // const [selectedStudent, setSelectedStudent] = useState({type: "1"});
+  const [dateValue, setDateValue] = useState();
+  const [testids, setTestids] = useState([]);
   const [typedsection, settypedSections] = useState(false);
+  const [studentChanged, setStudentChanged] = useState(false); 
+  const [testsChanged, setTestsChanged] = useState(false);
   const dispatch = useDispatch();
+  let [schools, setSchools] = useState([]);
+  let [classes, setClasses] = useState([]);
+  let [sections, setSections] = useState([]);
+  let [tests, setTests] = useState([]);
+  // useEffect(() => {
+  //   let testiids =  tests.map(function(i) {
+  //     return i._id;
+  // })
+  //   setTestids(testiids);
+  // }, [tests]);
 
-
-  let { studentsCount} = useSelector((state) => {
-    // setStudents({ ...students, serial: state.studentDetail.count })
-    return state.studentDetail; 
-  });
-  // useEffect(()=> {setTest(students.testId)}, [tests])
-  // useEffect(()=> {if(students.dbdaId) {setDbda(students.dbdaId)}}, [dbdas])
-  useEffect(() => {
-    // if (testsValues) {
-    //   setTests(testsValues);
-    // }
-    // if(dbdasValues) {
-    //   setDbadas(dbdasValues);
-    // }
-    if (selectedValue) {
-      let value = Object.assign({},selectedValue);
-      if(selectedValue.timer=="Yes") {
-        value.timer = true;
-        setTimer(true);
-      } else if(selectedValue.timer=="No") {
-        value.timer = false;
-        setTimer(false);
-      }
-      if(selectedValue.timerVisible=="Yes") {
-        value.timerVisible = true;
-      } else if(selectedValue.timer=="No") {
-        value.timerVisible = false;
-      }
-      if(value.name?.indexOf('-')>-1) {
-        value.name= value.name?.substring(value.name?.indexOf('-')+1);
-      } else {
-        value.name = "";
-      }
-      if(value.dbdaId) {
-        setDbda(true);
-        if(value.name?.indexOf('-')>-1) {
-          value.name= value.name?.substring(value.name?.indexOf('-')+1);
-        } else {
-          value.name = "";
-        }
-      } else {
-        setDbda(false);
-      }
-      setStudents(value);
-      settypedSections(false);
-      setStudentChanged(false);
-  }
-  }, [selectedValue])
-
+  // useEffect(() => { 
+  //   setStudents({ ...students, dob: dateValue, resultPublish: false, counsellorId: "6558ac9039d0ba5397e75965", feedbackFlag: false, finalReportFlag: false, isAssesmentStarted: false })
+  // }, [dateValue]);
 
   useEffect(() => {
-    console.log("students ::"+JSON.stringify(students))
-    if(students.testId && students.timer!=null && students.serial && studentChanged) {
-      if(dbda) {
-        if(timer) {
-          if(students.dbdaId && students.timerVisible!=null && students.duration) {
-            settypedSections(true)
-          } else {
-            settypedSections(false)
-          }
-        } else {
-          if(students.dbdaId) {
-            settypedSections(true)
-          } else {
-            settypedSections(false)
-          }
-        }
-      } else {
-        if(timer) {
-          if(students.timerVisible!=null && students.duration) { 
-            settypedSections(true)
-          } else {
-            settypedSections(false)
-          }
-        } else {
-          settypedSections(true)
-        }
-      }
-    } else {
-      settypedSections(false)
+    console.log(JSON.stringify(selectedValue))
+    getData();
+
+  }, []);
+
+  const getData = async() =>{
+    let classesToPopulate = await axios.get("/classes");
+    setClasses(classesToPopulate.data);
+    let schoolsToPopulate = await axios.get("/schools");
+    setSchools(schoolsToPopulate.data);
+    let sectionsToPopulate = await axios.get("/sections");
+    setSections(sectionsToPopulate.data);
+    let testsToPopulate = await axios.get("/tests");
+    setTests(testsToPopulate.data);
     }
- }, [students]);
+
+  useEffect(() => {
+    console.log(JSON.stringify(students));
+    if(studentChanged && students.name && students.father && students.school && students.father && students.class && students.section && dateValue) {
+      settypedSections(true);
+    }
+    else {
+      settypedSections(false);
+    }
+  }, [students, dateValue,testids]);
 
   const styles = {
     equalFields: {
@@ -118,207 +89,217 @@ function ViewStudent(props) {
       paddingRight: "15px",
     },
   };
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
   const getStudentData = (e) => {
-    setStudentChanged(true)
-    if(e.target.name === "testId") {
-      console.log("e.target.value"+e.target.value)
-      let type=1;
-      for(let i=0;i<testsValues.length;i++) {
-        if((e.target.value === testsValues[i]._id) ) { 
-          if(testsValues[i].type === 2) {
-            type=2;
-          }
-         break;
-        }
-      }
-      if(type==2) {
-        setDbda(true);
-      } else {
-        delete students.dbdaId
-        setDbda(false);
-      }
-    }
-    if(e.target.name === "timer") { 
-      if(e.target.value==true) { 
-        setTimer(true);
-      } else {
-        delete students.timerVisible;
-        delete students.duration;
-        setTimer(false);
-      }
-    }
+    setStudentChanged(true);
     setStudents({ ...students, [e.target.name]: e.target.value })
+  }  
+  const testschanged = (e) => {
+    setStudentChanged(true);
+    setTestsChanged(true);
+    setTestids(e.target.value)
+  } 
+  
+
+  useEffect(() => {
+    console.log(JSON.stringify(selectedValue))
+    getStudentTestIds();
+    let studentdata = JSON.parse(JSON.stringify(selectedValue));
+    let dob = new Date(studentdata.dob);
+    console.log("daaate of b "+dob)
+    setDateValue(dob);
+    studentdata.dob = null;
+    setStudents(studentdata);
+  }, [selectedValue]);
+
+  const getStudentTestIds = async() =>{
+    if(selectedValue && selectedValue._id) {
+      let studentDetails = await axios.get("/students/"+selectedValue._id);
+      setTestids(studentDetails.data.tests);
+    }
   }
 
-  // const getTestData = (e) => {
-  //   setStudents({ ...students, [e.target.name]: e.target.value })
-  // }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    let stud = new Object();
+    stud.student = students;
+    stud.student.dob = dateValue;
+    stud.studentTests = testids;
+    stud.testsViewd = testsChanged;
     e.preventDefault();
-    dispatch(editStudent(students));
+    await axios.put("/students",stud);
     handleClose();
     window.location.reload(); 
   }
-  
+
   const handleClose = () => {
-    let value = Object.assign({},selectedValue);
-    if(selectedValue.timer==="Yes") {
-      value.timer = true;
-      setTimer(true);
-    } else if(selectedValue.timer==="No") {
-      value.timer = false;
-      setTimer(false);
-    }
-    if(selectedValue.timerVisible=="Yes") {
-      value.timerVisible = true;
-    } else if(selectedValue.timer=="No") {
-      value.timerVisible = false;
-    }
-    if(value.name?.indexOf('-')>-1) {
-      value.name= value.name?.substring(value.name?.indexOf('-')+1);
-    } else {
-      value.name = "";
-    }
-    if(value.dbdaId) {
-      setDbda(true);
-      if(value.name?.indexOf('-')>-1) {
-        value.name= value.name?.substring(value.name?.indexOf('-')+1);
-      } else {
-        value.name = "";
-      }
-    } else {
-      setDbda(false);
-    }
-    setStudents(value);
+    let studentdata = JSON.parse(JSON.stringify(selectedValue));
+    setStudents(studentdata);
+    getStudentTestIds();
     settypedSections(false);
     setStudentChanged(false);
     onClose(selectedValue);
   };
-  // testsValues = testsValues?.filter(item => item.name !== "CIS") 
-  const menuItems = testsValues?.map(item => (
-    <MenuItem value={item._id}>{item.name}</MenuItem>
+
+  const schoolmenuItems = schools.map(item => (
+    <MenuItem value={item.name}>{item.name}</MenuItem>
     ));
 
-    const dbdasmenuItems = dbdasValues?.map(item => (
-      <MenuItem value={item._id}>{item.code}</MenuItem>
-      ));
+  const classmenuItems = classes.map(item => (
+    <MenuItem value={item.name}>{item.name}</MenuItem>
+    ));
+
+  const sectionmenuItems = sections.map(item => (
+    <MenuItem value={item.name}>{item.name}</MenuItem>
+    ));
+  const testmenuItems = tests.map(item => (
+    <MenuItem value={item._id}><Checkbox checked={testids.indexOf(item._id) > -1} /> {item.name}</MenuItem>
+  ));
 
   return (
-    <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
-      <DialogTitle>View Student</DialogTitle>
-      <DialogContent>
-        <form >
-          <div className="pt-4 flex items-center justify-center">
-          <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
-            <InputLabel id="demo-select-small-label" required>Test</InputLabel>
-            <Select
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              name="testId"
-              value={students.testId}
-              label="Test"
-              //onChange={getStudentData}
-            >
-              {menuItems}
-            </Select>
-            
-            </FormControl>
+    <>
+      {students?.school && schools.length>0 &&
+        <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
+          <DialogTitle>View Student</DialogTitle>
+          <DialogContent>
+            <form >
+              <div className="pt-4 flex items-center justify-center">
+                <TextField sx={{ display: "inline-flex", width: "100%", paddingRight: "20px" }}
+                  fullWidth
+                  label="Name"
+                  name="name"
+                  value={students.name}
+                  // onChange={getStudentData}
+                  id="outlined-size-small"
+                  size="small"
+                  multiline
+                  maxRows={4}
+                  required
+                />
 
-            {dbda ? <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}>
-            <InputLabel id="demo-select-small-label" required>DBDA Code</InputLabel>
-            <Select
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              name="dbdaId"
-              value={students.dbdaId}
-              label="Test"
-              //onChange={getStudentData}
-            >
-              {dbdasmenuItems}
-            </Select>
-            </FormControl>  : false}
-            
-            <TextField sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}
-              fullWidth
-              label="Name"
-              name="name"
-              value={students.name}
-             // onChange={getStudentData}
-              id="outlined-size-small"
-              size="small"
-              multiline
-              maxRows={4}
-            />
-          </div>
-          <div className="pt-4 flex items-center justify-center" >
-          <FormControl size="small" sx={{ display: "inline-flex", width: "50%", paddingRight:"20px"}}>
-            <InputLabel id="demo-select-small-label"  required>Timer</InputLabel>
-            <Select
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              name="timer"
-              value={students.timer}
-              label="Timer"
-              //onChange={getStudentData}
-            >
-               <MenuItem value="">
-              </MenuItem>
-              <MenuItem value={true}>Yes</MenuItem>
-              <MenuItem value={false}>No</MenuItem>
-            </Select>
-            </FormControl>
-            <TextField
-              style={styles.equalFields}
-              label="Serial"
-              name="serial"
-              value={students.serial}
-              //onChange={getStudentData}
-              id="outlined-number"
-              size="small"
-              type="number"
-              defaultValue= {studentsCount}
-              required
-            />  
-          </div>
-          <div className="pt-4 flex items-center justify-center">
-          {timer ? <FormControl size="small" sx={{ display: "inline-flex", width: "50%", paddingRight:"20px"}}>
-            <InputLabel id="demo-select-small-label"  required>Timer Visible</InputLabel>
-            <Select
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              name="timerVisible"
-              value={students.timerVisible}
-              label="Timer Visible"
-              //onChange={getStudentData}
-            >
-              <MenuItem value="">
-              </MenuItem>
-              <MenuItem value={true}>Yes</MenuItem>
-              <MenuItem value={false}>No</MenuItem>
-            </Select>
-            </FormControl>  : false}
-          {timer ? <TextField 
-              style={styles.equalFields}
-              label="Duration(Seconds)"
-              name="duration"
-              type="number"
-              value={students.duration}
-              //onChange={getStudentData}
-              id="outlined-number"
-              size="small"
-              required
-            />  : false}
-          </div>
-        </form>
-        
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Close</Button>
-      </DialogActions>
-    </Dialog>
+                <TextField sx={{ display: "inline-flex", width: "100%", paddingRight: "20px" }}
+                  fullWidth
+                  label="Father's Name"
+                  name="father"
+                  value={students.father}
+                  // onChange={getStudentData}
+                  id="outlined-size-small"
+                  size="small"
+                  multiline
+                  maxRows={4}
+                  required
+                />
+              </div>
+              <div className="pt-4 flex items-center justify-center" >
+                <TextField sx={{ display: "inline-flex", width: "100%", paddingRight: "20px" }} 
+                  fullWidth
+                  label="Admission No."
+                  name="admsnno"
+                  value={students.admsnno}
+                  // onChange={getStudentData}
+                  id="outlined-size-small"
+                  size="small"
+                  multiline
+                  maxRows={4}
+                  required
+                />
+                <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight: "20px" }}>
+                  <InputLabel id="demo-select-small-label" required>School</InputLabel>
+                  <Select
+                    labelId="demo-select-small-label"
+                    id="demo-select-small"
+                    name="school"
+                    value={students.school}
+                    label="School"
+                    // onChange={getStudentData}
+                    required
+                  >
+                    {schoolmenuItems}
+                  </Select>
+
+
+                </FormControl>
+              </div>
+              <div className="pt-4 flex items-center justify-center">
+                <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight: "20px" }}>
+                  <InputLabel id="demo-select-small-label" required>Class</InputLabel>
+                  <Select
+                    labelId="demo-select-small-label"
+                    id="demo-select-small"
+                    name="class"
+                    value={students.class}
+                    label="Class"
+                    // onChange={getStudentData}
+                    required
+                  >
+                    {classmenuItems}
+                  </Select>
+
+                </FormControl>
+                <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight: "20px" }}>
+                  <InputLabel id="demo-select-small-label" required>Section</InputLabel>
+                  <Select
+                    labelId="demo-select-small-label"
+                    id="demo-select-small"
+                    name="section"
+                    value={students.section}
+                    label="Section"
+                    // onChange={getStudentData}
+                    required
+                  >
+                    {sectionmenuItems}
+                  </Select>
+
+                </FormControl>
+              </div>
+              <div className="pt-4 flex items-center justify-center">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={['DateField', 'DateField']} size="small" sx={{ display: "inline-flex", width: "100%", paddingRight: "20px" }}>
+                    <DateField label="Date of Birth"
+                      value={dayjs(dateValue)}
+                      // onChange={(datevalue) =>   {setStudentChanged(true); setDateValue(datevalue);}}
+                      format="DD-MM-YYYY"
+                      required 
+                      disabled/>
+                  </DemoContainer>
+                </LocalizationProvider>
+                <FormControl size="small" sx={{ display: "inline-flex", width: "100%", paddingRight: "20px" }}>
+                  <InputLabel id="demo-multiple-checkbox-label">Enabled Tests</InputLabel>
+                  <Select
+                    labelId="demo-multiple-checkbox-label"
+                    id="demo-multiple-checkbox"
+                    multiple
+                    value={testids}
+                    // onChange={!students.isAssesmentStarted && testschanged}
+                    input={<OutlinedInput label="Enabled Tests" />}
+                    MenuProps={MenuProps}
+                  >
+                    {testmenuItems}
+                  </Select>
+                </FormControl>
+              </div>
+            </form>
+
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Close</Button>
+            {/* <Button type="submit" disabled={!typedsection} onClick={handleSubmit} >view</Button> */}
+          </DialogActions>
+        </Dialog>
+      }
+    </>
   );
 }
 
 export default ViewStudent
+
 

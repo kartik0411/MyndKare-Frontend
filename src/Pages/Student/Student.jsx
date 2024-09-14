@@ -59,9 +59,6 @@ function Student() {
   const [selectedValue, setSelectedValue] = React.useState([]);
   const [editFormValues, setEditFormValues] = React.useState([]);
   const dispatch = useDispatch();
-  let [schoolsmenuItems, setSchoolsmenuItems] = useState([]);
-  let [classesmenuItems, setClassesmenuItems] = useState([]);
-  let [sectionsmenuItems, setSectionsmenuItems] = useState([]);
   const { students, loading, error } = useSelector((state) => {
     return state.studentDetail;
     // }
@@ -363,30 +360,11 @@ function Student() {
     },
   ];
 
-  const getData = async() =>{
-    let classesToPopulate = await axios.get("/classes");
-    let schoolsToPopulate = await axios.get("/schools");
-    let sectionsToPopulate = await axios.get("/sections");
-    console.log("data hoe gaya set")
-    const schools = schoolsToPopulate.data.map(item => (
-      <MenuItem value={item.name}>{item.name}</MenuItem>
-    ));
-    setSchoolsmenuItems(schools);
-    const classes = classesToPopulate.data.map(item => (
-      <MenuItem value={item.name}>{item.name}</MenuItem>
-    ));
-    setClassesmenuItems(classes);
-    const sections = sectionsToPopulate.data.map(item => (
-      <MenuItem value={item.name}>{item.name}</MenuItem>
-    ));
-    setSectionsmenuItems(sections);
-    }
 
   useEffect(() => {
     dispatch(showStudent())
     dispatch(showTest())
     dispatch(showDBDA())
-    getData();
     console.log(students)
   }, [])
   console.log(students)
@@ -523,10 +501,6 @@ function Student() {
             testsValues={tests}
             dbdasValues={dbdas}
             onClose={handleClose}
-            schools={schoolsmenuItems}
-            classes={classesmenuItems}
-            sections={sectionsmenuItems}
-            tests={tests}
           />
           <ViewStudent
             selectedValue={editFormValues}
