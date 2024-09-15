@@ -20,7 +20,7 @@ import { read, utils, writeFile } from 'xlsx';
 import UpdateStudent from "./UpdateStudent";
 import ViewStudent from "./ViewStudent";
 import CreateStudent from "./CreateStudent";
-import StudentTest from "./StudentTest";
+import StudentTests from "./StudentTests";
 import DeleteStudent from "./DeleteStudent";
 import { createTest, showTest } from "../../redux/testSlice";
 import { showDBDA } from "../../redux/dbdaSlice";
@@ -509,7 +509,7 @@ function Student() {
             dbdasValues={dbdas}
             onClose={handleClose}
           />
-          <StudentTest
+          <StudentTests
             selectedValue={editFormValues}
             open={studenttestOpen}
             onClose={handleClose}
