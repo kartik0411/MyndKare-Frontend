@@ -21,6 +21,7 @@ import UpdateStudent from "./UpdateStudent";
 import ViewStudent from "./ViewStudent";
 import CreateStudent from "./CreateStudent";
 import StudentTests from "./StudentTests";
+import EditFeedback from "./EditFeedback";
 import DeleteStudent from "./DeleteStudent";
 import { createTest, showTest } from "../../redux/testSlice";
 import { showDBDA } from "../../redux/dbdaSlice";
@@ -52,6 +53,7 @@ const styles = {
 function Student() {
   const [createOpen, setCreateOpen] = React.useState(false);
   const [studenttestOpen, setstudenttestOpen] = React.useState(false);
+  const [feedbackOpen, setFeedbackOpen] = React.useState(false);
   const [editOpen, setEditOpen] = React.useState(false);
   // const [snackOpen, setSnackOpen] = React.useState(false);
   const [viewOpen, setViewOpen] = React.useState(false);
@@ -246,7 +248,7 @@ function Student() {
                 </Tooltip>
                 <Tooltip title="Edit Feedback">
                 <IconButton onClick={(e) => {
-                  handleDelete(params.row)
+                  handleFeedback(params.row)
                   }}>
                     <RateReviewIcon sx={{ color: yellow[700] }} />
                   </IconButton>
@@ -294,7 +296,7 @@ function Student() {
                 </Tooltip>
                 <Tooltip title="Edit Feedback">
                 <IconButton onClick={(e) => {
-                  handleDelete(params.row)
+                  handleFeedback(params.row)
                   }}>
                     <RateReviewIcon color="success" />
                   </IconButton>
@@ -341,7 +343,7 @@ function Student() {
                 </Tooltip>
                 <Tooltip title="Edit Feedback">
                 <IconButton onClick={(e) => {
-                  handleDelete(params.row)
+                  handleFeedback(params.row)
                   }}>
                     <RateReviewIcon color="success" />
                   </IconButton>
@@ -403,6 +405,16 @@ function Student() {
     setEditFormValues(value)
     console.log(value)
   }
+  
+  const handleFeedback = (value) => {
+    setCreateOpen(false);
+    setEditOpen(false);
+    setDeleteOpen(false);
+    setstudenttestOpen(false);
+    setFeedbackOpen(true);
+    setEditFormValues(value)
+    console.log(value)
+  }
 
   const handleView = (value) => {
     setCreateOpen(false);
@@ -424,6 +436,7 @@ function Student() {
     setViewOpen(false);
     setDeleteOpen(false);
     setstudenttestOpen(false);
+    setFeedbackOpen(false);
     // if(snackOpen) {
     //   console.log("ye kaise aa skta")
     //   window.location.reload();
@@ -512,6 +525,11 @@ function Student() {
           <StudentTests
             selectedValue={editFormValues}
             open={studenttestOpen}
+            onClose={handleClose}
+          />
+          <EditFeedback
+            selectedValue={editFormValues}
+            open={feedbackOpen}
             onClose={handleClose}
           />
           <DeleteStudent
