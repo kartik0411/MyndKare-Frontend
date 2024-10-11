@@ -39,16 +39,6 @@ function StudentTests(props) {
     const { onClose, selectedValue, open } = props;
     const [students, setStudents] = useState({});
     const [studentTests, setStudentTests] = useState([]);
-    const [dateValue, setDateValue] = useState();
-    const [testids, setTestids] = useState([]);
-    const [typedsection, settypedSections] = useState(false);
-    const [studentChanged, setStudentChanged] = useState(false);
-    const [testsChanged, setTestsChanged] = useState(false);
-    const dispatch = useDispatch();
-    let [schools, setSchools] = useState([]);
-    let [classes, setClasses] = useState([]);
-    let [sections, setSections] = useState([]);
-    let [tests, setTests] = useState([]);
 
     // useEffect(() => {
     //   let testiids =  tests.map(function(i) {
@@ -74,69 +64,14 @@ function StudentTests(props) {
         checkboxSelection: false,
         disableSelectionOnClick: true,
     };
-    useEffect(() => {
-        console.log(JSON.stringify(selectedValue))
-        getData();
 
-    }, []);
-
-    const getData = async () => {
-        let classesToPopulate = await axios.get("/classes");
-        setClasses(classesToPopulate.data);
-        let schoolsToPopulate = await axios.get("/schools");
-        setSchools(schoolsToPopulate.data);
-        let sectionsToPopulate = await axios.get("/sections");
-        setSections(sectionsToPopulate.data);
-        let testsToPopulate = await axios.get("/tests");
-        setTests(testsToPopulate.data);
-    }
 
     useEffect(() => {
-        console.log(JSON.stringify(students));
-        if (studentChanged && students.name && students.father && students.school && students.father && students.class && students.section && dateValue) {
-            settypedSections(true);
+        if(open==true) {
+            getStudentTestIds();
         }
-        else {
-            settypedSections(false);
-        }
-    }, [students, dateValue, testids]);
-
-    const styles = {
-        equalFields: {
-            width: "50%",
-            paddingRight: "15px",
-        },
-    };
-    const ITEM_HEIGHT = 48;
-    const ITEM_PADDING_TOP = 8;
-    const MenuProps = {
-        PaperProps: {
-            style: {
-                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-                width: 250,
-            },
-        },
-    };
-    const getStudentData = (e) => {
-        setStudentChanged(true);
-        setStudents({ ...students, [e.target.name]: e.target.value })
-    }
-    const testschanged = (e) => {
-        setStudentChanged(true);
-        setTestsChanged(true);
-        setTestids(e.target.value)
-    }
-
-
-    useEffect(() => {
-        console.log(JSON.stringify(selectedValue))
-        getStudentTestIds();
-        // let dob = new Date(studentdata.dob);
-        // console.log("daaate of b "+dob)
-        // setDateValue(dob);
-        // studentdata.dob = null;
-        // setStudents(studentdata);
-    }, [selectedValue]);
+        console.log(JSON.stringify(students))
+    }, [open]);
 
     const getStudentTestIds = async () => {
         if (selectedValue && selectedValue._id) {
@@ -147,42 +82,13 @@ function StudentTests(props) {
         }
     }
 
-
-    const handleSubmit = async (e) => {
-        let stud = new Object();
-        stud.student = students;
-        stud.student.dob = dateValue;
-        stud.studentTests = testids;
-        stud.testsUpdated = testsChanged;
-        e.preventDefault();
-        await axios.put("/students", stud);
-        handleClose();
-        window.location.reload();
-    }
-
     const handleClose = () => {
-        // let studentdata = JSON.parse(JSON.stringify(selectedValue));
-        // setStudents(studentdata);
-        // getStudentTestIds();
-        // settypedSections(false);
-        // setStudentChanged(false);
+        setStudents(null);
+        setStudentTests([]);
         onClose(selectedValue);
     };
 
-    const schoolmenuItems = schools.map(item => (
-        <MenuItem value={item.name}>{item.name}</MenuItem>
-    ));
 
-    const classmenuItems = classes.map(item => (
-        <MenuItem value={item.name}>{item.name}</MenuItem>
-    ));
-
-    const sectionmenuItems = sections.map(item => (
-        <MenuItem value={item.name}>{item.name}</MenuItem>
-    ));
-    const testmenuItems = tests.map(item => (
-        <MenuItem value={item._id}><Checkbox checked={testids.indexOf(item._id) > -1} /> {item.name}</MenuItem>
-    ));
 
     const examsColumns = [
         {

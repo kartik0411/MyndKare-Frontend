@@ -111,15 +111,17 @@ function ViewStudent(props)  {
   
 
   useEffect(() => {
-    console.log(JSON.stringify(selectedValue))
-    getStudentTestIds();
-    let studentdata = JSON.parse(JSON.stringify(selectedValue));
-    let dob = new Date(studentdata.dob);
-    console.log("daaate of b "+dob)
-    setDateValue(dob);
-    studentdata.dob = null;
-    setStudents(studentdata);
-  }, [selectedValue]);
+    if(open==true) {
+      console.log(JSON.stringify(selectedValue))
+      getStudentTestIds();
+      let studentdata = JSON.parse(JSON.stringify(selectedValue));
+      let dob = new Date(studentdata.dob);
+      console.log("daaate of b "+dob)
+      setDateValue(dob);
+      studentdata.dob = null;
+      setStudents(studentdata);
+    }
+  }, [open]);
 
   const getStudentTestIds = async() =>{
     if(selectedValue && selectedValue._id) {
@@ -142,9 +144,9 @@ function ViewStudent(props)  {
   }
 
   const handleClose = () => {
-    let studentdata = JSON.parse(JSON.stringify(selectedValue));
-    setStudents(studentdata);
-    getStudentTestIds();
+    // let studentdata = JSON.parse(JSON.stringify(selectedValue));
+    setStudents(null);
+    getStudentTestIds([]);
     settypedSections(false);
     setStudentChanged(false);
     onClose(selectedValue);

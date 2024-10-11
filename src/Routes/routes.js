@@ -43,6 +43,7 @@ const routes = [
     { path: "/faq", Component: FAQ },
     { path: "/terms-and-condition", Component: TermsAndCondition },
     { path: "*", Component: PageNotFound },
+    { path: "/studentReport", Component: Question}
 ]
 
 export default routes
