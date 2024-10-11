@@ -22,7 +22,8 @@ import ViewStudent from "./ViewStudent";
 import CreateStudent from "./CreateStudent";
 import StudentTests from "./StudentTests";
 import EditFeedback from "./EditFeedback";
-import DeleteStudent from "./DeleteStudent";
+import DeleteStudent from "./DeleteStudent"; 
+import Report from "./Report";
 import { createTest, showTest } from "../../redux/testSlice";
 import { showDBDA } from "../../redux/dbdaSlice";
 import { red, yellow, green } from '@mui/material/colors';
@@ -55,6 +56,7 @@ function Student() {
   const [studenttestOpen, setstudenttestOpen] = React.useState(false);
   const [feedbackOpen, setFeedbackOpen] = React.useState(false);
   const [editOpen, setEditOpen] = React.useState(false);
+  const [reportOpen, setReportOpen] = React.useState(false);
   // const [snackOpen, setSnackOpen] = React.useState(false);
   const [viewOpen, setViewOpen] = React.useState(false);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
@@ -255,7 +257,7 @@ function Student() {
                 </Tooltip>
                 <Tooltip title="View Final Report">
                 <IconButton onClick={(e) => {
-                  handleDelete(params.row)
+                  handleReport(params.row)
                   }}>
                     <AssessmentIcon  sx={{ color: yellow[700] }}/>
                   </IconButton>
@@ -303,7 +305,7 @@ function Student() {
                 </Tooltip>
                 <Tooltip title="View Final Report">
                 <IconButton onClick={(e) => {
-                  handleDelete(params.row)
+                  handleReport(params.row)
                   }}>
                     <AssessmentIcon  sx={{ color: yellow[700] }}/>
                   </IconButton>
@@ -350,7 +352,7 @@ function Student() {
                 </Tooltip>
                 <Tooltip title="View Final Report">
                 <IconButton onClick={(e) => {
-                  handleDelete(params.row)
+                  handleReport(params.row)
                   }}>
                     <AssessmentIcon color="success"/>
                   </IconButton>
@@ -415,6 +417,17 @@ function Student() {
     setEditFormValues(value)
     console.log(value)
   }
+  const handleReport = (value) => {
+    // window.open("/#/studentReport", "_blank");
+    setCreateOpen(false);
+    setEditOpen(false);
+    setDeleteOpen(false);
+    setstudenttestOpen(false);
+    setFeedbackOpen(false);
+    setReportOpen(true);
+    setEditFormValues(value)
+    console.log(value)
+  }
 
   const handleView = (value) => {
     setCreateOpen(false);
@@ -437,12 +450,9 @@ function Student() {
     setDeleteOpen(false);
     setstudenttestOpen(false);
     setFeedbackOpen(false);
-    // if(snackOpen) {
-    //   console.log("ye kaise aa skta")
-    //   window.location.reload();
-    // }
-    // setSnackOpen(false);
-    setSelectedValue(value);
+    setReportOpen(false);
+
+    // setSelectedValue({});
   };
 
   // const snackaction = (
@@ -535,6 +545,11 @@ function Student() {
           <DeleteStudent
             selectedValue={editFormValues}
             open={deleteOpen}
+            onClose={handleClose}
+          />
+          <Report
+            selectedValue={editFormValues}
+            open={reportOpen}
             onClose={handleClose}
           />
 

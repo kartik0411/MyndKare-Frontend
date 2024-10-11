@@ -108,19 +108,21 @@ function EditFeedback(props)  {
   
 
   useEffect(() => {
-    settypedSections(false);
-    if(selectedValue?.feedbackFlag==true) {
-        getStudentFeedbacks();
-    } else {
-        setone("");
-        settwo("");
-        setthree("");
-        setfour("");
-        setfive("");
-        setsix("");
-        setseven("");
+    if(open==true) {
+      settypedSections(false);
+      if(selectedValue?.feedbackFlag==true) {
+          getStudentFeedbacks();
+      } else {
+          setone("");
+          settwo("");
+          setthree("");
+          setfour("");
+          setfive("");
+          setsix("");
+          setseven("");
+      }
     }
-  }, [selectedValue]);
+  }, [open]);
 
   const getStudentFeedbacks = async() =>{
     if(selectedValue && selectedValue._id) {
@@ -155,13 +157,13 @@ function EditFeedback(props)  {
   }
 
   const handleClose = async ()  => {
-    // setone();
-    // settwo();
-    // setthree();
-    // setfour();
-    // setfive();
-    // setsix();
-    // setseven();
+    setone("");
+    settwo("");
+    setthree("");
+    setfour("");
+    setfive("");
+    setsix("");
+    setseven("");
     settypedSections(false);
     setFeedbackChanged(false);
     onClose(selectedValue);
