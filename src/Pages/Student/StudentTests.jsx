@@ -32,13 +32,17 @@ import Checkbox from '@mui/material/Checkbox';
 import axios from "../../axiosConfig";
 import { Table } from '../../components/Table'
 import { Box, IconButton, Tooltip } from "@mui/material";
-import Download from '@mui/icons-material/Download';
+import Preview from '@mui/icons-material/Preview';
+import Report from "./Report";
 
 
 function StudentTests(props) {
     const { onClose, selectedValue, open } = props;
     const [students, setStudents] = useState({});
     const [studentTests, setStudentTests] = useState([]);
+    const [subReportOpen, setSubReportOpen] = useState(false);
+    const [reportValue, setReportValue] = useState({});
+
 
     // useEffect(() => {
     //   let testiids =  tests.map(function(i) {
@@ -87,6 +91,19 @@ function StudentTests(props) {
         setStudentTests([]);
         onClose(selectedValue);
     };
+
+    const handleReportClose = (value) => {
+        setSubReportOpen(false);
+    
+        // setSelectedValue({});
+      };
+
+      const handleReportOpen = () => {
+        console.log("ghua")
+        setSubReportOpen(true);
+    
+        // setSelectedValue({});
+      };
 
 
 
@@ -158,7 +175,6 @@ function StudentTests(props) {
                     return (
                         <Box display="flex" spacing={2} justifyContent="space-between">
                             <Button size="small" variant="contained" onClick={(e) => {
-                                // handleEdit(params.row)
                             }} disabled>
                                 Finish
                             </Button>
@@ -173,6 +189,7 @@ function StudentTests(props) {
             }
         }
     ]
+
 
     const testsColumns = [
         {
@@ -199,20 +216,20 @@ function StudentTests(props) {
                 if (params.row.completedFlag === "Completed") {
                     return (
                         <Box display="flex" spacing={2} justifyContent="space-between">
-                            <Button size="small" variant="contained" style={{
+                            <Button size="small" variant="contained" startIcon={<Preview />} style={{
                                 backgroundColor: "#8F00FF"
-                            }} startIcon={<Download />} onClick={(e) => {
-                                // handleEdit(params.row)
+                            }} onClick={(e) => {
+                                handleReportOpen();
                             }}>
-                                Download Report
+                                View Report
                             </Button>
                         </Box>
                     );
                 } else {
                     return (
                         <Box display="flex" spacing={2} justifyContent="space-between">
-                            <Button size="small" variant="contained" startIcon={<Download />} disabled>
-                                Download Report
+                            <Button size="small" variant="contained" startIcon={<Preview />} disabled>
+                                View Report
                             </Button>
                         </Box>
                     );
@@ -223,8 +240,8 @@ function StudentTests(props) {
 
     return (
         <>
-            {students?.school && studentTests.length>0 && 
-                <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
+            {students?.school && studentTests.length > 0 && 
+                <><Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
                     <DialogTitle>Student Exams</DialogTitle>
                     <DialogContent>
                         <Table
@@ -235,8 +252,7 @@ function StudentTests(props) {
                             initialState={tableOptions.initialState}
                             pageSizeOptions={tableOptions.pageSizeOptions}
                             checkboxSelection={tableOptions.checkboxSelection}
-                            disableSelectionOnClick={tableOptions.disableSelectionOnClick}
-                        />
+                            disableSelectionOnClick={tableOptions.disableSelectionOnClick} />
 
                     </DialogContent>
                     <DialogTitle>Student Tests</DialogTitle>
@@ -249,16 +265,20 @@ function StudentTests(props) {
                             initialState={tableOptions.initialState}
                             pageSizeOptions={tableOptions.pageSizeOptions}
                             checkboxSelection={tableOptions.checkboxSelection}
-                            disableSelectionOnClick={tableOptions.disableSelectionOnClick}
-                        />
+                            disableSelectionOnClick={tableOptions.disableSelectionOnClick} />
 
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose}>Close</Button>
                         {/* <Button type="submit" disabled={!typedsection} onClick={handleSubmit} >Update</Button> */}
                     </DialogActions>
-                </Dialog>
-                
+                </Dialog><div className="pb-4">                                    
+                    <Report
+                    selectedValue={reportValue}
+                    open={subReportOpen}
+                    onClose={handleReportClose} />
+                    </div></>
+
             }
         </>
     );
