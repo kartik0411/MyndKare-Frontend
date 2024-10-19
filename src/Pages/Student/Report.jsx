@@ -22,6 +22,8 @@ const styles = StyleSheet.create({
 });
 
 
+
+
 // Create Document Component
 function Report(props) {
   const { onClose, selectedValue, open } = props;
@@ -32,8 +34,22 @@ function Report(props) {
 
   const handleDownload = async () => {
     // onClose(selectedValue);
-      const fileName = selectedValue?.name+'_Report.pdf';
-      const blob = await pdf(<Document>
+    const fileName = selectedValue?.name + '_Report.pdf';
+    const blob = await pdf(<Document>
+      <Page size="A4" style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        }}>
+        <a href="#" className="flex items-center">
+          <img
+            src="https://www.myndkare.com/wp-content/uploads/2021/05/cropped-myndkare-logo-115x57.png"
+            className="h-16 mr-3"
+            alt="Myndkare Logo"
+          />
+          <Text style={{ textAlign: "center", lineHeight: '64px' }}>MYNDKARE</Text> {/* Adjust lineHeight as needed */}
+        </a>
+      </Page>
         <Page size="A4" style={styles.page}>
           <View style={styles.section}>
             <Text>Section #1</Text>
@@ -42,32 +58,31 @@ function Report(props) {
             <Text>Section #2</Text>
           </View>
         </Page>
-        <Page size="A4" style={styles.page}>
-              <View style={styles.section}>
-                <Text>Section #1</Text>
-              </View>
-              <View style={styles.section}>
-                <Text>Section #2</Text>
-              </View>
-            </Page>
       </Document>).toBlob();
-      saveAs(blob, fileName);
-    };
+    saveAs(blob, fileName);
+  };
+  
 
 
-    return (<>
-      <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
-        <DialogTitle>Student Exams</DialogTitle>
-        <DialogContent>
-          <Document>
-            <Page size="A4" style={styles.page}>
-              <View style={styles.section}>
-                <Text>Section #1</Text>
-              </View>
-              <View style={styles.section}>
-                <Text>Section #2</Text>
-              </View>
-            </Page>
+  return (<>
+    <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
+      <DialogTitle>Test Report</DialogTitle>
+      <DialogContent>
+        <Document>
+          <Page size="A4" style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}>
+            <a href="#" className="flex items-center">
+              <img
+                src="https://www.myndkare.com/wp-content/uploads/2021/05/cropped-myndkare-logo-115x57.png"
+                className="h-16 mr-3"
+                alt="Myndkare Logo"
+              />
+              <Text style={{ textAlign: "center", lineHeight: '64px' }}>MYNDKARE</Text> {/* Adjust lineHeight as needed */}
+            </a>
+          </Page>
             <Page size="A4" style={styles.page}>
               <View style={styles.section}>
                 <Text>Section #1</Text>
