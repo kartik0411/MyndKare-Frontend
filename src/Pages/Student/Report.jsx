@@ -36,20 +36,22 @@ function Report(props) {
     // onClose(selectedValue);
     const fileName = selectedValue?.name + '_Report.pdf';
     const blob = await pdf(<Document>
-      <Page size="A4" style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-        }}>
-        <a href="#" className="flex items-center">
-          <img
-            src="https://www.myndkare.com/wp-content/uploads/2021/05/cropped-myndkare-logo-115x57.png"
-            className="h-16 mr-3"
-            alt="Myndkare Logo"
-          />
-          <Text style={{ textAlign: "center", lineHeight: '64px' }}>MYNDKARE</Text> {/* Adjust lineHeight as needed */}
-        </a>
-      </Page>
+        <Page size="A4" style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+          }}>
+          <a href="#" className="relative flex items-center w-full">
+            <img
+              src="https://www.myndkare.com/wp-content/uploads/2021/05/cropped-myndkare-logo-115x57.png"
+              className="h-16 mr-3"
+              alt="Myndkare Logo"
+            />
+            <div className="absolute left-1/2 transform -translate-x-1/2" style={{ lineHeight: '64px' }}>
+              <p>MYNDKARE</p>
+            </div>
+          </a>
+        </Page>
         <Page size="A4" style={styles.page}>
           <View style={styles.section}>
             <Text>Section #1</Text>
@@ -74,13 +76,15 @@ function Report(props) {
                 alignItems: 'center',
                 justifyContent: 'center',
             }}>
-            <a href="#" className="flex items-center">
+            <a href="#" className="relative flex items-center w-full">
               <img
                 src="https://www.myndkare.com/wp-content/uploads/2021/05/cropped-myndkare-logo-115x57.png"
                 className="h-16 mr-3"
                 alt="Myndkare Logo"
               />
-              <Text style={{ textAlign: "center", lineHeight: '64px' }}>MYNDKARE</Text> {/* Adjust lineHeight as needed */}
+              <div className="absolute left-1/2 transform -translate-x-1/2" style={{ lineHeight: '64px' }}>
+                <p>MYNDKARE</p>
+              </div>
             </a>
           </Page>
             <Page size="A4" style={styles.page}>
