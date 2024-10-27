@@ -38,7 +38,7 @@ import Report from "./Report";
 
 function StudentTests(props) {
     const { onClose, selectedValue, open } = props;
-    const [students, setStudents] = useState({});
+    const [studentExams, setStudentExams] = useState({});
     const [studentTests, setStudentTests] = useState([]);
     const [subReportOpen, setSubReportOpen] = useState(false);
     const [reportValue, setReportValue] = useState({});
@@ -74,20 +74,20 @@ function StudentTests(props) {
         if(open==true) {
             getStudentTestIds();
         }
-        console.log(JSON.stringify(students))
+        console.log(JSON.stringify(studentExams))
     }, [open]);
 
     const getStudentTestIds = async () => {
         if (selectedValue && selectedValue._id) {
             let studentdata = await axios.get("/studentExams/" + selectedValue._id)
-            setStudents(studentdata.data);
+            setStudentExams(studentdata.data);
             let studentTests = await axios.get("/getReportStatus/"+selectedValue._id);
             setStudentTests(studentTests.data);
         }
     }
 
     const handleClose = () => {
-        setStudents(null);
+        setStudentTests(null);
         setStudentTests([]);
         onClose(selectedValue);
     };
@@ -98,8 +98,10 @@ function StudentTests(props) {
         // setSelectedValue({});
       };
 
-      const handleReportOpen = () => {
-        console.log("ghua")
+      const handleReportOpen = (test) => {
+        let report = JSON.parse(JSON.stringify(selectedValue));
+        report.testid = test._id;
+        setReportValue(report);
         setSubReportOpen(true);
     
         // setSelectedValue({});
@@ -219,7 +221,7 @@ function StudentTests(props) {
                             <Button size="small" variant="contained" startIcon={<Preview />} style={{
                                 backgroundColor: "#8F00FF"
                             }} onClick={(e) => {
-                                handleReportOpen();
+                                handleReportOpen(params.row);
                             }}>
                                 View Report
                             </Button>
@@ -240,14 +242,14 @@ function StudentTests(props) {
 
     return (
         <>
-            {students?.school && studentTests.length > 0 && 
+            {studentExams?.school && studentTests.length > 0 && 
                 <><Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
                     <DialogTitle>Student Exams</DialogTitle>
                     <DialogContent>
                         <Table
                             height={tableOptions.height}
                             width={tableOptions.width}
-                            rows={students.studentExams}
+                            rows={studentExams.studentExams}
                             columns={examsColumns}
                             initialState={tableOptions.initialState}
                             pageSizeOptions={tableOptions.pageSizeOptions}
