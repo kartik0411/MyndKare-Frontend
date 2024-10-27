@@ -73,3 +73,9 @@ body {
     max-width: 1366px;
     margin: auto;
 }
+
+@media print{
+    ::-webkit-scrollbar {
+        display: none;
+    }
+}

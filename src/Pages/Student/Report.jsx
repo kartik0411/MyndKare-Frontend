@@ -107,7 +107,7 @@ function Report(props) {
     <>
       {selectedValue?.name && report && report.length > 0 &&
         <><Dialog fullWidth maxHeight="80vh" PaperProps={{
-          style: { minHeight: '80vh' } // Set minHeight here
+          style: { minHeight: '80vh'} // Set minHeight here
         }} maxWidth="md" onClose={handleClose} open={open}>
           {showDialogActions && (<DialogTitle>Test Report</DialogTitle>)}
           <DialogContent>
@@ -116,7 +116,7 @@ function Report(props) {
                 display: 'flex',
                 justifyContent: 'center',
               }}>
-                <a href="#" className="relative flex items-center w-full">
+                <a  className="relative flex items-center w-full" >
                   <div style={{ marginTop: 20 }}>
                     <img
                       src="https://www.myndkare.com/wp-content/uploads/2021/05/cropped-myndkare-logo-115x57.png"
@@ -179,10 +179,10 @@ function Report(props) {
                 display: 'flex',
                 justifyContent: 'center',
               }}>
-                <a href="#" className="relative flex items-center w-full">
+                <a  className="relative flex items-center w-full">
                   <hr style={{ width: '100%', border: '1px solid #000', marginTop: 110 }} />
                   <div className="absolute left-1/2 transform -translate-x-1/2" style={{ marginTop: 150 }} >
-                    <Text style={{ fontSize: 18, color: '#000000', lineHeight: 100, textDecorationLine: 'underline' }}> {report[0].name} ({getTestTypeDesc(report[0].type)} Test)
+                    <Text style={{ fontSize: 19, color: '#000000', lineHeight: 100, textDecorationLine: 'underline' }}> {report[0].name} ({getTestTypeDesc(report[0].type)} Test)
                     </Text>
                   </div>
                 </a>
