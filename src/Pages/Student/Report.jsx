@@ -30,8 +30,12 @@ function Report(props) {
   const { onClose, selectedValue, open } = props;
   const [report, setReport] = useState({});
   const [showDialogActions, setDialogActions] = useState(true);
+  const [divref,setDivRef] = useState();
+  const [paddingTest, setPaddingTest] = useState(100);
 
   const handleClose = () => {
+    setDivRef(null)
+    setPaddingTest(100);
     onClose(selectedValue);
   };
 
@@ -41,9 +45,25 @@ function Report(props) {
     }
   }, [open]);
 
+  useEffect(() => {
+    if (divref!=null) {
+      if(divref.offsetHeight) {
+        console.log(divref);
+        console.log(JSON.stringify(paddingTest));
+        console.log(JSON.stringify(divref.offsetHeight));
+        setPaddingTest(paddingTest+divref.offsetHeight-2000);
+      }
+    }
+  }, [divref]);
+
   const getStudentTestReport = async () => {
-    if (selectedValue && selectedValue.testid) {
-      let reportvalue = await axios.get("/report/" + selectedValue._id + "/" + selectedValue.testid)
+    if (selectedValue && selectedValue._id) {
+      let reportvalue;
+      if(selectedValue.testid && selectedValue.testid!="") {
+        reportvalue = await axios.get("/report/" + selectedValue._id + "/" + selectedValue.testid)
+      } else {
+        reportvalue = await axios.get("/report/" + selectedValue._id)
+      }
       setReport(reportvalue.data);
     }
   }
@@ -103,11 +123,12 @@ function Report(props) {
 
 
 
+
   return (
     <>
       {selectedValue?.name && report && report.length > 0 &&
         <><Dialog fullWidth maxHeight="80vh" PaperProps={{
-          style: { minHeight: '80vh'} // Set minHeight here
+          style: { minHeight: '80vh' } // Set minHeight here
         }} maxWidth="md" onClose={handleClose} open={open}>
           {showDialogActions && (<DialogTitle>Test Report</DialogTitle>)}
           <DialogContent>
@@ -116,7 +137,7 @@ function Report(props) {
                 display: 'flex',
                 justifyContent: 'center',
               }}>
-                <a  className="relative flex items-center w-full" >
+                <a className="relative flex items-center w-full" >
                   <div style={{ marginTop: 20 }}>
                     <img
                       src="https://www.myndkare.com/wp-content/uploads/2021/05/cropped-myndkare-logo-115x57.png"
@@ -126,26 +147,36 @@ function Report(props) {
                     />
                   </div>
                   <div className="absolute left-1/2 transform -translate-x-1/2" style={{ marginTop: 0 }}>
-                    <Text style={{ fontSize: 40, color: '#1adb4e', fontWeight: "bold" }}>MYNDKARE
+                    <Text style={{ fontSize: 60, color: '#1adb4e', fontWeight: "bold" }}>MYNDKARE
                     </Text>
                   </div>
-                  <div className="absolute left-1/2 transform -translate-x-1/2" style={{ marginTop: 50 }} >
-                    <Text style={{ fontSize: 12, color: '#000000', lineHeight: 50 }}>Career Testing and Counselling Services
+                  <div className="absolute left-1/2 transform -translate-x-1/2" style={{ marginTop: 65 }} >
+                    <Text style={{ fontSize: 17, color: '#000000', lineHeight: 50 }}>Career Testing and Counselling Services
                     </Text>
                   </div>
-                  <div className="absolute left-1/2 transform -translate-x-1/2" style={{ marginTop: 130 }} >
-                    <Text style={{ fontSize: 18, color: '#000000', lineHeight: 100, textDecorationLine: 'underline' }}> STUDENT INFORMATION
+                  {selectedValue.testid == null && (
+                    <div className="absolute left-1/2 transform -translate-x-1/2" style={{ marginTop: 100 }} >
+                      <Text style={{ fontSize: 12, color: '#000000', lineHeight: 50 }}>Certification no: {selectedValue._id}
+                      </Text>
+                    </div>
+                  )}
+                  <div className="absolute left-1/2 transform -translate-x-1/2" style={{ marginTop: 160 }} >
+                    <Text style={{ fontSize: 21, color: '#000000', lineHeight: 50, textDecorationLine: 'underline', fontWeight: 'bold' }}>CAREER TESTING AND GUIDANCE REPORT
                     </Text>
                   </div>
-                  <div className="absolute left" style={{ marginTop: 200 }} >
+                  <div className="absolute left-1/2 transform -translate-x-1/2" style={{ marginTop: 250 }} >
+                    <Text style={{ fontSize: 16, color: '#000000', lineHeight: 100, textDecorationLine: 'underline' }}> STUDENT INFORMATION
+                    </Text>
+                  </div>
+                  <div className="absolute left" style={{ marginTop: 300 }} >
                     <Text style={{ fontSize: 15, color: '#000000', lineHeight: 100 }}>
                       Student Name:
                     </Text>
                     <Text style={{ fontSize: 15, color: '#000000', lineHeight: 100, fontWeight: '300', marginLeft: 5 }}>
-                      {selectedValue?.name}
+                      {selectedValue?.name} 
                     </Text>
                   </div>
-                  <div className="absolute" style={{ left: '67%', marginTop: 200 }} >
+                  <div className="absolute" style={{ left: '67%', marginTop: 300 }} >
                     <Text style={{ fontSize: 15, color: '#000000', lineHeight: 100 }}>
                       Admission Number:
                     </Text>
@@ -153,7 +184,7 @@ function Report(props) {
                       {selectedValue?.admsnno}
                     </Text>
                   </div>
-                  <div className="absolute left" style={{ marginTop: 250 }} >
+                  <div className="absolute left" style={{ marginTop: 350 }} >
                     <Text style={{ fontSize: 15, color: '#000000', lineHeight: 100 }}>
                       School:
                     </Text>
@@ -161,7 +192,7 @@ function Report(props) {
                       {selectedValue?.school}
                     </Text>
                   </div>
-                  <div className="absolute" style={{ left: '67%', marginTop: 250 }} >
+                  <div className="absolute" style={{ left: '67%', marginTop: 350 }} >
                     <Text style={{ fontSize: 15, color: '#000000', lineHeight: 100 }}>
                       Class:
                     </Text>
@@ -178,15 +209,52 @@ function Report(props) {
               <Page size={[600, 11000]} style={{
                 display: 'flex',
                 justifyContent: 'center',
+                flexDirection: 'column',
+                gap: 100
               }}>
-                <a  className="relative flex items-center w-full">
-                  <hr style={{ width: '100%', border: '1px solid #000', marginTop: 110 }} />
-                  <div className="absolute left-1/2 transform -translate-x-1/2" style={{ marginTop: 150 }} >
-                    <Text style={{ fontSize: 19, color: '#000000', lineHeight: 100, textDecorationLine: 'underline' }}> {report[0].name} ({getTestTypeDesc(report[0].type)} Test)
-                    </Text>
-                  </div>
+                <a className="relative flex items-center w-full" style={{ marginTop: 140 }}>
+                  <hr style={{ width: '100%', border: '1px solid #000' }} />
+                  {report?.map(testReport => (
+                    <>
+                      {testReport.type == 1 && <>
+                        <div className="absolute left-1/2 transform -translate-x-1/2" ref={el=>setDivRef(el.height)} style={{  paddingTop: paddingTest }} >
+                          <Text style={{ fontSize: 19, color: '#000000', lineHeight: 100, textDecorationLine: 'underline' }}> {testReport.name} (Personality Test)
+                          </Text>
+                        </div>
+                      </>}
+                      {testReport.type == 2 && <>
+                        <div className="absolute left-1/2 transform -translate-x-1/2"  ref={el=>{setPaddingTest(paddingTest+el?.offsetHeight-2000); console.log(paddingTest)}} style={{  paddingTop: paddingTest }}>
+                          <Text style={{ fontSize: 19, color: '#000000', lineHeight: 100, textDecorationLine: 'underline' }}> {testReport.name} (Aptitude Test)
+                          </Text>
+                        </div>
+                        <div className="absolute left-1/2 transform -translate-x-1/2" ref={el=>setPaddingTest(paddingTest+el?.offsetHeight-2000)} style={{  paddingTop: paddingTest }} >
+                          <Text style={{ fontSize: 19, color: '#000000', lineHeight: 100, textDecorationLine: 'underline' }}> {testReport.name} (Interest Test)
+                          </Text>
+                        </div>
+                        <div className="absolute left-1/2 transform -translate-x-1/2" ref={el=>setPaddingTest(paddingTest+el?.offsetHeight-2000)} style={{  paddingTop: paddingTest }} >
+                          <Text style={{ fontSize: 19, color: '#000000', lineHeight: 100, textDecorationLine: 'underline' }}> {testReport.name} (Interest Test)
+                          </Text>
+                        </div>
+                        <div className="absolute left-1/2 transform -translate-x-1/2" ref={el=>setPaddingTest(paddingTest+el?.offsetHeight-2000)} style={{  paddingTop: paddingTest }} >
+                          <Text style={{ fontSize: 19, color: '#000000', lineHeight: 100, textDecorationLine: 'underline' }}> {testReport.name} (Interest Test)
+                          </Text>
+                        </div>
+                      </>}
+                      {testReport.type == 3 && <>
+                        <div className="absolute left-1/2 transform -translate-x-1/2" ref={el=>setDivRef(el)} style={{  paddingTop: paddingTest }} >
+                          <Text style={{ fontSize: 19, color: '#000000', lineHeight: 100, textDecorationLine: 'underline' }}> {testReport.name} (Interest Test)
+                          </Text>
+                        </div>
+                      </>}
+                      {testReport.type == 4 && <>
+                        <div className="absolute left-1/2 transform -translate-x-1/2" ref={el=>setDivRef(el)} style={{  paddingTop: paddingTest }} >
+                          <Text style={{ fontSize: 19, color: '#000000', lineHeight: 100, textDecorationLine: 'underline' }}> Counseller Feedback
+                          </Text>
+                        </div>
+                      </>}
+                    </>
+                  ))}
                 </a>
-
               </Page>
             </Document>
 
