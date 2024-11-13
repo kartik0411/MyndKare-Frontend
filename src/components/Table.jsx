@@ -30,3 +30,29 @@ export function Table(props) {
     </div>
   );
 }
+
+export function TableWithoutPagination(props) {
+  const {
+    rows,
+    columns,
+    checkboxSelection,
+    disableSelectionOnClick,
+    height,
+    width,
+  } = props;
+  return (
+    <div style={{ height: height, width: width }}>
+      <DataGrid
+        rows={rows}
+        height={height}
+        width={width}
+        columns={columns}
+        getRowHeight={() => "auto"}
+        checkboxSelection={checkboxSelection}
+        disableSelectionOnClick={disableSelectionOnClick}
+        getRowId={(row) => row._id}
+        hideFooter
+      />
+    </div>
+  );
+}

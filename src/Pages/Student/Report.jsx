@@ -9,6 +9,10 @@ import Download from '@mui/icons-material/Download';
 import { saveAs } from 'file-saver';
 import { useEffect, useState } from "react";
 import axios from "../../axiosConfig";
+import { TableWithoutPagination } from '../../components/Table'
+import { BarChart } from '@mui/x-charts/BarChart';
+import { axisClasses } from '@mui/x-charts/ChartsAxis';
+
 // Create styles
 const styles = StyleSheet.create({
   page: {
@@ -22,6 +26,36 @@ const styles = StyleSheet.create({
   }
 });
 
+const tableOptions = {
+  height: "auto",
+  width: "100%",
+  checkboxSelection: false,
+  disableSelectionOnClick: true,
+};
+
+const columns = [
+  {
+    field: "code",
+    headerName: "Code",
+    flex: 1
+  },
+  {
+    field: "name",
+    headerName: "Exam Name",
+    flex: 2
+  },
+  {
+    field: "detail",
+    headerName: "Detail",
+    flex: 5
+  },
+  {
+    field: "score",
+    headerName: "Score",
+    flex: 1
+  },
+]
+
 
 
 
@@ -31,11 +65,11 @@ function Report(props) {
   const [report, setReport] = useState({});
   const [showDialogActions, setDialogActions] = useState(true);
   const [divref,setDivRef] = useState();
-  const [paddingTest, setPaddingTest] = useState(100);
+  // const [paddingTest, setPaddingTest] = useState(100);
 
   const handleClose = () => {
     setDivRef(null)
-    setPaddingTest(100);
+    // setPaddingTest(100);
     onClose(selectedValue);
   };
 
@@ -45,16 +79,16 @@ function Report(props) {
     }
   }, [open]);
 
-  useEffect(() => {
-    if (divref!=null) {
-      if(divref.offsetHeight) {
-        console.log(divref);
-        console.log(JSON.stringify(paddingTest));
-        console.log(JSON.stringify(divref.offsetHeight));
-        setPaddingTest(paddingTest+divref.offsetHeight-2000);
-      }
-    }
-  }, [divref]);
+  // useEffect(() => {
+  //   if (divref!=null) {
+  //     if(divref.offsetHeight) {
+  //       console.log(divref);
+  //       console.log(JSON.stringify(paddingTest));
+  //       console.log(JSON.stringify(divref.offsetHeight));
+  //       setPaddingTest(paddingTest+divref.offsetHeight-2000);
+  //     }
+  //   }
+  // }, [divref]);
 
   const getStudentTestReport = async () => {
     if (selectedValue && selectedValue._id) {
@@ -119,7 +153,22 @@ function Report(props) {
   }, [showDialogActions]);
 
 
-
+  const chartSetting = {
+    yAxis: [
+      {
+        label: '',
+        min: 0,
+        max: 10,
+      },
+    ],
+    width: 750,
+    height: 500,
+    sx: {
+      [`.${axisClasses.left} .${axisClasses.label}`]: {
+        transform: 'translate(-20px, 0)',
+      },
+    },
+  };
 
 
 
@@ -164,19 +213,19 @@ function Report(props) {
                     <Text style={{ fontSize: 21, color: '#000000', lineHeight: 50, textDecorationLine: 'underline', fontWeight: 'bold' }}>CAREER TESTING AND GUIDANCE REPORT
                     </Text>
                   </div>
-                  <div className="absolute left-1/2 transform -translate-x-1/2" style={{ marginTop: 250 }} >
+                  <div className="absolute left-1/2 transform -translate-x-1/2" style={{ marginTop: 280 }} >
                     <Text style={{ fontSize: 16, color: '#000000', lineHeight: 100, textDecorationLine: 'underline' }}> STUDENT INFORMATION
                     </Text>
                   </div>
-                  <div className="absolute left" style={{ marginTop: 300 }} >
+                  <div className="absolute left" style={{ marginTop: 330 }} >
                     <Text style={{ fontSize: 15, color: '#000000', lineHeight: 100 }}>
                       Student Name:
                     </Text>
                     <Text style={{ fontSize: 15, color: '#000000', lineHeight: 100, fontWeight: '300', marginLeft: 5 }}>
-                      {selectedValue?.name} 
+                      {selectedValue?.name}
                     </Text>
                   </div>
-                  <div className="absolute" style={{ left: '67%', marginTop: 300 }} >
+                  <div className="absolute" style={{ left: '67%', marginTop: 330 }} >
                     <Text style={{ fontSize: 15, color: '#000000', lineHeight: 100 }}>
                       Admission Number:
                     </Text>
@@ -184,7 +233,7 @@ function Report(props) {
                       {selectedValue?.admsnno}
                     </Text>
                   </div>
-                  <div className="absolute left" style={{ marginTop: 350 }} >
+                  <div className="absolute left" style={{ marginTop: 380 }} >
                     <Text style={{ fontSize: 15, color: '#000000', lineHeight: 100 }}>
                       School:
                     </Text>
@@ -192,7 +241,7 @@ function Report(props) {
                       {selectedValue?.school}
                     </Text>
                   </div>
-                  <div className="absolute" style={{ left: '67%', marginTop: 350 }} >
+                  <div className="absolute" style={{ left: '67%', marginTop: 380 }} >
                     <Text style={{ fontSize: 15, color: '#000000', lineHeight: 100 }}>
                       Class:
                     </Text>
@@ -210,49 +259,164 @@ function Report(props) {
                 display: 'flex',
                 justifyContent: 'center',
                 flexDirection: 'column',
-                gap: 100
+                gap: 50,
+                marginTop: 150
               }}>
-                <a className="relative flex items-center w-full" style={{ marginTop: 140 }}>
+                <a className="relative flex flex-col items-center w-full">
                   <hr style={{ width: '100%', border: '1px solid #000' }} />
                   {report?.map(testReport => (
-                    <>
+                    <><div style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 20,
+                      width: '100%',
+                    }}>
                       {testReport.type == 1 && <>
-                        <div className="absolute left-1/2 transform -translate-x-1/2" ref={el=>setDivRef(el.height)} style={{  paddingTop: paddingTest }} >
-                          <Text style={{ fontSize: 19, color: '#000000', lineHeight: 100, textDecorationLine: 'underline' }}> {testReport.name} (Personality Test)
+                        <div style={{ textAlign: 'center' }}>
+                          <Text style={{ fontSize: 20, color: '#000000', textDecorationLine: 'underline' }}> {testReport.name} (Personality Test)
                           </Text>
+                        </div>
+                        <div style={{
+                          textAlign: 'left',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: 2,
+                        }}>
+                          {testReport?.examsResults.map(exam=>(
+                          <><Text style={{ fontSize: 16, color: '#000000', textDecorationLine: 'underline' }}>{exam?.name} Personality Type:
+                            </Text>
+                            <Text style={{ fontSize: 14, color: '#000000' }}> {exam.output}
+                            </Text>
+                          </>
+                          ))}
                         </div>
                       </>}
                       {testReport.type == 2 && <>
-                        <div className="absolute left-1/2 transform -translate-x-1/2"  ref={el=>{setPaddingTest(paddingTest+el?.offsetHeight-2000); console.log(paddingTest)}} style={{  paddingTop: paddingTest }}>
-                          <Text style={{ fontSize: 19, color: '#000000', lineHeight: 100, textDecorationLine: 'underline' }}> {testReport.name} (Aptitude Test)
+                        <div style={{ textAlign: 'center' }}>
+                          <Text style={{ fontSize: 20, color: '#000000', textDecorationLine: 'underline' }}> {testReport.name} (Aptitude Test)
                           </Text>
                         </div>
-                        <div className="absolute left-1/2 transform -translate-x-1/2" ref={el=>setPaddingTest(paddingTest+el?.offsetHeight-2000)} style={{  paddingTop: paddingTest }} >
-                          <Text style={{ fontSize: 19, color: '#000000', lineHeight: 100, textDecorationLine: 'underline' }}> {testReport.name} (Interest Test)
+                        <TableWithoutPagination
+                          height={tableOptions.height}
+                          width={tableOptions.width}
+                          rows={testReport.dbdaResults}
+                          columns={columns}
+                          checkboxSelection={tableOptions.checkboxSelection}
+                          disableSelectionOnClick={tableOptions.disableSelectionOnClick} />
+                        <div style={{ textAlign: 'center' }}>
+                          <Text style={{ fontSize: 16, color: '#000000', textDecorationLine: 'underline' }}> APTITUDE PROFILE
                           </Text>
                         </div>
-                        <div className="absolute left-1/2 transform -translate-x-1/2" ref={el=>setPaddingTest(paddingTest+el?.offsetHeight-2000)} style={{  paddingTop: paddingTest }} >
-                          <Text style={{ fontSize: 19, color: '#000000', lineHeight: 100, textDecorationLine: 'underline' }}> {testReport.name} (Interest Test)
-                          </Text>
+                        <div style={{ textAlign: 'center' }}>
+                          <BarChart dataset={testReport.dbdaResults}
+                            xAxis={[{ scaleType: 'band', dataKey: 'code', label: 'ABILITIES' }]}
+                            series={[
+                              { dataKey: 'score', label: testReport.name + ' Scores' },
+                            ]}
+                            {...chartSetting} />
                         </div>
-                        <div className="absolute left-1/2 transform -translate-x-1/2" ref={el=>setPaddingTest(paddingTest+el?.offsetHeight-2000)} style={{  paddingTop: paddingTest }} >
-                          <Text style={{ fontSize: 19, color: '#000000', lineHeight: 100, textDecorationLine: 'underline' }}> {testReport.name} (Interest Test)
+                        <div style={{
+                          textAlign: 'left',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: 2,
+                        }}>
+                          <Text style={{ fontSize: 16, color: '#000000', textDecorationLine: 'underline' }}> Areas of Proficiency:
                           </Text>
+                          {testReport?.proficiency?.map(prof => (
+                            <Text style={{ fontSize: 14, color: '#000000' }}> {'\u2022'}{prof}
+                            </Text>
+                          ))}
                         </div>
+                        <div style={{
+                          textAlign: 'left',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: 2,
+                        }}>
+                          <Text style={{ fontSize: 16, color: '#000000', textDecorationLine: 'underline' }}> Areas of Strength:
+                          </Text>
+                          {testReport?.strength?.map(prof => (
+                            <Text style={{ fontSize: 14, color: '#000000' }}> {'\u2022'}{prof}
+                            </Text>
+                          ))}
+                        </div>
+                        <div style={{
+                          textAlign: 'left',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: 2,
+                        }}>
+                          <Text style={{ fontSize: 16, color: '#000000', textDecorationLine: 'underline' }}> Areas of Improvement:
+                          </Text>
+                          {testReport?.improvement?.map(prof => (
+                            <Text style={{ fontSize: 14, color: '#000000' }}> {'\u2022'}{prof}
+                            </Text>
+                          ))}
+                        </div>
+
+
                       </>}
                       {testReport.type == 3 && <>
-                        <div className="absolute left-1/2 transform -translate-x-1/2" ref={el=>setDivRef(el)} style={{  paddingTop: paddingTest }} >
-                          <Text style={{ fontSize: 19, color: '#000000', lineHeight: 100, textDecorationLine: 'underline' }}> {testReport.name} (Interest Test)
+                        <div style={{ textAlign: 'center' }}>
+                          <Text style={{ fontSize: 20, color: '#000000',  textDecorationLine: 'underline' }}> {testReport.name} (Interest Test)
                           </Text>
                         </div>
                       </>}
                       {testReport.type == 4 && <>
-                        <div className="absolute left-1/2 transform -translate-x-1/2" ref={el=>setDivRef(el)} style={{  paddingTop: paddingTest }} >
-                          <Text style={{ fontSize: 19, color: '#000000', lineHeight: 100, textDecorationLine: 'underline' }}> Counseller Feedback
+                        <div style={{ textAlign: 'center' }}>
+                          <Text style={{ fontSize: 20, color: '#000000',  textDecorationLine: 'underline' }}> Counsellor Feedback
                           </Text>
                         </div>
+                        <div style={{
+                          textAlign: 'left',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: 2,
+                        }}>
+                          <><Text style={{ fontSize: 15, color: '#000000',fontWeight: "bold" }}>Academic:
+                            </Text>
+                            <Text style={{ fontSize: 14, color: '#000000' }}>{testReport?.feedback?.feedbacks[0]}
+                            </Text>
+                            <Text style={{ fontSize: 15, color: '#000000',fontWeight: "bold" }}>Personal Interaction Child:
+                            </Text>
+                            <Text style={{ fontSize: 14, color: '#000000' }}>{testReport?.feedback?.feedbacks[1]}
+                            </Text>
+                            <Text style={{ fontSize: 15, color: '#000000',fontWeight: "bold" }}>Personal Interactions Parents:
+                            </Text>
+                            <Text style={{ fontSize: 14, color: '#000000' }}>{testReport?.feedback?.feedbacks[2]}
+                            </Text>
+                            <Text style={{ fontSize: 15, color: '#000000',fontWeight: "bold" }}>Suggested Career or Stream Option-1:
+                            </Text>
+                            <Text style={{ fontSize: 14, color: '#000000' }}>{testReport?.feedback?.feedbacks[3]}
+                            </Text>
+                            <Text style={{ fontSize: 15, color: '#000000',fontWeight: "bold" }}>Suggested Career or Stream Option-2:
+                            </Text>
+                            <Text style={{ fontSize: 14, color: '#000000' }}>{testReport?.feedback?.feedbacks[4]}
+                            </Text>
+                            <Text style={{ fontSize: 15, color: '#000000',fontWeight: "bold" }}>Counsellor Remarks:
+                            </Text>
+                            <Text style={{ fontSize: 14, color: '#000000' }}>{testReport?.feedback?.feedbacks[5]}
+                            </Text>
+                            <wbr></wbr>
+                            <Text style={{ fontSize: 14, color: '#000000' }}> Regards,
+                            </Text>
+                            <Text style={{ fontSize: 14, color: '#000000' }}> For & on behalf of
+                            </Text>
+                            <Text style={{ fontSize: 14, color: '#000000' }}> MyndKare
+                            </Text>
+                            <wbr></wbr>
+                            <wbr></wbr>
+                            <Text style={{ fontSize: 14, color: '#000000',fontWeight: "bold"  }}>{testReport?.feedback?.feedbacks[6]}
+                            </Text>
+                            <Text style={{ fontSize: 14, color: '#000000' }}>Clinical Psychologist
+                            </Text>
+
+                          </>
+                        </div>
                       </>}
-                    </>
+                    </div>
+                      <hr style={{ width: '100%', border: '1px solid #000' }} /></>
                   ))}
                 </a>
               </Page>
