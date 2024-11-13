@@ -78,7 +78,7 @@ function ViewExam(props) {
             
             <TextField sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}
               fullWidth
-              label="Response"
+              label="Name"
               name="name"
               value={dbdas.name}
               // onChange={getDBDAData}
@@ -88,6 +88,20 @@ function ViewExam(props) {
               maxRows={4}
               // defaultvalue={dbdas.name}
               required
+            />
+          </div>
+          <div className="pt-4 flex items-center justify-center">
+            <TextField sx={{ display: "inline-flex", width: "100%", paddingRight:"20px"}}
+              fullWidth
+              label="Detail"
+              name="detail"
+              value={dbdas.detail}
+              // onChange={getDBDAData}
+              id="outlined-size-small"
+              size="small"
+              multiline
+              maxRows={4}
+              // defaultvalue={dbdas.name}
             />
           </div>
         </form>

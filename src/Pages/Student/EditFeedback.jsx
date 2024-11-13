@@ -265,7 +265,7 @@ function EditFeedback(props)  {
               <div className="pt-4 flex items-center justify-center">
                 <TextField sx={{ display: "inline-flex", width: "100%", paddingRight: "20px" }}
                   fullWidth
-                  label="Counseller Remarks"
+                  label="Counsellor Remarks"
                   name="name"
                   value={six}
                   onChange={(value) =>   {setFeedbackChanged(true); setsix(value.target.value); }}
@@ -279,7 +279,7 @@ function EditFeedback(props)  {
               <div className="pt-4 flex items-center justify-center">
                 <TextField sx={{ display: "inline-flex", width: "100%", paddingRight: "20px" }}
                   fullWidth
-                  label="Counseller Name"
+                  label="Counsellor Name"
                   name="name"
                   value={seven}
                   onChange={(value) =>   {setFeedbackChanged(true); setseven(value.target.value); }}

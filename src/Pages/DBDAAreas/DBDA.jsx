@@ -70,6 +70,11 @@ function DBDA() {
       flex: 1
     },
     {
+      field: "detail",
+      headerName: "Detail",
+      flex: 1
+    },
+    {
       field: "actions",
       headerName: "Actions",
       type: "actions",
