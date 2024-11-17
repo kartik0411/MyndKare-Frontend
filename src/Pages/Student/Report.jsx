@@ -225,9 +225,9 @@ function Report(props) {
                       {selectedValue?.name}
                     </Text>
                   </div>
-                  <div className="absolute" style={{ left: '67%', marginTop: 330 }} >
+                  <div className="absolute" style={{ left: '65%', marginTop: 330 }} >
                     <Text style={{ fontSize: 15, color: '#000000', lineHeight: 100 }}>
-                      Admission Number:
+                      Admission No:
                     </Text>
                     <Text style={{ fontSize: 15, color: '#000000', lineHeight: 100, fontWeight: '300', marginLeft: 5 }}>
                       {selectedValue?.admsnno}
@@ -241,7 +241,7 @@ function Report(props) {
                       {selectedValue?.school}
                     </Text>
                   </div>
-                  <div className="absolute" style={{ left: '67%', marginTop: 380 }} >
+                  <div className="absolute" style={{ left: '65%', marginTop: 380 }} >
                     <Text style={{ fontSize: 15, color: '#000000', lineHeight: 100 }}>
                       Class:
                     </Text>
