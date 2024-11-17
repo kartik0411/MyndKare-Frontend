@@ -285,8 +285,8 @@ function Report(props) {
                           {testReport?.examsResults.map(exam=>(
                           <><Text style={{ fontSize: 16, color: '#000000', textDecorationLine: 'underline' }}>{exam?.name} Personality Type:
                             </Text>
-                            <Text style={{ fontSize: 14, color: '#000000' }}> {exam.output}
-                            </Text>
+                            <p style={{ fontSize: 14, color: '#000000' }}> {exam.output}
+                            </p>
                           </>
                           ))}
                         </div>
@@ -324,8 +324,8 @@ function Report(props) {
                           <Text style={{ fontSize: 16, color: '#000000', textDecorationLine: 'underline' }}> Areas of Proficiency:
                           </Text>
                           {testReport?.proficiency?.map(prof => (
-                            <Text style={{ fontSize: 14, color: '#000000' }}> {'\u2022'}{prof}
-                            </Text>
+                            <p style={{ fontSize: 14, color: '#000000' }}> {'\u2022'}{prof}
+                            </p>
                           ))}
                         </div>
                         <div style={{
@@ -337,8 +337,8 @@ function Report(props) {
                           <Text style={{ fontSize: 16, color: '#000000', textDecorationLine: 'underline' }}> Areas of Strength:
                           </Text>
                           {testReport?.strength?.map(prof => (
-                            <Text style={{ fontSize: 14, color: '#000000' }}> {'\u2022'}{prof}
-                            </Text>
+                            <p style={{ fontSize: 14, color: '#000000' }}> {'\u2022'}{prof}
+                            </p>
                           ))}
                         </div>
                         <div style={{
@@ -350,8 +350,8 @@ function Report(props) {
                           <Text style={{ fontSize: 16, color: '#000000', textDecorationLine: 'underline' }}> Areas of Improvement:
                           </Text>
                           {testReport?.improvement?.map(prof => (
-                            <Text style={{ fontSize: 14, color: '#000000' }}> {'\u2022'}{prof}
-                            </Text>
+                            <p style={{ fontSize: 14, color: '#000000' }}> {'\u2022'}{prof}
+                            </p>
                           ))}
                         </div>
 
@@ -376,28 +376,28 @@ function Report(props) {
                         }}>
                           <><Text style={{ fontSize: 15, color: '#000000',fontWeight: "bold" }}>Academic:
                             </Text>
-                            <Text style={{ fontSize: 14, color: '#000000' }}>{testReport?.feedback?.feedbacks[0]}
-                            </Text>
+                            <p style={{ fontSize: 14, color: '#000000' }}>{testReport?.feedback?.feedbacks[0]}
+                            </p>
                             <Text style={{ fontSize: 15, color: '#000000',fontWeight: "bold" }}>Personal Interaction Child:
                             </Text>
-                            <Text style={{ fontSize: 14, color: '#000000' }}>{testReport?.feedback?.feedbacks[1]}
-                            </Text>
+                            <p style={{ fontSize: 14, color: '#000000' }}>{testReport?.feedback?.feedbacks[1]}
+                            </p>
                             <Text style={{ fontSize: 15, color: '#000000',fontWeight: "bold" }}>Personal Interactions Parents:
                             </Text>
-                            <Text style={{ fontSize: 14, color: '#000000' }}>{testReport?.feedback?.feedbacks[2]}
-                            </Text>
+                            <p style={{ fontSize: 14, color: '#000000' }}>{testReport?.feedback?.feedbacks[2]}
+                            </p>
                             <Text style={{ fontSize: 15, color: '#000000',fontWeight: "bold" }}>Suggested Career or Stream Option-1:
                             </Text>
-                            <Text style={{ fontSize: 14, color: '#000000' }}>{testReport?.feedback?.feedbacks[3]}
-                            </Text>
+                            <p style={{ fontSize: 14, color: '#000000' }}>{testReport?.feedback?.feedbacks[3]}
+                            </p>
                             <Text style={{ fontSize: 15, color: '#000000',fontWeight: "bold" }}>Suggested Career or Stream Option-2:
                             </Text>
-                            <Text style={{ fontSize: 14, color: '#000000' }}>{testReport?.feedback?.feedbacks[4]}
-                            </Text>
+                            <p style={{ fontSize: 14, color: '#000000' }}>{testReport?.feedback?.feedbacks[4]}
+                            </p>
                             <Text style={{ fontSize: 15, color: '#000000',fontWeight: "bold" }}>Counsellor Remarks:
                             </Text>
-                            <Text style={{ fontSize: 14, color: '#000000' }}>{testReport?.feedback?.feedbacks[5]}
-                            </Text>
+                            <p style={{ fontSize: 14, color: '#000000' }}>{testReport?.feedback?.feedbacks[5]}
+                            </p>
                             <wbr></wbr>
                             <Text style={{ fontSize: 14, color: '#000000' }}> Regards,
                             </Text>
@@ -407,8 +407,8 @@ function Report(props) {
                             </Text>
                             <wbr></wbr>
                             <wbr></wbr>
-                            <Text style={{ fontSize: 14, color: '#000000',fontWeight: "bold"  }}>{testReport?.feedback?.feedbacks[6]}
-                            </Text>
+                            <p style={{ fontSize: 14, color: '#000000',fontWeight: "bold"  }}>{testReport?.feedback?.feedbacks[6]}
+                            </p>
                             <Text style={{ fontSize: 14, color: '#000000' }}>Clinical Psychologist
                             </Text>
 
