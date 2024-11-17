@@ -85,6 +85,14 @@ function StudentTests(props) {
             setStudentTests(studentTests.data);
         }
     }
+    const examAction = async (exam, action) => {
+        let request = new Object();
+        request.action = action;
+        request.studentId = selectedValue._id;
+        request.examId = exam.examId;
+        await axios.put("/studentExams", request);
+        getStudentTestIds();
+    }
 
     const handleClose = () => {
         setStudentTests(null);
@@ -141,52 +149,86 @@ function StudentTests(props) {
             type: "actions",
             flex: 1,
             renderCell: (params) => {
-                if (params.row.status === "In Progress") {
-                    return (
-                        <Box display="flex" spacing={2} justifyContent="space-between">
-                            <Button size="small" variant="contained" style={{
-                                backgroundColor: "#FFA500"
-                            }} onClick={(e) => {
-                                // handleEdit(params.row)
-                            }}>
-                                Finish
-                            </Button>
-                            <Button size="small" variant="contained" color="error" onClick={(e) => {
-                                // handleEdit(params.row)
-                            }}>
-                                Restart
-                            </Button>
-                        </Box>
-                    );
-                } else if (params.row.status === "Finished") {
-                    return (
-                        <Box display="flex" spacing={2} justifyContent="space-between">
-                            <Button size="small" variant="contained"  onClick={(e) => {
-                                // handleEdit(params.row)
-                            }} disabled>
-                                Finish
-                            </Button>
-                            <Button size="small" variant="contained" color="error" onClick={(e) => {
-                                // handleEdit(params.row)
-                            }}>
-                                Restart
-                            </Button>
-                        </Box>
-                    );
+                if (params.row.testType == 1) {
+                    if (selectedValue.resultPublish == false && params.row.status === "In Progress") {
+                        return (
+                            <Box display="flex" spacing={2} justifyContent="space-between">
+                                <Button size="small" variant="contained" color="error" onClick={(e) => {
+                                    examAction(params.row, "RESTART")
+                                }}>
+                                    Restart
+                                </Button>
+                            </Box>
+                        );
+                    } else if (selectedValue.resultPublish == false && params.row.status === "Finished") {
+                        return (
+                            <Box display="flex" spacing={2} justifyContent="space-between">
+                                <Button size="small" variant="contained" color="error" onClick={(e) => {
+                                    examAction(params.row, "RESTART")
+                                }}>
+                                    Restart
+                                </Button>
+                            </Box>
+                        );
+                    } else {
+                        return (
+                            <Box display="flex" spacing={2} justifyContent="space-between">
+                                <Button size="small" variant="contained" onClick={(e) => {
+                                    // handleEdit(params.row)
+                                }} disabled>
+                                    Restart
+                                </Button>
+                            </Box>
+                        );
+                    }
                 } else {
-                    return (
-                        <Box display="flex" spacing={2} justifyContent="space-between">
-                            <Button size="small" variant="contained" onClick={(e) => {
-                            }} disabled>
-                                Finish
-                            </Button>
-                            <Button size="small" variant="contained" onClick={(e) => {
-                                // handleEdit(params.row)
-                            }} disabled>
-                                Restart
-                            </Button>
-                        </Box>
-                    );
+                    if (selectedValue.resultPublish == false && params.row.status === "In Progress") {
+                        return (
+                            <Box display="flex" spacing={2} justifyContent="space-between">
+                                <Button size="small" variant="contained" style={{
+                                    backgroundColor: "#FFA500"
+                                }} onClick={(e) => {
+                                    examAction(params.row, "FINISH")
+                                }}>
+                                    Finish
+                                </Button>
+                                <Button size="small" variant="contained" color="error" onClick={(e) => {
+                                    examAction(params.row, "RESTART")
+                                }}>
+                                    Restart
+                                </Button>
+                            </Box>
+                        );
+                    } else if (selectedValue.resultPublish == false && params.row.status === "Finished") {
+                        return (
+                            <Box display="flex" spacing={2} justifyContent="space-between">
+                                <Button size="small" variant="contained" onClick={(e) => {
+                                    // examAction(params.row, "FINISH")
+                                }} disabled>
+                                    Finish
+                                </Button>
+                                <Button size="small" variant="contained" color="error" onClick={(e) => {
+                                    examAction(params.row, "RESTART")
+                                }}>
+                                    Restart
+                                </Button>
+                            </Box>
+                        );
+                    } else {
+                        return (
+                            <Box display="flex" spacing={2} justifyContent="space-between">
+                                <Button size="small" variant="contained" onClick={(e) => {
+                                }} disabled>
+                                    Finish
+                                </Button>
+                                <Button size="small" variant="contained" onClick={(e) => {
+                                    // handleEdit(params.row)
+                                }} disabled>
+                                    Restart
+                                </Button>
+                            </Box>
+                        );
+                    }
                 }
             }
         }
