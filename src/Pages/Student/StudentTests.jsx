@@ -89,13 +89,21 @@ function StudentTests(props) {
         }
         setIsFetching(false);
     }
+    const getStudentTestIdsWithoutReload = async () => {
+        if (selectedValue && selectedValue._id) {
+            let studentdata = await axios.get("/studentExams/" + selectedValue._id)
+            setStudentExams(studentdata.data);
+            let studentTests = await axios.get("/getReportStatus/"+selectedValue._id);
+            setStudentTests(studentTests.data);
+        }
+    }
     const examAction = async (exam, action) => {
         let request = new Object();
         request.action = action;
         request.studentId = selectedValue._id;
         request.examId = exam.examId;
         await axios.put("/studentExams", request);
-        getStudentTestIds();
+        getStudentTestIdsWithoutReload();
     }
 
     const handleClose = () => {
