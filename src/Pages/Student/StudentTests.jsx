@@ -34,6 +34,7 @@ import { Table } from '../../components/Table'
 import { Box, IconButton, Tooltip } from "@mui/material";
 import Preview from '@mui/icons-material/Preview';
 import Report from "./Report";
+import CircularProgress from "@mui/material/CircularProgress";
 
 
 function StudentTests(props) {
@@ -42,6 +43,7 @@ function StudentTests(props) {
     const [studentTests, setStudentTests] = useState([]);
     const [subReportOpen, setSubReportOpen] = useState(false);
     const [reportValue, setReportValue] = useState({});
+    const [isFetching, setIsFetching] = useState();
 
 
     // useEffect(() => {
@@ -78,12 +80,14 @@ function StudentTests(props) {
     }, [open]);
 
     const getStudentTestIds = async () => {
+        setIsFetching(true);
         if (selectedValue && selectedValue._id) {
             let studentdata = await axios.get("/studentExams/" + selectedValue._id)
             setStudentExams(studentdata.data);
             let studentTests = await axios.get("/getReportStatus/"+selectedValue._id);
             setStudentTests(studentTests.data);
         }
+        setIsFetching(false);
     }
     const examAction = async (exam, action) => {
         let request = new Object();
@@ -282,6 +286,13 @@ function StudentTests(props) {
         }
     ]
 
+    if (isFetching) {
+        return (
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <CircularProgress />
+          </Box>
+        );
+      } else {
     return (
         <>
             {studentExams?.school && studentTests.length > 0 && 
@@ -326,6 +337,7 @@ function StudentTests(props) {
             }
         </>
     );
+}
 }
 
 export default StudentTests
