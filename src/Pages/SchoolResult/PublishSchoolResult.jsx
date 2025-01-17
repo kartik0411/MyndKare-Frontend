@@ -37,7 +37,7 @@ function PublishSchoolResult(props) {
 
   return (
     <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
-      <DialogTitle>Are you sure you want to Publish the Result of the below School?</DialogTitle>
+      <DialogTitle>Are you sure you want to Publish the Result of the below Organisation?</DialogTitle>
       <DialogContent>
         <form >
           <div className="pt-4">

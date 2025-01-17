@@ -59,7 +59,7 @@ function UpdateSchoolResult(props) {
 
   return (
     <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
-      <DialogTitle>Edit Studentresult</DialogTitle>
+      <DialogTitle>Edit Organisation Result</DialogTitle>
       <DialogContent>
       <form>
           <div className="pt-4">

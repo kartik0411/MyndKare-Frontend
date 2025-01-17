@@ -46,7 +46,7 @@ function CreateSchoolResult(props) {
 
   return (
     <Dialog fullWidth maxWidth="md" onClose={handleClose} open={open}>
-      <DialogTitle>Create Schoolresult</DialogTitle>
+      <DialogTitle>Create Organisation Result</DialogTitle>
       <DialogContent>
         <form>
           <div className="pt-4">

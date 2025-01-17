@@ -130,7 +130,7 @@ function SchoolResult() {
             variant="h4"
             gutterBottom
           >
-            School Results
+            Organisation Results
           </Typography>
 
           {/* <div className="pb-4">
