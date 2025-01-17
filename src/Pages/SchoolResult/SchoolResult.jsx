@@ -46,7 +46,7 @@ function SchoolResult() {
   const columns = [
     {
       field: "name",
-      headerName: "School",
+      headerName: "Organisation",
       flex: 1
     },
     {
